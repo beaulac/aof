@@ -8,7 +8,7 @@ export const DEF_VISUAL_STYLE = [
                 'height': 40,
                 'width': 40,
                 'background-color': 'scratch(color)',
-                'label': 'scratch(type)',
+                'label': 'hi tyler',
                 'text-valign': 'center',
                 'text-halign': 'left'
             }
