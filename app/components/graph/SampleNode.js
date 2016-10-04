@@ -83,7 +83,7 @@ export default class SampleNode extends CyElementWrapper {
         return {
             data: {id: this.id, level: this.currentLevel},
             scratch: {
-                type: this.id.match(/_([^\d]+)[\d]?.wav/)[1],
+                type: this.id.match(/_([^\d]+)[\d]?\..+/)[1],
                 nodeStop: nodeStopBeats,
                 color: SampleNode.randomColor(),
                 fm: 'hi',
