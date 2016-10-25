@@ -5,10 +5,10 @@ export const DEF_VISUAL_STYLE = [
         {
             selector: 'node',
             style: {
-                'height': 40,
-                'width': 40,
+                'height': 30,
+                'width': 30,
                 'background-color': 'scratch(color)',
-                'label': 'hi tyler',
+                'label': 'scratch(type)',
                 'text-valign': 'center',
                 'text-halign': 'left'
             }
@@ -40,7 +40,7 @@ export const DEF_VISUAL_STYLE = [
                 'opacity': 0.666,
                 'line-color': '#888',
                 //'label': 'data(length)',
-                'curve-style': 'unbundled-bezier',
+                'curve-style': 'bezier',
                 'control-point-step-size': 20,
                 'control-point-distances': 50
             }
@@ -55,7 +55,7 @@ export const DEF_VISUAL_STYLE = [
         {
             selector: 'edge.unbundled-bezier',
             style: {
-                'curve-style': 'unbundled-bezier',
+                'curve-style': 'bezier',
                 'control-point-distances': 120,
                 'control-point-weights': 0.1
             }

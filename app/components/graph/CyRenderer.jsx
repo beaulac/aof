@@ -1,11 +1,11 @@
 /**
  * Created by alacasse on 9/19/16.
  */
+import React from 'react';
 import _ from "lodash";
 import cytoscape from "cytoscape";
-import cyspringy from "cytoscape-springy";
-import React from 'react';
-import springy from "springy";
+import cycola from "cytoscape-cola";
+import cola from "webcola";
 
 // TODO: consolidate Cytoscape-dependent tags
 const CYTOSCAPE_TAG = 'cy';
@@ -23,7 +23,7 @@ export default class CyRenderer extends React.Component {
         renderOptions: {},
         elements: [],
         nodesById: {},
-        layoutName: 'springy',
+        layoutName: 'cose',
         highlightClass: 'highlighted',
         unhighlightClass: 'unhighlighted'
     };
@@ -48,9 +48,8 @@ export default class CyRenderer extends React.Component {
             }
         }
 
+        //cycola(cytoscape, cola);
 
-        //Register graph FDL plugin.
-        cyspringy(cytoscape, springy);
         this.cy = cytoscape(
             Object.assign(
                 this.props.renderOptions,
@@ -168,6 +167,7 @@ export default class CyRenderer extends React.Component {
     static highlightElement(element) {
         element.classes(UNHIGHLIGHT_CLASS);
     }
+
     static unhighlightElement(element) {
         element.classes(UNHIGHLIGHT_CLASS);
     }
