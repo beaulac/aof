@@ -48,7 +48,17 @@ export default class CyRenderer extends React.Component {
             }
         }
 
-        //cycola(cytoscape, cola);
+
+        console.log(cola);
+
+        if (window.cola === undefined) {
+            window.cola = cola;
+        }
+
+        console.log(window.cola);
+
+        //debugger;
+        cycola(cytoscape, cola);
 
         this.cy = cytoscape(
             Object.assign(
@@ -76,7 +86,6 @@ export default class CyRenderer extends React.Component {
             damping: 0.5,
             nodeRepulsion: function (node) { //TODO INVESTIGATE EDGE REPULSION
                 let value = 100 * node.connectedEdges().toArray().reduce(((acc, e) => acc + e.data().length), 0);
-                console.log(value);
                 return value;
             },
             edgeLength: function (edge) {
@@ -112,42 +121,64 @@ export default class CyRenderer extends React.Component {
     startBfsFrom(elements, root) {
 
         let bfs = elements.bfs(root, CyRenderer.NO_OP_BFS, false);
-        console.log(bfs.path);
-
-        //debugger;
 
         highlightNextElement(root);
 
-        let targetExtractor = new ElementTargets()
+        var initVolume = 0.5;
 
         function highlightNextElement(cyElem) {
             let currentID = cyElem.id();
             let sample = cyElem.scratch('sample');
 
+
             //Highlight & trigger:
             cyElem.classes(HIGHLIGHT_CLASS);
+
+            sample.setVolume(initVolume);
+            initVolume = Math.random() / 2;
+
+
+
             sample.play();
 
+
             //Set callback to stop:
-            let currentNodeStop = cyElem.scratch('nodeStop') * TICK_LENGTH_MS;
+            let nodeStopBeats = cyElem.scratch('nodeStop');
+
+            let beatsToPeak = Math.floor(Math.random() * nodeStopBeats);
+            let beatsToStop = nodeStopBeats - beatsToPeak;
+
+            let msToPeak = beatsToPeak * TICK_LENGTH_MS;
+
+            sample.fadeTo(1, msToPeak);
+            setTimeout(function () {
+                sample.fadeTo(0, beatsToStop * TICK_LENGTH_MS);
+            }, msToPeak);
+
+            let currentNodeStopDelay = nodeStopBeats * TICK_LENGTH_MS;
+
             setTimeout(function () {
                 CyRenderer.unhighlightElement(cyElem);
+                sample.fadeTo(0, 20); // To prevent 'click' on stop.
                 sample.stop();
-            }, currentNodeStop);
+            }, currentNodeStopDelay);
+
 
             //Continue on the BFS path:
             let extractedTargets = ElementTargets.extractTargetsFor(bfs.path, currentID);
 
-            console.log(
-                'targets w/ ' + extractedTargets.nodeTargets.length + ' nodes and ' +
-                extractedTargets.edgeTargets.length + ' edges'
-            );
+            let numberOfTargets = extractedTargets.nodeTargets.length;
+            //console.log(
+            //    'targets w/ ' + numberOfTargets + ' nodes and ' +
+            //    extractedTargets.edgeTargets.length + ' edges'
+            //);
+
 
             if (extractedTargets.hasTargets()) {
                 let edgeTargets = extractedTargets.edgeTargets;
                 let nodeTargets = extractedTargets.nodeTargets;
 
-                for (let i = 0; i < edgeTargets.length; i++) {
+                for (let i = 0; i < numberOfTargets; i++) {
 
                     let edgeTarget = edgeTargets[i];
                     let edgeDelay = TICK_LENGTH_MS * edgeTarget.data('length');

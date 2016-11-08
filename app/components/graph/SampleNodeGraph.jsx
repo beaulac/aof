@@ -25,18 +25,22 @@ export default class SampleNodeGraph extends React.Component {
 
 
     static buildElements() {
-        let randomizedSamples = _.shuffle(DEF_SAMPLES);
+        let samplesBytype = SampleNodeGraph.samplesByType(DEF_SAMPLES);
+        let randomizedSamples = _.shuffle(SampleNodeGraph.selectSamplesFromGroupedMap(samplesBytype));
+
+        console.log(randomizedSamples);
 
         let currentRoot = SampleNodeGraph.buildRandomNode(randomizedSamples[0]);
         let elements = [currentRoot];
-        for (var i = 1; i < randomizedSamples.length; i++) {
+        for (let i = 1; i < randomizedSamples.length; i++) {
             let newNode = SampleNodeGraph.buildRandomNode(randomizedSamples[i]);
 
             currentRoot.connectTo(newNode, SampleNodeGraph.randomMultipleOfFourWeight());
 
             elements.push(newNode);
 
-            if (Math.random() < 0.8) {
+            if (Math.random() < 0.9) {
+            //if (true) {
                 currentRoot = newNode;
             }
         }
@@ -44,12 +48,50 @@ export default class SampleNodeGraph extends React.Component {
         return elements;
     }
 
+    static samplesByType() {
+
+        let regex = /_([^._\s]+)[\s.]+/;
+        let shuffledSamples = _.shuffle(DEF_SAMPLES);
+
+        return _.groupBy(shuffledSamples, function sampleType(sampleName) {
+            return regex.exec(sampleName)[1];
+        })
+    }
+
+    static selectSamplesFromGroupedMap(groupedMap) {
+
+        var types = {
+            "Beat": 5,
+            "Bass": 3,
+            "Element": 10,
+            "Speech": 5,
+            "Texture": 10
+        };
+
+        var samples = [];
+
+        for (let type in types) {
+
+            if (types.hasOwnProperty(type)) {
+                let count = 0;
+                let maxOfType = types[type];
+
+                while (count < maxOfType) {
+                    samples.push(groupedMap[type][count]);
+                    ++count;
+                }
+            }
+        }
+
+        return samples;
+    }
+
     static buildRandomNode(sampleName) {
         return new SampleNode(sampleName, 10, 10);
     }
 
     static randomMultipleOfFourWeight() {
-        return 4 + (4 * Math.floor(Math.random() * 3))  ;
+        return 4 + (4 * Math.floor(Math.random() * 3));
     }
 
     render() {

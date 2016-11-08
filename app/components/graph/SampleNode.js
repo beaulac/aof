@@ -28,14 +28,18 @@ const DEFAULT_EDGE_WEIGHT = 1;
 class Sample {
 
     static AUDIO_SAMPLE_ROOT_PATH = '../../audio/';
+    static DEFAULT_START_VOLUME = 0.5;
 
     constructor(filename) {
+
+        this.type = /_([^._\s]+)[\s.]+/.exec(filename)[1].toLowerCase();
+
         this.file = Sample.AUDIO_SAMPLE_ROOT_PATH + filename;
 
         this.howlSound = new Howler.Howl({
             src: this.file,
             loop: true,
-            volume: 0.5,
+            volume: Sample.DEFAULT_START_VOLUME,
             preload: true
         });
 
@@ -52,8 +56,14 @@ class Sample {
     }
 
     setVolume(newVolume) {
-        console.log(this.file + " had its volume set to ");
+        console.log(this.file + " had its volume set to " + newVolume);
         this.howlSound.volume(newVolume);
+    }
+
+    fadeTo(newVolume, lengthMs) {
+        console.log(this.file + " is fading to " + newVolume);
+        let sound = this.howlSound;
+        sound.fade(sound.volume(), newVolume, lengthMs);
     }
 
 }
@@ -80,7 +90,10 @@ export default class SampleNode extends CyElementWrapper {
 
     selfToCyElement() {
         let nodeStopBeats = SampleNode.determineBeatsUntilStop();
+        var type = this.sample.type;
+        console.log(type)
         return {
+            classes : type,
             data: {id: this.id, level: this.currentLevel},
             scratch: {
                 type: this.id,
