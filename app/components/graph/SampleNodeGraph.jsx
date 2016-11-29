@@ -40,7 +40,7 @@ export default class SampleNodeGraph extends React.Component {
             elements.push(newNode);
 
             if (Math.random() < 0.9) {
-            //if (true) {
+                //if (true) {
                 currentRoot = newNode;
             }
         }
@@ -54,7 +54,14 @@ export default class SampleNodeGraph extends React.Component {
         let shuffledSamples = _.shuffle(DEF_SAMPLES);
 
         return _.groupBy(shuffledSamples, function sampleType(sampleName) {
-            return regex.exec(sampleName)[1];
+            var results = regex.exec(sampleName);
+
+            if (results && results.length > 0) {
+                return results[1];
+            } else {
+                return "UNKNOWN";
+            }
+
         })
     }
 
