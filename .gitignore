@@ -12,7 +12,7 @@
 *.iml
 
 # OS or Editor folders
-.DS_Store
+**/.DS_Store
 .cache
 .project
 .settings
