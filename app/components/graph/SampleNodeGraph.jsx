@@ -10,6 +10,17 @@ import _ from 'lodash';
 
 export default class SampleNodeGraph extends React.Component {
     static MIN_LEVEL = 0;
+    static PROBABILITY_TICK = 0.1;
+
+    static BRANCHING_PROBABILITY = 0.9;
+
+    static types = {
+        "Beat": 5,
+        "Bass": 3,
+        "Element": 10,
+        "Speech": 5,
+        "Texture": 10
+    };
 
     static defaultProps = {
         style: {
@@ -23,24 +34,33 @@ export default class SampleNodeGraph extends React.Component {
         visualStyle: DEF_VISUAL_STYLE
     };
 
-
     static buildElements() {
-        let samplesBytype = SampleNodeGraph.samplesByType(DEF_SAMPLES);
-        let randomizedSamples = _.shuffle(SampleNodeGraph.selectSamplesFromGroupedMap(samplesBytype));
+        let samplesBytype = SampleNodeGraph.trimSamplesByType(SampleNodeGraph.samplesByType(DEF_SAMPLES));
+        let sampleCount = SampleNodeGraph.countSamples(samplesBytype);
 
-        console.log(randomizedSamples);
+        // Init type probabilities
+        var typeProbabilities = [];
+        for (let type in SampleNodeGraph.types) {
 
-        let currentRoot = SampleNodeGraph.buildRandomNode(randomizedSamples[0]);
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
+               
+                let maxOfType = SampleNodeGraph.types[type];
+                typeProbabilities[type] = maxOfType / sampleCount;
+            }
+        }
+
+        let currentRoot = SampleNodeGraph.buildRandomNode(SampleNodeGraph.randomSelection(samplesBytype, typeProbabilities));
         let elements = [currentRoot];
-        for (let i = 1; i < randomizedSamples.length; i++) {
-            let newNode = SampleNodeGraph.buildRandomNode(randomizedSamples[i]);
+        
+        for (let i = 1; i < sampleCount; i++) {
+
+            let newNode = SampleNodeGraph.buildRandomNode(SampleNodeGraph.randomSelection(samplesBytype, typeProbabilities));
 
             currentRoot.connectTo(newNode, SampleNodeGraph.randomMultipleOfFourWeight());
 
             elements.push(newNode);
 
-            if (Math.random() < 0.9) {
-            //if (true) {
+            if (Math.random() < SampleNodeGraph.BRANCHING_PROBABILITY) {
                 currentRoot = newNode;
             }
         }
@@ -51,39 +71,101 @@ export default class SampleNodeGraph extends React.Component {
     static samplesByType() {
 
         let regex = /_([^._\s]+)[\s.]+/;
-        let shuffledSamples = _.shuffle(DEF_SAMPLES);
 
-        return _.groupBy(shuffledSamples, function sampleType(sampleName) {
+        return _.groupBy(DEF_SAMPLES, function sampleType(sampleName) {
             return regex.exec(sampleName)[1];
         })
     }
 
-    static selectSamplesFromGroupedMap(groupedMap) {
+    static trimSamplesByType(groupedMap) {
+        
+        for (let type in SampleNodeGraph.types) {
 
-        var types = {
-            "Beat": 5,
-            "Bass": 3,
-            "Element": 10,
-            "Speech": 5,
-            "Texture": 10
-        };
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
 
-        var samples = [];
+                groupedMap[type] = _.shuffle(groupedMap[type]);
 
-        for (let type in types) {
+                let count = groupedMap[type].length;
+                let maxOfType = SampleNodeGraph.types[type];
 
-            if (types.hasOwnProperty(type)) {
-                let count = 0;
-                let maxOfType = types[type];
-
-                while (count < maxOfType) {
-                    samples.push(groupedMap[type][count]);
-                    ++count;
+                while (count > maxOfType) {
+                    groupedMap[type].pop()
+                    --count;
                 }
+
             }
         }
 
-        return samples;
+        console.log(groupedMap);
+        return groupedMap;
+    }
+
+    static countSamples(groupedMap) {
+        
+        var count = 0;
+        
+        for (let type in SampleNodeGraph.types) {
+
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
+                count += groupedMap[type].length;
+            }
+        }
+
+        return count;
+    }
+
+    static randomSelection(groupedMap, probabilities) {
+        
+        console.log(groupedMap);
+        console.log(probabilities);
+
+
+        var selectedType = SampleNodeGraph.selectRandomType(probabilities);
+        var selectedNode = groupedMap[selectedType].pop();
+        for (let type in SampleNodeGraph.types) {
+
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
+
+                if (groupedMap[type].length > 0) {
+                    if (type == selectedType) {
+                        probabilities[type] = 0.1; // TODO alex: Don't hardcode this
+                    }
+
+                    probabilities[type] += SampleNodeGraph.PROBABILITY_TICK;
+                }
+                else
+                {
+                    probabilities[type] = 0;
+                }
+            }
+        }
+ 
+        return selectedNode;
+    }
+
+    static selectRandomType(probabilities) {
+        
+        // Calculate total probability
+        var totalProbability = 0;
+
+        for (let type in SampleNodeGraph.types) {
+
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
+                totalProbability = totalProbability + probabilities[type];
+            }
+        }
+
+        // Make random selection based on existing probailities
+        var randNumber = Math.random() * totalProbability;
+        for (let type in SampleNodeGraph.types) {
+
+            if (SampleNodeGraph.types.hasOwnProperty(type)) {
+                if (randNumber <= probabilities[type]) {
+                    return type;
+                }
+                randNumber -= probabilities[type];
+            }
+        }
     }
 
     static buildRandomNode(sampleName) {
