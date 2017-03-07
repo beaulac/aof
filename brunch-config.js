@@ -28,7 +28,7 @@ module.exports = {
 
             var audioFiles = JSON.stringify(fs.readdirSync('app/assets/audio'));
             var jsLOL = "export const DEF_SAMPLES = ";          //wow such hack
-            fs.writeFileSync('app/components/graph/Samples.js', jsLOL + audioFiles);
+            //fs.writeFileSync('app/components/graph/Samples.js', jsLOL + audioFiles);
 
             console.log("Found audio files: " + audioFiles);
 

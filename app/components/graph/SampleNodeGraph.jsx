@@ -9,10 +9,10 @@ import {DEF_SAMPLES} from 'components/graph/Samples';
 import _ from 'lodash';
 
 export default class SampleNodeGraph extends React.Component {
-    static MIN_LEVEL = 0;
-    static PROBABILITY_TICK = 0.1;
 
+    static PROBABILITY_TICK = 0.1;
     static BRANCHING_PROBABILITY = 0.9;
+    static BUILD_FIXED = false;
 
     static types = {
         "Beat": 5,
@@ -34,6 +34,47 @@ export default class SampleNodeGraph extends React.Component {
         visualStyle: DEF_VISUAL_STYLE
     };
 
+    static fixedSamplesTree =
+    {
+        "A10_Speech.mp3": ["A14_Texture.mp3"],
+        "A14_Texture.mp3": ["A2_Bass.mp3", "F4_Beat.mp3"],
+        "A2_Bass.mp3": ["A10_Speech.mp3"],
+        "F4_Beat.mp3": []
+    };
+
+    static buildFixedElements() {
+        // Get list of provided samples
+        var sampleNodes = [];
+        for (let sample in SampleNodeGraph.fixedSamplesTree) {
+
+            if (SampleNodeGraph.fixedSamplesTree.hasOwnProperty(sample)) {
+
+                sampleNodes.push(SampleNodeGraph.buildRandomNode(sample));
+            }
+        }
+
+        // Link all elements to their provided neighbors
+        var samplesLength = sampleNodes.length;
+        for (var i = 0; i < samplesLength; i++) {
+
+            let neighbors = SampleNodeGraph.fixedSamplesTree[sampleNodes[i].filename];
+            var neighborLength = neighbors.length;
+            for (var j = 0; j < neighborLength; j++) {
+
+                let newNeighbor = sampleNodes.find(function(element) {
+                    return element.filename === neighbors[j];
+                });
+
+                if (newNeighbor) {
+
+                    sampleNodes[i].connectTo(newNeighbor, SampleNodeGraph.randomMultipleOfFourWeight());
+                }
+            }
+        }
+
+        return sampleNodes;
+    }
+
     static buildElements() {
         let samplesBytype = SampleNodeGraph.trimSamplesByType(SampleNodeGraph.samplesByType(DEF_SAMPLES));
         let sampleCount = SampleNodeGraph.countSamples(samplesBytype);
@@ -43,7 +84,7 @@ export default class SampleNodeGraph extends React.Component {
         for (let type in SampleNodeGraph.types) {
 
             if (SampleNodeGraph.types.hasOwnProperty(type)) {
-               
+
                 let maxOfType = SampleNodeGraph.types[type];
                 typeProbabilities[type] = maxOfType / sampleCount;
             }
@@ -51,7 +92,7 @@ export default class SampleNodeGraph extends React.Component {
 
         let currentRoot = SampleNodeGraph.buildRandomNode(SampleNodeGraph.randomSelection(samplesBytype, typeProbabilities));
         let elements = [currentRoot];
-        
+
         for (let i = 1; i < sampleCount; i++) {
 
             let newNode = SampleNodeGraph.buildRandomNode(SampleNodeGraph.randomSelection(samplesBytype, typeProbabilities));
@@ -78,7 +119,7 @@ export default class SampleNodeGraph extends React.Component {
     }
 
     static trimSamplesByType(groupedMap) {
-        
+
         for (let type in SampleNodeGraph.types) {
 
             if (SampleNodeGraph.types.hasOwnProperty(type)) {
@@ -101,9 +142,9 @@ export default class SampleNodeGraph extends React.Component {
     }
 
     static countSamples(groupedMap) {
-        
+
         var count = 0;
-        
+
         for (let type in SampleNodeGraph.types) {
 
             if (SampleNodeGraph.types.hasOwnProperty(type)) {
@@ -115,7 +156,7 @@ export default class SampleNodeGraph extends React.Component {
     }
 
     static randomSelection(groupedMap, probabilities) {
-        
+
         console.log(groupedMap);
         console.log(probabilities);
 
@@ -139,12 +180,12 @@ export default class SampleNodeGraph extends React.Component {
                 }
             }
         }
- 
+
         return selectedNode;
     }
 
     static selectRandomType(probabilities) {
-        
+
         // Calculate total probability
         var totalProbability = 0;
 
@@ -178,7 +219,7 @@ export default class SampleNodeGraph extends React.Component {
 
     render() {
 
-        let elements = SampleNodeGraph.buildElements();
+        let elements = SampleNodeGraph.BUILD_FIXED ? SampleNodeGraph.buildFixedElements() : SampleNodeGraph.buildElements();
 
         return (
             <CyRenderer visualStyle={this.props.visualStyle} elements={elements}/>

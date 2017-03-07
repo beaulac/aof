@@ -72,6 +72,9 @@ export default class SampleNode extends CyElementWrapper {
 
     constructor(sampleFilename, maxLevel, startLevel) {
         super(sampleFilename || Math.random().toString().substr(2, 4));
+
+        this.filename = sampleFilename;
+
         this.edges = new Map();
 
         this.maxLevel = maxLevel || DEFAULT_MAX_LEVEL;
