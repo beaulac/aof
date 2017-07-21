@@ -71,6 +71,8 @@ export default class CyRenderer extends React.Component {
                 })
         );
 
+        this.cy.minZoom(0.04);
+        this.cy.maxZoom(4);
 
         let layout = this.cy.makeLayout({
             name: layoutName,
@@ -103,7 +105,6 @@ export default class CyRenderer extends React.Component {
 
     setupEventHandlers() {
         let cyNodes = this.cy.elements();
-
         if (cyNodes !== undefined) {
             let bfsFunctionFor = this.startBfsFrom.bind(this, cyNodes);
 
