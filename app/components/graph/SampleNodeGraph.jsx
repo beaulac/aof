@@ -2,10 +2,10 @@
  * Created by alacasse on 9/19/16.
  */
 import React from 'react';
-import SampleNode from 'components/graph/SampleNode';
-import CyRenderer from 'components/graph/CyRenderer';
-import {DEF_VISUAL_STYLE} from 'components/graph/VisualStyle';
-import {DEF_SAMPLES} from 'components/graph/Samples';
+import SampleNode from './SampleNode';
+import CyRenderer from './CyRenderer';
+import {DEF_VISUAL_STYLE} from './VisualStyle';
+import {DEF_SAMPLES} from './Samples';
 import _ from 'lodash';
 
 export default class SampleNodeGraph extends React.Component {
