@@ -1,4 +1,3 @@
-
 module.exports = {
     files: {
 
@@ -14,7 +13,7 @@ module.exports = {
     plugins: {
         babel: {
             presets: ['es2015', 'es2016', 'react'],
-            "plugins": ["transform-class-properties"]
+            'plugins': ['transform-class-properties']
         },
         less: {
             modules: true,
@@ -24,13 +23,17 @@ module.exports = {
 
     hooks: {
         preCompile: (end) => {
-            var fs = require('fs');
+            const fs = require('fs');
 
-            var audioFiles = JSON.stringify(fs.readdirSync('app/assets/audio'));
-            var jsLOL = "export const DEF_SAMPLES = ";          //wow such hack
-            //fs.writeFileSync('app/components/graph/Samples.js', jsLOL + audioFiles);
+            const audioFileRegex = /(.mp3$)|(.ogg$)|(.wav$)|(.m4a$)/;
 
-            console.log("Found audio files: " + audioFiles);
+            const audioFiles = JSON.stringify(fs.readdirSync('app/assets/audio'))
+                                   .filter(filename => audioFileRegex.test(filename));
+
+            const jsLOL = 'export const DEF_SAMPLES = ';          //wow such hack
+            fs.writeFileSync('app/components/graph/Samples.js', jsLOL + audioFiles);
+
+            console.log('Found audio files: ' + audioFiles);
 
             end();
         }
