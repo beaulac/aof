@@ -2,10 +2,10 @@
  * Created by alacasse on 9/19/16.
  */
 import React from 'react';
-import _ from "lodash";
-import cytoscape from "cytoscape";
-import cycola from "cytoscape-cola";
-import cola from "webcola";
+import _ from 'lodash';
+import cytoscape from 'cytoscape';
+import cycola from 'cytoscape-cola';
+import cola from 'webcola';
 
 // TODO: consolidate Cytoscape-dependent tags
 const CYTOSCAPE_TAG = 'cy';
@@ -27,6 +27,8 @@ export default class CyRenderer extends React.Component {
         highlightClass: 'highlighted',
         unhighlightClass: 'unhighlighted'
     };
+
+    startEventQueue = [];
 
     static NO_OP_BFS() {
     }
@@ -68,54 +70,55 @@ export default class CyRenderer extends React.Component {
                     container: document.getElementById(CYTOSCAPE_TAG), //Could be cached... but not a heavy operation.
                     elements: cyElements,
                     style: visualStyle
-                })
+                }
+            )
         );
 
 
         let layout = this.cy.makeLayout({
-            name: layoutName,
-            animate: true,
-            fit: true,
-            padding: 50,
-            maxSimulationTime: 1000,
-            avoidOverlap: true,
-            randomize: false,
-            animationThreshold: 0,
-            infinite: true,
-            stiffness: 400,
-            damping: 0.5,
-            nodeRepulsion: function (node) { //TODO INVESTIGATE EDGE REPULSION
-                let value = 100 * node.connectedEdges().toArray().reduce(((acc, e) => acc + e.data().length), 0);
-                return value;
-            },
-            edgeLength: function (edge) {
-                return edge.data().length * 2
-            },
-            nestingFactor: 0,
-            edgeElasticity: function (edge) {
-                return Math.pow(2, edge.data('length'));
-            }
-        });
+                                            name: layoutName,
+                                            animate: true,
+                                            fit: true,
+                                            padding: 50,
+                                            maxSimulationTime: 1000,
+                                            avoidOverlap: true,
+                                            randomize: false,
+                                            animationThreshold: 0,
+                                            infinite: true,
+                                            stiffness: 400,
+                                            damping: 0.5,
+                                            nodeRepulsion: function (node) { //TODO INVESTIGATE EDGE REPULSION
+                                                return 100 * node.connectedEdges()
+                                                                 .toArray()
+                                                                 .reduce(((acc, e) => acc + e.data().length), 0);
+                                            },
+                                            edgeLength: function (edge) {
+                                                return edge.data().length * 2
+                                            },
+                                            nestingFactor: 0,
+                                            edgeElasticity: function (edge) {
+                                                return Math.pow(2, edge.data('length'));
+                                            }
+                                        });
         layout.run();
 
         this.setupEventHandlers();
     }
 
     setupEventHandlers() {
-        let cyNodes = this.cy.elements();
+        const cyNodes = (this.cy.elements() || []).filter((i, e) => e.isNode());
+        cyNodes.forEach(node => node.on('click', event => this.startBfsFrom(cyNodes, event.cyTarget)));
+    }
 
-        if (cyNodes !== undefined) {
-            let bfsFunctionFor = this.startBfsFrom.bind(this, cyNodes);
-
-            cyNodes.filter((i, e) => e.isNode())
-                .forEach(node => node.on(
-                    'click',
-                    function (event) {
-                        let target = event.cyTarget;
-                        bfsFunctionFor(target);
-                    })
-            );
-        }
+    STOP() {
+        this.eventQueue.forEach(queuedEvent => clearTimeout(queuedEvent));
+        this.cy.elements().forEach(cyElem => {
+            let sample = cyElem.scratch('sample');
+            if (sample) {
+                CyRenderer.unhighlightElement(cyElem);
+                sample.stop();
+            }
+        })
     }
 
     startBfsFrom(elements, root) {
@@ -124,7 +127,7 @@ export default class CyRenderer extends React.Component {
 
         highlightNextElement(root);
 
-        var initVolume = 0.5;
+        let initVolume = 0.5;
 
         function highlightNextElement(cyElem) {
             let currentID = cyElem.id();
@@ -138,7 +141,7 @@ export default class CyRenderer extends React.Component {
             initVolume = Math.random() / 2;
 
 
-
+            // STARTS TO PLAY HERE:
             sample.play();
 
 
@@ -151,13 +154,12 @@ export default class CyRenderer extends React.Component {
             let msToPeak = beatsToPeak * TICK_LENGTH_MS;
 
             sample.fadeTo(1, msToPeak);
-            setTimeout(function () {
-                sample.fadeTo(0, beatsToStop * TICK_LENGTH_MS);
-            }, msToPeak);
+
+            setTimeout(() => sample.fadeTo(0, beatsToStop * TICK_LENGTH_MS), msToPeak)
 
             let currentNodeStopDelay = nodeStopBeats * TICK_LENGTH_MS;
 
-            setTimeout(function () {
+            setTimeout(() => {
                 CyRenderer.unhighlightElement(cyElem);
                 sample.fadeTo(0, 20); // To prevent 'click' on stop.
                 sample.stop();
@@ -173,7 +175,6 @@ export default class CyRenderer extends React.Component {
             //    extractedTargets.edgeTargets.length + ' edges'
             //);
 
-
             if (extractedTargets.hasTargets()) {
                 let edgeTargets = extractedTargets.edgeTargets;
                 let nodeTargets = extractedTargets.nodeTargets;
@@ -185,11 +186,9 @@ export default class CyRenderer extends React.Component {
 
                     let nextNodeStart = cyElem.scratch('nextNodeStart') * TICK_LENGTH_MS;
 
-                    setTimeout(function () {
-                        highlightNextElement(nodeTargets[i]);
-                    }, edgeDelay + nextNodeStart);
-
-
+                    this.startEventQueue.push(
+                        setTimeout(() => highlightNextElement(nodeTargets[i]), edgeDelay + nextNodeStart)
+                    );
                 }
             }
         }
@@ -209,10 +208,10 @@ export default class CyRenderer extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.networkData.equals(this.props.networkData)) {
-            console.log("Network unchanged, not updating cytoscapejs");
+            console.log('Network unchanged, not updating cytoscapejs');
             return false;
         }
-        console.log("Network changed, updating cytoscapejs");
+        console.log('Network changed, updating cytoscapejs');
         return true;
     }
 
@@ -220,10 +219,9 @@ export default class CyRenderer extends React.Component {
         //TODO Figure out dynamic sizing for Cytoscape div.
         return (
             <div className="bdtem-graph" style={{height: '100%'}}>
-                <div id={CYTOSCAPE_TAG} style={{height: 800}}/>
+                <div id={CYTOSCAPE_TAG} style={{height: 800}} />
             </div>
         );
-
     }
 
 }

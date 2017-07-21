@@ -14,10 +14,6 @@ module.exports = {
         babel: {
             presets: ['es2015', 'es2016', 'react'],
             'plugins': ['transform-class-properties']
-        },
-        less: {
-            modules: true,
-            'source-map': 'styles/application.css.map'
         }
     },
 
@@ -27,8 +23,10 @@ module.exports = {
 
             const audioFileRegex = /(.mp3$)|(.ogg$)|(.wav$)|(.m4a$)/;
 
-            const audioFiles = JSON.stringify(fs.readdirSync('app/assets/audio'))
-                                   .filter(filename => audioFileRegex.test(filename));
+            const audioFiles = JSON.stringify(
+                fs.readdirSync('app/assets/audio')
+                  .filter(filename => audioFileRegex.test(filename))
+            );
 
             const jsLOL = 'export const DEF_SAMPLES = ';          //wow such hack
             fs.writeFileSync('app/components/graph/Samples.js', jsLOL + audioFiles);

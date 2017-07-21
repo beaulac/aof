@@ -32,36 +32,41 @@ class Sample {
 
     constructor(filename) {
 
-        this.type = /_([^._\s]+)[\s.]+/.exec(filename)[1].toLowerCase();
+        if (filename && filename.length) {
+            this.type = /_([^._\s]+)[\s.]+/.exec(filename)[1].toLowerCase();
 
-        this.file = Sample.AUDIO_SAMPLE_ROOT_PATH + filename;
+            this.file = Sample.AUDIO_SAMPLE_ROOT_PATH + filename;
 
-        this.howlSound = new Howler.Howl({
-            src: this.file,
-            loop: true,
-            volume: Sample.DEFAULT_START_VOLUME,
-            preload: true
-        });
+            this.howlSound = new Howler.Howl({
+                                                 src: this.file,
+                                                 loop: true,
+                                                 volume: Sample.DEFAULT_START_VOLUME,
+                                                 preload: true
+                                             });
+        } else {
+            console.warn(`missing filename? ${filename}`)
+        }
+
 
     }
 
     play() {
         this.howlSound.play();
-        console.log(this.file + " is now playing");
+        console.log(this.file + ' is now playing');
     }
 
     stop() {
         this.howlSound.stop();
-        console.log(this.file + " has stopped playing.");
+        console.log(this.file + ' has stopped playing.');
     }
 
     setVolume(newVolume) {
-        console.log(this.file + " had its volume set to " + newVolume);
+        console.log(this.file + ' had its volume set to ' + newVolume);
         this.howlSound.volume(newVolume);
     }
 
     fadeTo(newVolume, lengthMs) {
-        console.log(this.file + " is fading to " + newVolume);
+        console.log(this.file + ' is fading to ' + newVolume);
         let sound = this.howlSound;
         sound.fade(sound.volume(), newVolume, lengthMs);
     }
@@ -93,10 +98,10 @@ export default class SampleNode extends CyElementWrapper {
 
     selfToCyElement() {
         let nodeStopBeats = SampleNode.determineBeatsUntilStop();
-        var type = this.sample.type;
-        console.log(type)
+        const type = this.sample.type;
+        console.log(type);
         return {
-            classes : type,
+            classes: type,
             data: {id: this.id, level: this.currentLevel},
             scratch: {
                 type: this.id,
@@ -110,11 +115,11 @@ export default class SampleNode extends CyElementWrapper {
     }
 
     static randomColor() {
-        var colorString = '#';
-        for (var i = 0; i < 3; i++) {
-            var byteString = SampleNode.randomByte().toString(16);
+        let colorString = '#';
+        for (let i = 0; i < 3; i++) {
+            let byteString = SampleNode.randomByte().toString(16);
             if (byteString.length < 2) {
-                byteString = '0' + byteString;
+                byteString = `0${byteString}`;
             }
             colorString = colorString.concat(byteString);
         }
@@ -127,19 +132,18 @@ export default class SampleNode extends CyElementWrapper {
     }
 
 
-
     static determineBeatsUntilStop() {
         return 32 + (Math.floor(Math.random() * 32) * 4)
     }
 
     trigger() {
         this.sample.play();
-        console.log(this.id + ' was triggered');
+        console.log(`${this.id} was triggered`);
     }
 
     stop() {
         this.sample.stop();
-        console.log(this.id + ' was stopped');
+        console.log(`${this.id} was stopped`);
     }
 
     connectTo(otherNode, distance) {
