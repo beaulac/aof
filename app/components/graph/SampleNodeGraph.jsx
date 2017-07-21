@@ -13,14 +13,16 @@ export default class SampleNodeGraph extends React.Component {
     static PROBABILITY_TICK = 0.1;
     static BRANCHING_PROBABILITY = 0.9;
     static BUILD_FIXED = false;
+    static TOTAL_NODE_COUNT = 25.0;
+    static TYPE_RATIO_COUNT = 0;
 
     static types = {
-        "Beat": 5,
-        "Bass": 3,
-        "Element": 10,
-        "Speech": 5,
-        "Texture": 10
-    };
+        "Beat": 5.0,
+        "Bass": 3.0,
+        "Element": 10.0,
+        "Speech": 5.0,
+        "Texture": 10.0
+    }; 
 
     static defaultProps = {
         style: {
@@ -85,8 +87,8 @@ export default class SampleNodeGraph extends React.Component {
 
             if (SampleNodeGraph.types.hasOwnProperty(type)) {
 
-                let maxOfType = SampleNodeGraph.types[type];
-                typeProbabilities[type] = maxOfType / sampleCount;
+                let typeNodeCount = SampleNodeGraph.getTypeRatio(type) * SampleNodeGraph.TOTAL_NODE_COUNT;
+                typeProbabilities[type] = typeNodeCount / sampleCount;
             }
         }
 
@@ -118,16 +120,35 @@ export default class SampleNodeGraph extends React.Component {
         })
     }
 
+    static getTypeRatio(type) {
+
+    	if (SampleNodeGraph.types.hasOwnProperty(type)) {
+
+	    	if (SampleNodeGraph.TYPE_RATIO_COUNT == 0) {
+
+		    	for (let type in SampleNodeGraph.types) {
+
+		            SampleNodeGraph.TYPE_RATIO_COUNT += SampleNodeGraph.types[type];
+		        }
+		    }
+
+		    return SampleNodeGraph.types[type] / SampleNodeGraph.TYPE_RATIO_COUNT;
+		}
+
+		return 0;
+
+    }
+
     static trimSamplesByType(groupedMap) {
 
-        for (let type in SampleNodeGraph.types) {
+    	for (let type in SampleNodeGraph.types) {
 
             if (SampleNodeGraph.types.hasOwnProperty(type)) {
 
                 groupedMap[type] = _.shuffle(groupedMap[type]);
 
                 let count = groupedMap[type].length;
-                let maxOfType = SampleNodeGraph.types[type];
+                let maxOfType = SampleNodeGraph.getTypeRatio(type) * SampleNodeGraph.TOTAL_NODE_COUNT;
 
                 while (count > maxOfType) {
                     groupedMap[type].pop()
