@@ -6,7 +6,8 @@ const DEFAULT_START_VOLUME = 0.5;
 const DEFAULT_HOWL_OPTIONS = {
     loop: true,
     volume: DEFAULT_START_VOLUME,
-    preload: true
+    preload: true,
+    format: 'mp3'
 };
 
 @Injectable()
@@ -21,7 +22,7 @@ export class HowlerService {
         this.options = Object.assign(DEFAULT_HOWL_OPTIONS, newOptions);
     }
 
-    buildHowlSound(src, options = DEFAULT_HOWL_OPTIONS) {
-        return new Howler.Howl(Object.assign(this.options, {src}));
+    buildHowlSound(src, baseOptions = this.options) {
+        return new Howler.Howl(Object.assign(baseOptions, {src}));
     }
 }
