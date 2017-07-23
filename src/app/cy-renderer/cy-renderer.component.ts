@@ -6,25 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../node.service';
 import { SampleNode } from '../SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
-import { DEF_VISUAL_STYLE } from '../VisualStyle';
-
-// Empty for now, can be used for debugging:
-const BFS_VISIT_CALLBACK = () => undefined;
-
-const HIGHLIGHT_CLASS = 'highlighted'
-    , UNHIGHLIGHT_CLASS = 'unhighlighted';
-
-function isEdgeLinkedTo(edge, sourceId) {
-    return edge.source().id() === sourceId || edge.target().id() === sourceId;
-}
-
-function highlightElement(element) {
-    element.classes(HIGHLIGHT_CLASS);
-}
-
-function unhighlightElement(element) {
-    element.classes(UNHIGHLIGHT_CLASS);
-}
+import { VisualStyle, highlightElement, unhighlightElement } from '../VisualStyle';
+import { ElementTargets } from '../ElementTargets';
 
 @Component({
                selector: 'app-cy-renderer',
@@ -37,10 +20,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     elements: Observable<SampleNode[]>;
     private elementSub: Subscription;
 
-    renderOptions = {};
     layoutName = 'cose';
-
-    tickLength = TICK_LENGTH_MS;
 
     cy: any;
     private cyContainer;
@@ -60,7 +40,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
     }
 
-    STOP() {
+    public STOP() {
         this.startEventQueue.forEach(queuedEvent => clearTimeout(queuedEvent));
         this.cy.elements().forEach(cyElem => {
             const sample = cyElem.scratch('sample');
@@ -73,9 +53,16 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     startBfsFrom(root) {
         let initVolume = 0.5;
+
+        const initializeSample = sample => {
+            sample.setVolume(initVolume);
+            initVolume = Math.random() * initVolume;
+            sample.play();
+        };
+
         const bfs = this.cy.elements().bfs({
                                                root,
-                                               visit: BFS_VISIT_CALLBACK,
+                                               visit: () => undefined,
                                                directed: false
                                            });
 
@@ -86,13 +73,10 @@ export class CyRendererComponent implements OnInit, OnDestroy {
             // Highlight & trigger:
             highlightElement(cyElem);
 
-            sample.setVolume(initVolume);
-            initVolume = Math.random() * initVolume;
-            sample.play();
+            initializeSample(sample);
 
             // Set callback to stop:
             const nodeStopBeats = cyElem.scratch('nodeStop');
-
             const beatsToPeak = Math.floor(Math.random() * nodeStopBeats);
             const beatsToStop = nodeStopBeats - beatsToPeak;
 
@@ -110,7 +94,6 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                 sample.stop();
             }, currentNodeStopDelay);
 
-
             // Continue on the BFS path:
             const extractedTargets = ElementTargets.extractTargetsFor(bfs.path, currentID);
 
@@ -125,12 +108,14 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                 const nodeTargets = extractedTargets.nodeTargets;
 
                 for (let idx = 0; idx < numberOfTargets; idx++) {
-
                     const edgeTarget = edgeTargets[idx];
-                    const edgeDelay = TICK_LENGTH_MS * edgeTarget.data('length');
 
+                    const edgeDelay = TICK_LENGTH_MS * edgeTarget.data('length');
                     const nextNodeStart = cyElem.scratch('nextNodeStart') * TICK_LENGTH_MS;
 
+                    const nodeTarget = nodeTargets[idx];
+                    const targetSample = nodeTarget.scratch('sample');
+                    targetSample.load();
                     this.startEventQueue.push(
                         setTimeout(() => highlightNextElement(nodeTargets[idx]), edgeDelay + nextNodeStart)
                     );
@@ -162,7 +147,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                 boxSelectionEnabled: false,
                                 container: this.cyContainer,
                                 elements: cyElements,
-                                style: DEF_VISUAL_STYLE
+                                style: VisualStyle
                             });
 
         this.initLayout();
@@ -202,44 +187,5 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     private runLayout() {
         this.currentLayout.run();
-    }
-}
-
-
-class ElementTargets {
-    constructor(public edgeTargets, public nodeTargets) {
-    }
-
-    static extractTargetsFor(path, sourceId) {
-        const targets = new ElementTargets([], []);
-
-        console.log(path, sourceId);
-
-        let previousWasOutgoingEdge = false;
-        let idx = path.toArray().findIndex(e => e.id() === sourceId); // Start i from location of node in path
-        for (idx; idx < path.length; idx++) {
-            const elem = path[idx];
-            if (elem.isEdge() && isEdgeLinkedTo(elem, sourceId)) { // Is an outgoing edge from source.
-                targets.addEdge(elem);
-                previousWasOutgoingEdge = true;
-            } else if (previousWasOutgoingEdge) { // Path is structured like E1, N1, E2, N2
-                targets.addNode(elem);
-                previousWasOutgoingEdge = false;
-            }
-        }
-        return targets;
-    }
-
-
-    addEdge(edge) {
-        this.edgeTargets.push(edge);
-    }
-
-    addNode(node) {
-        this.nodeTargets.push(node);
-    }
-
-    hasTargets() {
-        return this.edgeTargets.length > 0 && this.nodeTargets.length > 0;
     }
 }

@@ -6,7 +6,7 @@ const DEFAULT_START_VOLUME = 0.5;
 const DEFAULT_HOWL_OPTIONS = {
     loop: true,
     volume: DEFAULT_START_VOLUME,
-    preload: true,
+    preload: false,
     format: 'mp3'
 };
 
