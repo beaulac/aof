@@ -93,7 +93,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
             );
 
             if (extractedTargets.hasTargets()) {
-                const {edgeTargets, nodeTargets} = extractedTargets
+                const {edgeTargets, nodeTargets} = extractedTargets;
 
                 for (let idx = 0; idx < numberOfTargets; idx++) {
                     const edgeTarget = edgeTargets[idx];
@@ -116,9 +116,9 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.cyContainer = document.getElementById(this.CYTOSCAPE_TAG);
-        this.elementSub = this.elements.subscribe(newElements => this.updateCyjs(newElements));
-        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
-        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
+        this.elementSub = this.elements.subscribe(newElements => {
+            this.updateCyjs(newElements);
+        });
     }
 
     ngOnDestroy() {
@@ -138,6 +138,12 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                 style: VisualStyle
                             });
         this.initLayout();
+        this.setupEventListeners();
+    }
+
+    private setupEventListeners() {
+        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
+        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
     }
 
     private initLayout() {

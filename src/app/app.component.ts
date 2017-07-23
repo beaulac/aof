@@ -1,6 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { buildFixedElements } from './SampleNodeGraph';
-import { NodeService } from './node.service';
 import { CyRendererComponent } from './cy-renderer/cy-renderer.component';
 
 @Component({
