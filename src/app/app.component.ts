@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { buildFixedElements } from './SampleNodeGraph';
+import { NodeService } from './node.service';
 
 @Component({
                selector: 'app-root',
@@ -7,5 +8,6 @@ import { buildFixedElements } from './SampleNodeGraph';
                styleUrls: ['./app.component.css']
            })
 export class AppComponent {
-    elements = buildFixedElements();
+    constructor() {
+    }
 }

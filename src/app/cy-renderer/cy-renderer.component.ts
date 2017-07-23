@@ -1,14 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import * as cytoscape from 'cytoscape';
 import { DEF_VISUAL_STYLE } from '../VisualStyle';
-
-const BPM = 160;
-const TICK_LENGTH_MS = (60 / BPM) * 1000;
+import { TICK_LENGTH_MS } from '../Timing';
+import { SampleNode } from '../SampleNode';
+import { Observable } from 'rxjs/Observable';
+import { NodeService } from '../node.service';
+import { Subscription } from 'rxjs/Subscription';
 
 // Empty for now, can be used for debugging:
-const BFS_VISIT_CALLBACK = () => {
-};
+const BFS_VISIT_CALLBACK = () => undefined;
 
 const HIGHLIGHT_CLASS = 'highlighted'
     , UNHIGHLIGHT_CLASS = 'unhighlighted';
@@ -30,11 +31,11 @@ function unhighlightElement(element) {
                templateUrl: './cy-renderer.component.html',
                styleUrls: ['./cy-renderer.component.css']
            })
-export class CyRendererComponent implements OnInit {
+export class CyRendererComponent implements OnInit, OnDestroy {
     CYTOSCAPE_TAG = 'cy';
 
-    @Input()
-    elements: any[];
+    elements: Observable<SampleNode[]>;
+    private elementSub: Subscription;
 
     renderOptions = {};
     layoutName = 'cose';
@@ -42,6 +43,7 @@ export class CyRendererComponent implements OnInit {
     tickLength = TICK_LENGTH_MS;
 
     cy: any;
+    private cyContainer;
 
     currentLayout: any;
 
@@ -49,68 +51,8 @@ export class CyRendererComponent implements OnInit {
 
     startEventQueue = [];
 
-    constructor() {
-    }
-
-    updateCyjs() {
-        console.log('* Cytoscape.js is rendering new network...');
-        const cyElements = _.flattenDeep(this.elements.map(e => e.toCyElementJSON()));
-
-        console.log(cyElements);
-
-        this.nodesById = _.groupBy(this.elements, 'id');
-
-        // Is there not an easier way to collapse these group-by arrays? TODO look up unique groupBy
-        for (const prop in this.nodesById) {
-            if (this.nodesById.hasOwnProperty(prop)) {
-                this.nodesById[prop] = this.nodesById[prop][0];
-            }
-        }
-
-        this.cy = cytoscape({
-                                boxSelectionEnabled: false,
-                                container: document.getElementById(this.CYTOSCAPE_TAG), // Could be cached... but not a heavy operation.
-                                elements: cyElements,
-                                style: DEF_VISUAL_STYLE
-                            });
-
-        this.initLayout();
-        this.runLayout();
-        this.setupEventHandlers();
-    }
-
-    initLayout() {
-        const layoutName = this.layoutName;
-
-        const layoutOptions = {
-            name: layoutName,
-            animate: true,
-            fit: true,
-            padding: 50,
-            maxSimulationTime: 1000,
-            avoidOverlap: true,
-            randomize: false,
-            animationThreshold: 0,
-            infinite: true,
-            stiffness: 400,
-            damping: 0.5,
-            nodeRepulsion: node => { // TODO INVESTIGATE EDGE REPULSION
-                return 100 * node.connectedEdges()
-                                 .toArray()
-                                 .reduce(((acc, e) => acc + e.data().length),
-                                         0
-                                 );
-            },
-            edgeLength: edge => edge.data().length * 2,
-            nestingFactor: 0,
-            edgeElasticity: edge => Math.pow(2, edge.data('length'))
-        };
-
-        this.currentLayout = this.cy.makeLayout(layoutOptions);
-    }
-
-    runLayout() {
-        this.currentLayout.run();
+    constructor(private nodeService: NodeService) {
+        this.elements = this.nodeService.trackNodes();
     }
 
     setupEventHandlers() {
@@ -196,7 +138,66 @@ export class CyRendererComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.updateCyjs();
+        this.cyContainer = document.getElementById(this.CYTOSCAPE_TAG);
+        this.elementSub = this.elements.subscribe(newElements => this.updateCyjs(newElements));
+    }
+
+    ngOnDestroy() {
+        this.elementSub && this.elementSub.unsubscribe();
+    }
+
+    private updateCyjs(elements) {
+        console.log('* Cytoscape.js is rendering new network...');
+        this.nodesById = _(elements).groupBy('id').mapValues(([node]) => node).value();
+        const cyElements = _(elements).map(e => e.toCyElementJSON()).flatten().value();
+
+        console.log(cyElements);
+
+
+        this.cy = cytoscape({
+                                boxSelectionEnabled: false,
+                                container: this.cyContainer,
+                                elements: cyElements,
+                                style: DEF_VISUAL_STYLE
+                            });
+
+        this.initLayout();
+        this.runLayout();
+        this.setupEventHandlers();
+    }
+
+    private initLayout() {
+        const layoutName = this.layoutName;
+
+        const layoutOptions = {
+            name: layoutName,
+            animate: true,
+            fit: true,
+            padding: 50,
+            maxSimulationTime: 1000,
+            avoidOverlap: true,
+            randomize: false,
+            animationThreshold: 0,
+            infinite: true,
+            stiffness: 400,
+            damping: 0.5,
+            nodeRepulsion: node => { // TODO INVESTIGATE EDGE REPULSION
+                return 100 * node.connectedEdges()
+                                 .toArray()
+                                 .reduce(((acc, e) => acc + e.data().length),
+                                         0
+                                 );
+            },
+            edgeLength: edge => edge.data().length * 2,
+            nestingFactor: 0,
+            edgeElasticity: edge => Math.pow(2, edge.data('length'))
+        };
+
+        this.currentLayout = this.cy.makeLayout(layoutOptions);
+    }
+
+    private runLayout() {
+        this.currentLayout.run();
     }
 }
 

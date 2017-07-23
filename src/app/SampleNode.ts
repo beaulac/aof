@@ -1,35 +1,8 @@
-import * as Howler from 'howler';
+import { CyElementWrapper } from './CyElementWrapper';
+import { AofSample } from './AofSample';
+import { Edge } from './Edge';
 
 const DEFAULT_MAX_LEVEL = 10;
-const DEFAULT_EDGE_WEIGHT = 1;
-
-/**
- * @abstract
- */
-export class CyElementWrapper {
-    constructor(public id, public cyElement?) {
-    }
-
-    associateToCyElement(cyElement) {
-        this.cyElement = cyElement;
-    }
-
-    toCyElementJSON(): any[] {
-        return [
-            {
-                data: this
-            }
-        ];
-    }
-}
-
-export class Edge extends CyElementWrapper {
-    group = 'edges';
-
-    constructor(public source, public target, public length = DEFAULT_EDGE_WEIGHT) {
-        super(Math.random().toString().substr(4, 4));
-    }
-}
 
 function randomColor() {
     let colorString = '#';
@@ -38,82 +11,29 @@ function randomColor() {
         if (byteString.length < 2) {
             byteString = `0${byteString}`;
         }
-        colorString = colorString.concat(byteString);
+        colorString += `${colorString}${byteString}`;
     }
 
     return colorString;
 }
 
 function randomByte() {
-    return (Math.floor(Math.random() * (0xFF)));
+    return Math.round(Math.random() * 0xFF);
 }
-
 
 function determineBeatsUntilStop() {
     return 32 + (Math.floor(Math.random() * 32) * 4);
 }
 
+export class        SampleNode extends CyElementWrapper {
 
-class Sample {
-    static AUDIO_SAMPLE_ROOT_PATH = '../../audio/';
-    static DEFAULT_START_VOLUME = 0.5;
+    edges = {};
+    currentLevel: number;
 
-    private howlSound: Howl;
-    public type: string;
-    public file: string;
-
-    constructor(filename) {
-        if (filename && filename.length) {
-            this.type = /_([^._\s]+)[\s.]+/.exec(filename)[1].toLowerCase();
-
-            this.file = Sample.AUDIO_SAMPLE_ROOT_PATH + filename;
-
-            this.howlSound = new Howler.Howl({
-                                                 src: this.file,
-                                                 loop: true,
-                                                 volume: Sample.DEFAULT_START_VOLUME,
-                                                 preload: true
-                                             });
-        } else {
-            console.warn(`missing filename? ${filename}`);
-        }
-    }
-
-    play() {
-        this.howlSound.play();
-        console.log(this.file + ' is now playing');
-    }
-
-    stop() {
-        this.howlSound.stop();
-        console.log(this.file + ' has stopped playing.');
-    }
-
-    setVolume(newVolume) {
-        console.log(this.file + ' had its volume set to ' + newVolume);
-        this.howlSound.volume(newVolume);
-    }
-
-    fadeTo(newVolume, lengthMs) {
-        console.log(this.file + ' is fading to ' + newVolume);
-        const sound = this.howlSound;
-        sound.fade(sound.volume(), newVolume, lengthMs);
-    }
-}
-
-export class SampleNode extends CyElementWrapper {
-    public edges = new Map();
-
-    public currentLevel: number;
-
-    public sample: Sample;
-
-    constructor(public filename, public maxLevel = DEFAULT_MAX_LEVEL, public startLevel = maxLevel / 2) {
-        super(filename || Math.random().toString().substr(2, 4));
+    constructor(public sample: AofSample, public maxLevel = DEFAULT_MAX_LEVEL, public startLevel = maxLevel / 2) {
+        super(sample.file || Math.random().toString().substr(2, 4));
 
         this.currentLevel = this.startLevel;
-
-        this.sample = new Sample(filename);
     }
 
     toCyElementJSON() {
@@ -125,9 +45,8 @@ export class SampleNode extends CyElementWrapper {
 
     selfToCyElement() {
         const nodeStopBeats = determineBeatsUntilStop();
-        const type = this.sample.type;
         return {
-            classes: type,
+            classes: this.sample.type,
             data: {group: 'nodes', id: this.id, level: this.currentLevel},
             scratch: {
                 type: this.id,
