@@ -42,7 +42,7 @@ interface DriveFileEntry {
 export class SamplesService {
 
     private folderId = '0B721XY-cG39ueUNMVmZlWnpJeGc';
-    private apiKey = 'AIzaSyDOpKlq-zL7tNOyF0UiZlwAt7OLWLQSSIk';
+    private apiKey = 'AIzaSyB34kcbBYm9f0lpjwdm1_RDubFRZPwi0pA';
 
 
     private samplesURL = `${DRIVE_API_ROOT}/files?q=%27${this.folderId}%27+in+parents&key=${this.apiKey}`;

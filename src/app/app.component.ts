@@ -17,6 +17,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('Renderer: ', this.cyRenderer);
+        console.debug('Renderer: ', this.cyRenderer);
     }
 }

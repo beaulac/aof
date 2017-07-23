@@ -8,6 +8,7 @@ import { SampleNode } from '../SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
 import { VisualStyle, highlightElement, unhighlightElement } from '../VisualStyle';
 import { ElementTargets } from '../ElementTargets';
+import { CY_LAYOUT_OPTIONS } from './CyLayout';
 
 @Component({
                selector: 'app-cy-renderer',
@@ -16,28 +17,16 @@ import { ElementTargets } from '../ElementTargets';
            })
 export class CyRendererComponent implements OnInit, OnDestroy {
     CYTOSCAPE_TAG = 'cy';
+    cy: any;
+    private cyContainer;
+    currentLayout: any;
 
     elements: Observable<SampleNode[]>;
     private elementSub: Subscription;
-
-    layoutName = 'cose';
-
-    cy: any;
-    private cyContainer;
-
-    currentLayout: any;
-
-    nodesById = {};
-
     startEventQueue = [];
 
     constructor(private nodeService: NodeService) {
         this.elements = this.nodeService.trackNodes();
-    }
-
-    setupEventHandlers() {
-        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
-        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
     }
 
     public STOP() {
@@ -104,8 +93,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
             );
 
             if (extractedTargets.hasTargets()) {
-                const edgeTargets = extractedTargets.edgeTargets;
-                const nodeTargets = extractedTargets.nodeTargets;
+                const {edgeTargets, nodeTargets} = extractedTargets
 
                 for (let idx = 0; idx < numberOfTargets; idx++) {
                     const edgeTarget = edgeTargets[idx];
@@ -129,6 +117,8 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.cyContainer = document.getElementById(this.CYTOSCAPE_TAG);
         this.elementSub = this.elements.subscribe(newElements => this.updateCyjs(newElements));
+        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
+        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
     }
 
     ngOnDestroy() {
@@ -137,11 +127,9 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     private updateCyjs(elements) {
         console.log('* Cytoscape.js is rendering new network...');
-        this.nodesById = _(elements).groupBy('id').mapValues(([node]) => node).value();
+
         const cyElements = _(elements).map(e => e.toCyElementJSON()).flatten().value();
-
-        console.log(cyElements);
-
+        console.debug('Elements: ', cyElements);
 
         this.cy = cytoscape({
                                 boxSelectionEnabled: false,
@@ -149,43 +137,11 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                 elements: cyElements,
                                 style: VisualStyle
                             });
-
         this.initLayout();
-        this.runLayout();
-        this.setupEventHandlers();
     }
 
     private initLayout() {
-        const layoutName = this.layoutName;
-
-        const layoutOptions = {
-            name: layoutName,
-            animate: true,
-            fit: true,
-            padding: 50,
-            maxSimulationTime: 1000,
-            avoidOverlap: true,
-            randomize: false,
-            animationThreshold: 0,
-            infinite: true,
-            stiffness: 400,
-            damping: 0.5,
-            nodeRepulsion: node => { // TODO INVESTIGATE EDGE REPULSION
-                return 100 * node.connectedEdges()
-                                 .toArray()
-                                 .reduce(((acc, e) => acc + e.data().length),
-                                         0
-                                 );
-            },
-            edgeLength: edge => edge.data().length * 2,
-            nestingFactor: 0,
-            edgeElasticity: edge => Math.pow(2, edge.data('length'))
-        };
-
-        this.currentLayout = this.cy.makeLayout(layoutOptions);
-    }
-
-    private runLayout() {
+        this.currentLayout = this.cy.makeLayout(CY_LAYOUT_OPTIONS);
         this.currentLayout.run();
     }
 }
