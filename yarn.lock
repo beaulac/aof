@@ -1247,9 +1247,9 @@ cytoscape-cola@^1.6.0:
   dependencies:
     webcola "^3.1.2"
 
-cytoscape@^2.7.4:
-  version "2.7.21"
-  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-2.7.21.tgz#a067ea2cf355221bd0a21e676bec599bb4e4cbaa"
+cytoscape@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.1.4.tgz#f9bc078f7892bc66fc489cfae0f269693ed63665"
 
 d3-color@1:
   version "1.0.3"

@@ -1,6 +1,7 @@
 import { CyElementWrapper } from './CyElementWrapper';
 import { AofSample } from './AofSample';
 import { Edge } from './Edge';
+import { determineBeatsUntilStop } from './Timing';
 
 const DEFAULT_MAX_LEVEL = 10;
 
@@ -21,11 +22,7 @@ function randomByte() {
     return Math.round(Math.random() * 0xFF);
 }
 
-function determineBeatsUntilStop() {
-    return 32 + (Math.floor(Math.random() * 32) * 4);
-}
-
-export class        SampleNode extends CyElementWrapper {
+export class SampleNode extends CyElementWrapper {
 
     edges = {};
     currentLevel: number;

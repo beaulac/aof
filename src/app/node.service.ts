@@ -113,9 +113,6 @@ export class NodeService {
     }
 
     randomSelection(groupedMap, probabilities) {
-        console.log(groupedMap);
-        console.log(probabilities);
-
         const selectedType = this.selectRandomType(probabilities);
         const selectedNode = groupedMap[selectedType].pop();
         for (const type in countsPerType) {

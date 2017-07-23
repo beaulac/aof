@@ -1,12 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as cytoscape from 'cytoscape';
-import { DEF_VISUAL_STYLE } from '../VisualStyle';
-import { TICK_LENGTH_MS } from '../Timing';
-import { SampleNode } from '../SampleNode';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import { NodeService } from '../node.service';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeService } from '../node.service';
+import { SampleNode } from '../SampleNode';
+import { TICK_LENGTH_MS } from '../Timing';
+import { DEF_VISUAL_STYLE } from '../VisualStyle';
 
 // Empty for now, can be used for debugging:
 const BFS_VISIT_CALLBACK = () => undefined;
@@ -56,8 +56,8 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     setupEventHandlers() {
-        const cyNodes = (this.cy.elements() || []).filter((i, e) => e.isNode());
-        cyNodes.forEach(node => node.on('click', event => this.startBfsFrom(cyNodes, event.cyTarget)));
+        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
+        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
     }
 
     STOP() {
@@ -71,13 +71,15 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         });
     }
 
-    startBfsFrom(elements, root) {
-        const bfs = elements.bfs(root, BFS_VISIT_CALLBACK, false);
+    startBfsFrom(root) {
         let initVolume = 0.5;
+        const bfs = this.cy.elements().bfs({
+                                               root,
+                                               visit: BFS_VISIT_CALLBACK,
+                                               directed: false
+                                           });
 
-        highlightNextElement(root);
-
-        function highlightNextElement(cyElem) {
+        const highlightNextElement = (cyElem) => {
             const currentID = cyElem.id();
             const sample = cyElem.scratch('sample');
 
@@ -113,10 +115,10 @@ export class CyRendererComponent implements OnInit, OnDestroy {
             const extractedTargets = ElementTargets.extractTargetsFor(bfs.path, currentID);
 
             const numberOfTargets = extractedTargets.nodeTargets.length;
-            // console.log(
-            //    'targets w/ ' + numberOfTargets + ' nodes and ' +
-            //    extractedTargets.edgeTargets.length + ' edges'
-            // );
+            console.log(
+                'targets w/ ' + numberOfTargets + ' nodes and ' +
+                extractedTargets.edgeTargets.length + ' edges'
+            );
 
             if (extractedTargets.hasTargets()) {
                 const edgeTargets = extractedTargets.edgeTargets;
@@ -134,7 +136,9 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                     );
                 }
             }
-        }
+        };
+
+        highlightNextElement(root);
     }
 
     ngOnInit() {
@@ -208,6 +212,8 @@ class ElementTargets {
 
     static extractTargetsFor(path, sourceId) {
         const targets = new ElementTargets([], []);
+
+        console.log(path, sourceId);
 
         let previousWasOutgoingEdge = false;
         let idx = path.toArray().findIndex(e => e.id() === sourceId); // Start i from location of node in path

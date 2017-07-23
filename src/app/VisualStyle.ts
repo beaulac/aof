@@ -7,8 +7,8 @@ export const DEF_VISUAL_STYLE = [
     style: {
       'height': 30,
       'width': 30,
-      'background-color': 'scratch(color)',
-      'label': 'scratch(type)',
+      'background-color': 'data(color)',
+      'label': 'data(type)',
       'text-valign': 'center',
       'text-halign': 'left'
     }

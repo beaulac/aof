@@ -1,5 +1,8 @@
 export class AofSample {
-    constructor(public howlSound, public file: string, public type) {
+    public file: string;
+
+    constructor(public howlSound, file: string, public type) {
+        ([this.file] = file.split('.'));
     }
 
     play() {

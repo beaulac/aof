@@ -22,7 +22,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "core-js": "^2.4.1",
-    "cytoscape": "^2.7.4",
+    "cytoscape": "^3.1.4",
     "cytoscape-cola": "^1.6.0",
     "howler": "^2.0.4",
     "lodash": "^4.17.4",
