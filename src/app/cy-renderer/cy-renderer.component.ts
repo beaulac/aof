@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../node.service';
 import { SampleNode } from '../SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
-import { VisualStyle, highlightElement, unhighlightElement } from '../VisualStyle';
+import { VisualStyle, highlightElement, unhighlightElement, resetElement } from '../VisualStyle';
 import { ElementTargets } from '../ElementTargets';
 import { CY_LAYOUT_OPTIONS } from './CyLayout';
 
@@ -34,7 +34,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         this.cy.elements().forEach(cyElem => {
             const sample = cyElem.scratch('sample');
             if (sample) {
-                unhighlightElement(cyElem);
+                resetElement(cyElem);
                 sample.stop();
             }
         });

@@ -11,7 +11,13 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
+    someRange = 0;
+
     constructor() {
+    }
+
+    stopAll() {
+        this.cyRenderer.STOP();
     }
 
     ngOnInit() {

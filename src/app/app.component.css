@@ -22,3 +22,7 @@
     text-indent: 0.9em;
     letter-spacing: 0.9em;
 }
+
+pre, [nouislider] {
+    margin: 15px 0;
+}

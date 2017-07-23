@@ -1,6 +1,14 @@
 <div class="container">
     <div class="aof-title">A o F</div>
     <br />
-    <div class="aof-subtitle">DATA RECOLLECTION</div>
+    <div class="aof-subtitle">DATA RECOLLECTION
+        <div>
+            <button (click)="stopAll()">STOP</button>
+        </div>
+    </div>
+    <div>
+        <nouislider [connect]="true" [min]="0" [max]="15" [(ngModel)]="someRange"></nouislider>
+    </div>
     <app-cy-renderer></app-cy-renderer>
+
 </div>

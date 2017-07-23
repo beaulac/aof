@@ -9,6 +9,12 @@ export function unhighlightElement(element) {
     element.classes(UNHIGHLIGHT_CLASS);
 }
 
+export function resetElement(element) {
+    const sample = element.scratch('sample');
+
+    element.classes(sample.type);
+}
+
 export const VisualStyle = [
     {
         selector: 'node',

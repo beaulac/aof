@@ -26,6 +26,8 @@
     "cytoscape-cola": "^1.6.0",
     "howler": "^2.0.4",
     "lodash": "^4.17.4",
+    "ng2-nouislider": "^1.6.1",
+    "nouislider": "^10.0.0",
     "rxjs": "^5.1.0",
     "webcola": "^3.3.6",
     "zone.js": "^0.8.4"
