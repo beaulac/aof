@@ -39,11 +39,9 @@ export class NodeService {
 
     public updateProbability(newProbability) {
         this.branchingProbability = newProbability;
-        console.log('rebuilding with branch prob: ', this.branchingProbability);
-        this.buildElements();
     }
 
-    private buildElements() {
+    public buildElements() {
         const allSamplesByType = _.cloneDeep(this.samplesByType);
 
         let currentRoot = this.buildRandomNode(allSamplesByType);

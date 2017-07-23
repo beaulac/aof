@@ -12,8 +12,6 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
-    someRange = 0;
-
     constructor(public nodeService: NodeService) {
     }
 
@@ -27,5 +25,9 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         console.debug('Renderer: ', this.cyRenderer);
+    }
+
+    rebuildNodes() {
+        this.nodeService.buildElements();
     }
 }
