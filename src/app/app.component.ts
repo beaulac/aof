@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CyRendererComponent } from './cy-renderer/cy-renderer.component';
+import { NodeService } from './node.service';
 
 @Component({
                selector: 'app-root',
@@ -13,7 +14,11 @@ export class AppComponent implements OnInit {
 
     someRange = 0;
 
-    constructor() {
+    constructor(public nodeService: NodeService) {
+    }
+
+    updateBranchingProbability($event) {
+        this.nodeService.updateProbability($event);
     }
 
     stopAll() {

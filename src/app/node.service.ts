@@ -15,6 +15,7 @@ export class NodeService {
     private sampleCount = 0;
     private probabilities: Probabilities;
     private totalProbability = 0;
+    public branchingProbability = BRANCHING_PROBABILITY;
 
     private nodes = new ReplaySubject<SampleNode[]>(1);
 
@@ -36,18 +37,27 @@ export class NodeService {
         return this.nodes;
     }
 
+    public updateProbability(newProbability) {
+        this.branchingProbability = newProbability;
+        console.log('rebuilding with branch prob: ', this.branchingProbability);
+        this.buildElements();
+    }
+
     private buildElements() {
-        let currentRoot = this.buildRandomNode();
+        const allSamplesByType = _.cloneDeep(this.samplesByType);
+
+        let currentRoot = this.buildRandomNode(allSamplesByType);
         const elements = [currentRoot];
 
         for (let idx = 1; idx < this.sampleCount; idx++) {
-            const newNode = this.buildRandomNode();
+            const newNode = this.buildRandomNode(allSamplesByType);
 
             currentRoot.connectTo(newNode, randomMultipleOfFourWeight());
 
             elements.push(newNode);
 
-            if (Math.random() < BRANCHING_PROBABILITY) {
+            console.log(this.branchingProbability);
+            if (Math.random() < this.branchingProbability) {
                 currentRoot = newNode;
             }
         }
@@ -63,16 +73,15 @@ export class NodeService {
         return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, countsPerType[type]));
     }
 
-    private randomSelection() {
+    private randomSelection(samplesByType = this.samplesByType) {
 
         const selectedType = this.selectRandomType();
 
-        console.log('Selected: ', selectedType);
-        const selectedNode = this.samplesByType[selectedType].pop();
+        const selectedNode = samplesByType[selectedType].pop();
 
         for (const type in countsPerType) {
             if (countsPerType.hasOwnProperty(type)) {
-                if (this.samplesByType[type].length > 0) {
+                if (samplesByType[type].length > 0) {
                     if (type === selectedType) {
                         this.probabilities[type] = 0.1; // TODO alex: Don't hardcode this
                     }
@@ -103,7 +112,7 @@ export class NodeService {
         return type;
     }
 
-    private buildRandomNode(sample = this.randomSelection()) {
+    private buildRandomNode(samples, sample = this.randomSelection(samples)) {
         console.log(sample);
         return new SampleNode(sample, 10, 10);
     }
