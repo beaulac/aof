@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../node.service';
 import { SampleNode } from '../SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
-import { VisualStyle, highlightElement, unhighlightElement, resetElement } from '../VisualStyle';
-import { ElementTargets } from '../ElementTargets';
+import { resetElement, VisualStyle } from '../VisualStyle';
 import { CY_LAYOUT_OPTIONS } from './CyLayout';
+import { SampleRun } from './SampleRun';
+
 
 @Component({
                selector: 'app-cy-renderer',
@@ -16,21 +17,23 @@ import { CY_LAYOUT_OPTIONS } from './CyLayout';
                styleUrls: ['./cy-renderer.component.css']
            })
 export class CyRendererComponent implements OnInit, OnDestroy {
-    CYTOSCAPE_TAG = 'cy';
-    cy: any;
+    private cy: any;
+    private CYTOSCAPE_TAG = 'cy';
     private cyContainer;
-    currentLayout: any;
+    private currentLayout: any;
 
-    elements: Observable<SampleNode[]>;
+    private elements: Observable<SampleNode[]>;
     private elementSub: Subscription;
-    startEventQueue = [];
+    private sampleRun: SampleRun;
 
-    constructor(private nodeService: NodeService) {
-        this.elements = this.nodeService.trackNodes();
+    private tickLength = TICK_LENGTH_MS;
+
+    constructor(nodeService: NodeService) {
+        this.elements = nodeService.trackNodes();
     }
 
     public STOP() {
-        this.startEventQueue.forEach(queuedEvent => clearTimeout(queuedEvent));
+        this.sampleRun.STOP();
         this.cy.elements().forEach(cyElem => {
             const sample = cyElem.scratch('sample');
             if (sample) {
@@ -38,80 +41,6 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                 sample.stop();
             }
         });
-    }
-
-    startBfsFrom(root) {
-        let initVolume = 0.5;
-
-        const initializeSample = sample => {
-            sample.setVolume(initVolume);
-            initVolume = Math.random() * initVolume;
-            sample.play();
-        };
-
-        const bfs = this.cy.elements().bfs({
-                                               root,
-                                               visit: () => undefined,
-                                               directed: false
-                                           });
-
-        const highlightNextElement = (cyElem) => {
-            const currentID = cyElem.id();
-            const sample = cyElem.scratch('sample');
-
-            // Highlight & trigger:
-            highlightElement(cyElem);
-
-            initializeSample(sample);
-
-            // Set callback to stop:
-            const nodeStopBeats = cyElem.scratch('nodeStop');
-            const beatsToPeak = Math.floor(Math.random() * nodeStopBeats);
-            const beatsToStop = nodeStopBeats - beatsToPeak;
-
-            const msToPeak = beatsToPeak * TICK_LENGTH_MS;
-
-            sample.fadeTo(1, msToPeak);
-
-            setTimeout(() => sample.fadeTo(0, beatsToStop * TICK_LENGTH_MS), msToPeak);
-
-            const currentNodeStopDelay = nodeStopBeats * TICK_LENGTH_MS;
-
-            setTimeout(() => {
-                unhighlightElement(cyElem);
-                sample.fadeTo(0, 20); // To prevent 'click' on stop.
-                sample.stop();
-            }, currentNodeStopDelay);
-
-            // Continue on the BFS path:
-            const extractedTargets = ElementTargets.extractTargetsFor(bfs.path, currentID);
-
-            const numberOfTargets = extractedTargets.nodeTargets.length;
-            console.log(
-                'targets w/ ' + numberOfTargets + ' nodes and ' +
-                extractedTargets.edgeTargets.length + ' edges'
-            );
-
-            if (extractedTargets.hasTargets()) {
-                const {edgeTargets, nodeTargets} = extractedTargets;
-
-                for (let idx = 0; idx < numberOfTargets; idx++) {
-                    const edgeTarget = edgeTargets[idx];
-
-                    const edgeDelay = TICK_LENGTH_MS * edgeTarget.data('length');
-                    const nextNodeStart = cyElem.scratch('nextNodeStart') * TICK_LENGTH_MS;
-
-                    const nodeTarget = nodeTargets[idx];
-                    const targetSample = nodeTarget.scratch('sample');
-                    targetSample.load();
-                    this.startEventQueue.push(
-                        setTimeout(() => highlightNextElement(nodeTargets[idx]), edgeDelay + nextNodeStart)
-                    );
-                }
-            }
-        };
-
-        highlightNextElement(root);
     }
 
     ngOnInit() {
@@ -123,6 +52,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.elementSub && this.elementSub.unsubscribe();
+        this.sampleRun && this.sampleRun.STOP();
     }
 
     private updateCyjs(elements) {
@@ -142,8 +72,20 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     private setupEventListeners() {
-        this.cy.nodes().on('click', event => this.startBfsFrom(event.target));
+        this.cy.nodes().on('click', event => this.startSampleRunFrom(event.target));
         window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
+    }
+
+    private startSampleRunFrom(root) {
+        const bfs = this.cy.elements().bfs({
+                                               root,
+                                               visit: () => {
+                                               },
+                                               directed: false
+                                           });
+
+        this.sampleRun = new SampleRun(bfs, this.tickLength);
+        this.sampleRun.highlightNextElement(root);
     }
 
     private initLayout() {
