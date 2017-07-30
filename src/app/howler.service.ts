@@ -1,5 +1,5 @@
-import * as Howler from 'howler';
 import { Injectable } from '@angular/core';
+import * as Howler from 'howler';
 
 
 const DEFAULT_START_VOLUME = 0.5;
@@ -12,8 +12,15 @@ const DEFAULT_HOWL_OPTIONS = {
 
 @Injectable()
 export class HowlerService {
-
     options = DEFAULT_HOWL_OPTIONS;
+
+    get volume() {
+        return Howler.Howler.volume();
+    }
+
+    set volume(volume: number) {
+        Howler.Howler.volume(volume);
+    }
 
     constructor() {
     }

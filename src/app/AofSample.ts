@@ -1,16 +1,18 @@
 export class AofSample {
     public file: string;
 
-    constructor(public howlSound, file: string, public type) {
+    constructor(public howlSound: Howl, file: string, public type) {
         ([this.file] = file.split('.'));
     }
 
     play() {
+        this.howlSound.load();
         this.howlSound.play();
         console.log(this.file + ' is now playing');
     }
 
     stop() {
+        this.howlSound.unload();
         this.howlSound.stop();
         console.log(this.file + ' has stopped playing.');
     }

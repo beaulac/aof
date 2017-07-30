@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { HowlerService } from './howler.service';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-import { AofSample } from './AofSample';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AofSample } from './AofSample';
+import { HowlerService } from './howler.service';
 
 const DRIVE_API_ROOT = 'https://content.googleapis.com/drive/v3';
 const publicDownloadUrlFor = id => `https://drive.google.com/uc?export=download&id=${id}`;
@@ -40,7 +40,6 @@ interface DriveFileEntry {
 
 @Injectable()
 export class SamplesService {
-
     private folderId = '0B721XY-cG39ueUNMVmZlWnpJeGc';
     private apiKey = 'AIzaSyB34kcbBYm9f0lpjwdm1_RDubFRZPwi0pA';
 
@@ -63,10 +62,7 @@ export class SamplesService {
                        response => {
                            const fileResponse = response.json() as DriveFileResponse
                                , fileEntries = fileResponse.files;
-
-                           const asSamples = fileEntries.map(file => this.fileResultToSample(file));
-                           console.log(asSamples);
-                           return asSamples;
+                           return fileEntries.map(file => this.fileResultToSample(file));
                        }
                    );
     }

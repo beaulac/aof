@@ -38,7 +38,7 @@ export class NodeService {
     }
 
     public updateProbability(newProbability) {
-        this.branchingProbability = newProbability;
+        return this.branchingProbability = newProbability;
     }
 
     public buildElements() {
@@ -54,7 +54,6 @@ export class NodeService {
 
             elements.push(newNode);
 
-            console.log(this.branchingProbability);
             if (Math.random() < this.branchingProbability) {
                 currentRoot = newNode;
             }
@@ -111,8 +110,7 @@ export class NodeService {
     }
 
     private buildRandomNode(samples, sample = this.randomSelection(samples)) {
-        console.log(sample);
-        return new SampleNode(sample, 10, 10);
+        return new SampleNode(sample);
     }
 }
 
