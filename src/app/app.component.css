@@ -5,6 +5,12 @@
     background: linear-gradient(to bottom, #FFF, #CACACA);
 }
 
+.controls {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
 .aof-title {
     padding-top: 10px;
     margin: auto;

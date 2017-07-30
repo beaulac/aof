@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     }
 
     updateBranchingProbability($event) {
-        this.nodeService.updateProbability($event);
+        return this.nodeService.updateProbability($event);
     }
 
     stopAll() {
