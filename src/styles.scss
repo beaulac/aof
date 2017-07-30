@@ -17,3 +17,62 @@ html, body {
     filter: blur(50px);
     background-color: #00ee00;
 }
+
+.noUi-background {
+    height: 16px;
+}
+.noUi-background.noUi-vertical {
+    height: 200px;
+    width: 16px;
+    margin: 0 auto 30px;
+}
+.noUi-base .noUi-connect {
+    background-color: #81DDBE;
+}
+.noUi-base .noUi-handle {
+    background-color: #000000;
+    border: none;
+    border-radius: 6px;
+    box-shadow: none;
+    color: #FFFFFF;
+    display: table;
+    font-size: 15px;
+    height: 46px;
+    left: 0;
+    margin-left: -15px;
+    margin-top: -16px;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 10px;
+    z-index: 2;
+}
+.noUi-horizontal .noUi-base .noUi-handle {
+    cursor: ew-resize;
+}
+.noUi-vertical .noUi-base .noUi-handle {
+    cursor: ns-resize;
+    margin-left:-8px;
+}
+.noUi-base .noUi-handle:hover {
+    background-color: #4EDFB7;
+}
+.noUi-base .noUi-handle.noUi-active {
+    background-color: #32A17C;
+    z-index: 3;
+}
+.noUi-base .noUi-handle::before {
+    background: transparent;
+    content: attr(data-value);
+    display: table-cell;
+    font-size: 14px;
+    font-weight: 100;
+    position: static;
+    width: 100%;
+    vertical-align: middle;
+}
+.noUi-base .noUi-handle::after {
+    display: none;
+}
+
