@@ -1,4 +1,4 @@
 export const environment = {
-    corsProxy: 'http://aof.herokuapp.com',
+    corsProxy: 'https://aof.herokuapp.com',
     production: true
 };
