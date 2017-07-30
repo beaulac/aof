@@ -24,7 +24,9 @@ export const VisualStyle = [
             'background-color': 'data(color)',
             'label': 'data(type)',
             'text-valign': 'center',
-            'text-halign': 'left'
+            'text-halign': 'left',
+            'transition-property': 'background-color, line-color, target-arrow-color, width, height',
+            'transition-duration': '0.5s'
         }
     }, {
         selector: 'node.beat',
@@ -82,9 +84,7 @@ export const VisualStyle = [
         style: {
             'background-color': '#FFF',
             'line-color': '#FFF',
-            'target-arrow-color': '#FFF',
-            'transition-property': 'background-color, line-color, target-arrow-color, width, height',
-            'transition-duration': '0.5s'
+            'target-arrow-color': '#FFF'
         }
     },
     {
@@ -94,9 +94,7 @@ export const VisualStyle = [
             'width': 1,
             'background-color': '#333',
             'line-color': '#888',
-            'target-arrow-color': '#888',
-            'transition-property': 'background-color, line-color, target-arrow-color, height, width',
-            'transition-duration': '0.5s'
+            'target-arrow-color': '#888'
         }
     },
     {

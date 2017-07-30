@@ -1,4 +1,4 @@
-@import "~nouislider/distribute/nouislider.min.css";
+@import "~nouislider/distribute/nouislider.css";
 @import "~skeleton-css/css/normalize.css";
 @import "~skeleton-css/css/skeleton.css";
 
@@ -13,55 +13,71 @@ html, body {
     overflow: hidden;
 }
 
-.highlighted {
-    filter: blur(50px);
-    background-color: #00ee00;
+body {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
 }
 
-.noUi-background {
-    height: 16px;
-}
 .noUi-background.noUi-vertical {
     height: 200px;
     width: 16px;
     margin: 0 auto 30px;
 }
+
+.noUi-horizontal.noUi-extended {
+    padding-right: 32px;
+}
+.noUi-horizontal.noUi-extended .noUi-handle {
+    left: -1px;
+}
+.noUi-horizontal.noUi-extended .noUi-origin  {
+    right: -32px;
+}
+
 .noUi-base .noUi-connect {
     background-color: #81DDBE;
 }
+
+.noUi-target {
+    background-color: #000;
+    height: 4px;
+    border-left: solid #000 2px;
+    border-right: solid #000 2px;
+}
+
 .noUi-base .noUi-handle {
-    background-color: #000000;
-    border: none;
-    border-radius: 6px;
+    color: transparent;
+    background-color: transparent;
     box-shadow: none;
-    color: #FFFFFF;
+    border: 1px solid black;
     display: table;
     font-size: 15px;
-    height: 46px;
+    height: 3rem;
+    width: 0.5rem;
     left: 0;
-    margin-left: -15px;
-    margin-top: -16px;
+    margin-left: 0px;
+    margin-top: -14px;
     padding: 0;
     position: absolute;
     text-align: center;
     top: 0;
-    width: 10px;
     z-index: 2;
 }
+
 .noUi-horizontal .noUi-base .noUi-handle {
     cursor: ew-resize;
 }
+
 .noUi-vertical .noUi-base .noUi-handle {
     cursor: ns-resize;
-    margin-left:-8px;
+    margin-left: -8px;
 }
-.noUi-base .noUi-handle:hover {
-    background-color: #4EDFB7;
-}
+
 .noUi-base .noUi-handle.noUi-active {
-    background-color: #32A17C;
+    //background-color: #000;
     z-index: 3;
 }
+
 .noUi-base .noUi-handle::before {
     background: transparent;
     content: attr(data-value);
@@ -72,6 +88,7 @@ html, body {
     width: 100%;
     vertical-align: middle;
 }
+
 .noUi-base .noUi-handle::after {
     display: none;
 }

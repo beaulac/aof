@@ -13,28 +13,34 @@
     </div>
 
     <div class="controls one row">
+        <!-- VOLUME -->
+        <div class="one column offset-by-two">
+            <div class="aof-ui-element">
+                <img class="volume"
+                     src="{{muted ? '/assets/images/mute.svg' : '/assets/images/playing.svg'}}"
+                     (click)="toggleMute()" />
+            </div>
+            <div class="aof-button-subtitle"></div>
+        </div>
 
         <!-- RECYCLE -->
-        <div class="one column offset-by-three">
+        <div class="one column">
             <div class="aof-ui-element">
-                <input class="press" type="image" src="assets/images/recycle.png" (click)="rebuildNodes()" />
-                    <div class="aof-button-subtitle">
-                     Cycle
-                    </div>
+                <input class="press" type="image" src="/assets/images/recycle.png" (click)="rebuildNodes()" />
+                <div class="aof-button-subtitle">Cycle</div>
             </div>
         </div>
 
         <!-- BRANCHING -->
         <div class="two columns">
-            <nouislider [connect]="true"
+            <nouislider class="slider"
+                        [connect]="true"
                         (change)="updateBranchingProbability($event); rebuildNodes()"
                         [step]=0.05
                         [min]=0
                         [max]=1
                         [(ngModel)]="nodeService.branchingProbability"></nouislider>
-            <div class="aof-button-subtitle">
-                Branches
-            </div>
+            <div class="aof-button-subtitle">Recall Efficiency</div>
         </div>
 
         <!-- COUNT -->
@@ -42,14 +48,24 @@
             <nouislider [connect]="true"
                         [step]=0.05
                         [min]=0
-                        [max]=1
-                        [(ngModel)]="howlerService.volume"></nouislider>
-            <div class="aof-button-subtitle">
-                Volume
-            </div>
+                        [max]=33
+                        [(ngModel)]="nodeService.totalNodeCount"></nouislider>
+            <div class="aof-button-subtitle">Data Points</div>
         </div>
 
         <!-- STOP BUTTON -->
-        <button class="one column" (click)="stopAll()">STOP</button>
+        <div class="one column">
+            <div class="aof-ui-element">
+                <input class="stop-btn" (click)="stopAll()" />
+                <div class="aof-button-subtitle">Interrupt Process</div>
+            </div>
+        </div>
+        <!-- INFO BUTTON -->
+        <div class="one column">
+            <div class="aof-ui-element">
+                i
+            </div>
+        </div>
     </div>
+
 </div>
