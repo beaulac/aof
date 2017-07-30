@@ -13,26 +13,43 @@
     </div>
 
     <div class="controls one row">
-        <button class="one column" (click)="rebuildNodes()">REFRESH</button>
-        <button class="one column" (click)="stopAll()">STOP</button>
 
+        <!-- RECYCLE -->
+        <div class="one column offset-by-three">
+            <div class="aof-ui-element">
+                <input class="press" type="image" src="assets/images/recycle.png" (click)="rebuildNodes()" />
+                    <div class="aof-button-subtitle">
+                     Cycle
+                    </div>
+            </div>
+        </div>
+
+        <!-- BRANCHING -->
         <div class="two columns">
-            BRANCHINESS:
             <nouislider [connect]="true"
                         (change)="updateBranchingProbability($event); rebuildNodes()"
                         [step]=0.05
                         [min]=0
                         [max]=1
                         [(ngModel)]="nodeService.branchingProbability"></nouislider>
+            <div class="aof-button-subtitle">
+                Branches
+            </div>
         </div>
+
+        <!-- COUNT -->
         <div class="two columns">
-            VOLUME:
             <nouislider [connect]="true"
                         [step]=0.05
                         [min]=0
                         [max]=1
                         [(ngModel)]="howlerService.volume"></nouislider>
+            <div class="aof-button-subtitle">
+                Volume
+            </div>
         </div>
-    </div>
 
+        <!-- STOp BUTTON -->
+        <button class="one column" (click)="stopAll()">STOP</button>
+    </div>
 </div>

@@ -29,6 +29,41 @@
     letter-spacing: 0.9em;
 }
 
+.aof-ui-element {
+    z-index: 55;
+    min-height: 46px;
+    line-height: 14px;
+    text-align: center;
+    letter-spacing: 6px;
+    text-transform: none;
+    font-size: 12px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-top: 9px;
+    position: relative;
+    width: 100%;
+}
+
+.aof-button-subtitle {
+    z-index: 55;
+    min-height: 46px;
+    line-height: 14px;
+    text-align: center;
+    letter-spacing: 6px;
+    text-transform: none;
+    font-size: 12px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
+    margin-top: 9px;
+    position: relative;
+    width: 100%;
+}
+
+.press, img, .press:focus, img:focus{
+    outline: 0 !important;
+    border:0 none !important;
+}
+
 pre, [nouislider] {
     margin: 15px 0;
 }
