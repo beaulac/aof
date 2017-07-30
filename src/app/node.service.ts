@@ -1,20 +1,26 @@
-import * as _ from 'lodash';
-import { SampleNode } from './SampleNode';
 import { Injectable } from '@angular/core';
-import { SamplesService } from './samples.service';
-import { AofSample } from './AofSample';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AofSample } from './AofSample';
 import { BRANCHING_PROBABILITY, countsPerType, Probabilities, PROBABILITY_TICK } from './node.probabilities';
+import { SampleNode } from './SampleNode';
+import { SamplesService } from './samples.service';
 
 @Injectable()
 export class NodeService {
     private samplesObs: Observable<AofSample[]>;
 
     private samplesByType: _.Dictionary<AofSample[]>;
-    private sampleCount = 0;
     private probabilities: Probabilities;
     private totalProbability = 0;
+    public sampleCount = 0;
+
+
+    private maxPerType = countsPerType;
+    private typeRatioCount = _(countsPerType).values().sum();
+
+    public totalNodeCount = 0;
     public branchingProbability = BRANCHING_PROBABILITY;
 
     private nodes = new ReplaySubject<SampleNode[]>(1);
@@ -24,7 +30,7 @@ export class NodeService {
 
         this.samplesObs.subscribe(samples => {
             this.samplesByType = this.trimSamplesByType(_.groupBy(samples, 'type'));
-            this.sampleCount = _(this.samplesByType).values().map('length').sum().valueOf();
+            this.sampleCount = this.totalNodeCount = _(this.samplesByType).values().map('length').sum().valueOf();
 
             this.probabilities = this.buildTypeProbabilities();
             this.totalProbability = _(this.probabilities).values().sum();
@@ -35,6 +41,10 @@ export class NodeService {
 
     public trackNodes(): Observable<SampleNode[]> {
         return this.nodes;
+    }
+
+    private getTypeRatio(type: string) {
+        return this.maxPerType[type] / this.typeRatioCount;
     }
 
     public updateProbability(newProbability) {
