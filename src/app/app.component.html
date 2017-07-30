@@ -1,18 +1,38 @@
 <div class="container">
-    <div class="aof-title">A o F</div>
-    <br />
-    <div class="aof-subtitle">DATA RECOLLECTION</div>
-
-    <app-cy-renderer></app-cy-renderer>
-
-    <div class="controls">
-            <button (click)="rebuildNodes()">REFRESH</button>
-            <button (click)="stopAll()">STOP</button>
-        <nouislider [connect]="true"
-                    (change)="updateBranchingProbability($event); rebuildNodes()"
-                    [step]=0.05
-                    [min]=0
-                    [max]=1
-                    [(ngModel)]="nodeService.branchingProbability"></nouislider>
+    <div class="one row">
+        <span class="twelve columns aof-title">A o F</span>
     </div>
+    <div class="one row">
+        <span class="twelve columns aof-subtitle">DATA RECOLLECTION</span>
+    </div>
+
+    <div class="eight rows">
+        <div class="twelve columns">
+            <app-cy-renderer></app-cy-renderer>
+        </div>
+    </div>
+
+    <div class="controls one row">
+        <button class="one column" (click)="rebuildNodes()">REFRESH</button>
+        <button class="one column" (click)="stopAll()">STOP</button>
+
+        <div class="two columns">
+            BRANCHINESS:
+            <nouislider [connect]="true"
+                        (change)="updateBranchingProbability($event); rebuildNodes()"
+                        [step]=0.05
+                        [min]=0
+                        [max]=1
+                        [(ngModel)]="nodeService.branchingProbability"></nouislider>
+        </div>
+        <div class="two columns">
+            VOLUME:
+            <nouislider [connect]="true"
+                        [step]=0.05
+                        [min]=0
+                        [max]=1
+                        [(ngModel)]="howlerService.volume"></nouislider>
+        </div>
+    </div>
+
 </div>

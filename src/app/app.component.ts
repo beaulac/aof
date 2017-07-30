@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CyRendererComponent } from './cy-renderer/cy-renderer.component';
 import { NodeService } from './node.service';
+import { HowlerService } from './howler.service';
 
 @Component({
                selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
-    constructor(public nodeService: NodeService) {
+    constructor(public nodeService: NodeService,
+                public howlerService: HowlerService) {
     }
 
     updateBranchingProbability($event) {
