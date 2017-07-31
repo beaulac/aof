@@ -33,68 +33,75 @@ const BEAT_COLOR = '#F2671F'
     , SPEECH_COLOR = '#60047A'
     , TEXTURE_COLOR = '#160A47';
 
+const BEAT_SIZE = 100;
+const ELEMENT_SIZE = 60;
+const BASS_SIZE = 80;
+const SPEECH_SIZE = 40;
+const TEXTURE_SIZE = 50;
+
 export const VisualStyle = [
     {
         selector: 'node',
         style: {
             'height': 30,
             'width': 30,
-            'background-color': 'data(color)',
             'label': 'data(type)',
-            'text-valign': 'center',
-            'text-halign': 'left',
-            'transition-property': 'background-color, background-blacken, background-opacity, line-color, target-arrow-color, width, height',
+            'font-family': 'Raleway, sans-serif',
+            'text-valign': 'top',
+            'text-halign': 'center',
+            'text-max-width': function (elem) {
+                return elem.width() - 10;
+            },
+            'min-zoomed-font-size': 4,
+            'transition-property': [
+                'background-blacken',
+                'background-color',
+                'background-opacity',
+                'line-color',
+                'width',
+                'height'
+            ].join(','),
             'transition-duration': '0.5s'
         }
     }, {
         selector: 'node.beat',
         style: {
-            'height': 100,
-            'width': 100,
+            'height': BEAT_SIZE,
+            'width': BEAT_SIZE,
             'background-color': BEAT_COLOR,
-            'label': 'Beat',
-            'text-valign': 'center',
-            'text-halign': 'left'
+            'label': 'Beat'
         }
     }, {
         selector: 'node.element',
         style: {
-            'height': 60,
-            'width': 60,
+            'height': ELEMENT_SIZE,
+            'width': ELEMENT_SIZE,
             'background-color': ELEMENT_COLOR,
-            'label': 'Element',
-            'text-valign': 'center',
-            'text-halign': 'left'
+            'label': 'Element'
         }
     }, {
         selector: 'node.bass',
         style: {
-            'height': 80,
-            'width': 80,
+            'height': BASS_SIZE,
+            'width': BASS_SIZE,
             'background-color': BASS_COLOR,
-            'label': 'Bass',
-            'text-valign': 'center',
-            'text-halign': 'left'
+            'label': 'Bass'
         }
     }, {
         selector: 'node.speech',
         style: {
-            'height': 40,
-            'width': 40,
+            'height': SPEECH_SIZE,
+            'width': SPEECH_SIZE,
             'background-color': SPEECH_COLOR,
-            'label': 'Speech',
-            'text-valign': 'center',
-            'text-halign': 'left'
+            'label': 'Speech'
         }
     }, {
         selector: 'node.texture',
         style: {
-            'height': 50,
-            'width': 50,
+            'height': TEXTURE_SIZE,
+            'width': TEXTURE_SIZE,
             'background-color': TEXTURE_COLOR,
-            'label': 'Texture',
-            'text-valign': 'center',
-            'text-halign': 'left'
+            'label': 'Texture'
         }
     }, {
         selector: 'node.unhighlighted',
@@ -104,8 +111,7 @@ export const VisualStyle = [
             'border-width': '2px',
             'border-style': 'solid',
             'border-color': '#888',
-            'line-color': '#FFF',
-            'target-arrow-color': '#FFF'
+            'line-color': '#FFF'
         }
     },
     {
@@ -115,8 +121,7 @@ export const VisualStyle = [
             'label': '',
             'width': 1,
             'background-color': '#333',
-            'line-color': '#888',
-            'target-arrow-color': '#888'
+            'line-color': '#888'
         }
     },
     {
@@ -128,14 +133,14 @@ export const VisualStyle = [
             // 'label': 'data(length)',
             'curve-style': 'bezier',
             'control-point-step-size': 20,
-            'control-point-distances': 50
+            'control-point-distances': TEXTURE_SIZE
         }
     },
     {
         selector: 'edge.bezier',
         style: {
             'curve-style': 'bezier',
-            'control-point-step-size': 40
+            'control-point-step-size': SPEECH_SIZE
         }
     },
     {
@@ -183,8 +188,8 @@ export const VisualStyle = [
         style: {
             'background-opacity': 1,
             'transition-duration': '0.25s',
-            'height': 100,
-            'width': 100,
+            'height': BEAT_SIZE,
+            'width': BEAT_SIZE,
             'background-color': BEAT_COLOR,
             'text-valign': 'center',
             'text-halign': 'left'
@@ -192,8 +197,8 @@ export const VisualStyle = [
     }, {
         selector: 'node.element.unhighlighted.hovered',
         style: {
-            'height': 60,
-            'width': 60,
+            'height': ELEMENT_SIZE,
+            'width': ELEMENT_SIZE,
             'background-color': ELEMENT_COLOR,
             'text-valign': 'center',
             'text-halign': 'left'
@@ -201,8 +206,8 @@ export const VisualStyle = [
     }, {
         selector: 'node.bass.unhighlighted.hovered',
         style: {
-            'height': 80,
-            'width': 80,
+            'height': BASS_SIZE,
+            'width': BASS_SIZE,
             'background-color': BASS_COLOR,
             'text-valign': 'center',
             'text-halign': 'left'
@@ -210,8 +215,8 @@ export const VisualStyle = [
     }, {
         selector: 'node.speech.unhighlighted.hovered',
         style: {
-            'height': 40,
-            'width': 40,
+            'height': SPEECH_SIZE,
+            'width': SPEECH_SIZE,
             'background-color': SPEECH_COLOR,
             'text-valign': 'center',
             'text-halign': 'left'
@@ -219,8 +224,8 @@ export const VisualStyle = [
     }, {
         selector: 'node.texture.unhighlighted.hovered',
         style: {
-            'height': 50,
-            'width': 50,
+            'height': TEXTURE_SIZE,
+            'width': TEXTURE_SIZE,
             'background-color': TEXTURE_COLOR,
             'text-valign': 'center',
             'text-halign': 'left'
