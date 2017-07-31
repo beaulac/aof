@@ -25,6 +25,10 @@ export class HowlerService {
     constructor() {
     }
 
+    muted(muted: boolean) {
+        return Howler.Howler.mute(muted);
+    }
+
     updateOptions(newOptions) {
         this.options = Object.assign(DEFAULT_HOWL_OPTIONS, newOptions);
     }
