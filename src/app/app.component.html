@@ -35,12 +35,13 @@
         <div class="two columns">
             <nouislider class="slider"
                         [connect]="true"
-                        (change)="updateBranchingProbability($event); rebuildNodes()"
+                        (update)="updateBranchingProbability($event)"
+                        (change)="rebuildNodes()"
                         [step]=0.05
                         [min]=0
                         [max]=1
                         [(ngModel)]="nodeService.branchingProbability"></nouislider>
-            <div class="aof-button-subtitle">Recall Efficiency</div>
+            <div class="aof-button-subtitle">Recall&nbsp;Efficiency: {{nodeService.branchingProbability.toPrecision(2)}}</div>
         </div>
 
         <!-- COUNT -->
@@ -50,7 +51,7 @@
                         [min]=0
                         [max]=33
                         [(ngModel)]="nodeService.totalNodeCount"></nouislider>
-            <div class="aof-button-subtitle">Data Points</div>
+            <div class="aof-button-subtitle">Data&nbsp;Points</div>
         </div>
 
         <!-- STOP BUTTON -->

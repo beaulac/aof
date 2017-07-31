@@ -29,18 +29,15 @@
 
 .aof-ui-element {
     text-align: center;
-    font-size: 12px;
-    position: relative;
-    width: 100%;
-    line-height: 0.9em;
 }
 
 .aof-button-subtitle {
+    padding-top: 5px;
     text-align: center;
-    text-indent: 0.5em;
+    align-content: center;
+    font-size: 0.8em;
     letter-spacing: 0.5em;
-    position: relative;
-    width: 100%;
+    line-height: 1em;
 }
 
 .volume {
@@ -49,14 +46,18 @@
     cursor: pointer;
     margin-top: -5px;
 }
+
 .press, img, .press:focus, img:focus {
     outline: 0 !important;
     border: 0 none !important;
+    margin-bottom: 0.25em;
 }
 
 .stop-btn {
-    outline: 0 !important;
-    border: 0 none !important;
+    outline: 0;
+    border: 0 none;
+    margin-bottom: 0.5em;
+    padding: 0 0;
     cursor: pointer;
     background-color: #000;
     width: 2em;

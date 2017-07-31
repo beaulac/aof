@@ -52,7 +52,7 @@ export const VisualStyle = [
             'height': 100,
             'width': 100,
             'background-color': BEAT_COLOR,
-            'label': 'BEAT!',
+            'label': 'Beat',
             'text-valign': 'center',
             'text-halign': 'left'
         }
@@ -62,7 +62,7 @@ export const VisualStyle = [
             'height': 60,
             'width': 60,
             'background-color': ELEMENT_COLOR,
-            'label': 'Element!',
+            'label': 'Element',
             'text-valign': 'center',
             'text-halign': 'left'
         }
@@ -72,7 +72,7 @@ export const VisualStyle = [
             'height': 80,
             'width': 80,
             'background-color': BASS_COLOR,
-            'label': 'Bass!',
+            'label': 'Bass',
             'text-valign': 'center',
             'text-halign': 'left'
         }
@@ -82,7 +82,7 @@ export const VisualStyle = [
             'height': 40,
             'width': 40,
             'background-color': SPEECH_COLOR,
-            'label': 'Speech!',
+            'label': 'Speech',
             'text-valign': 'center',
             'text-halign': 'left'
         }
@@ -92,7 +92,7 @@ export const VisualStyle = [
             'height': 50,
             'width': 50,
             'background-color': TEXTURE_COLOR,
-            'label': 'Texture!',
+            'label': 'Texture',
             'text-valign': 'center',
             'text-halign': 'left'
         }
