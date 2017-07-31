@@ -40,7 +40,11 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     public STOP() {
-        this.sampleRun.STOP();
+        if (this.sampleRun) {
+            this.sampleRun.STOP();
+            this.sampleRun = null;
+        }
+
         this.cy.elements().forEach(cyElem => {
             const sample = cyElem.scratch('sample');
             if (sample) {
@@ -51,15 +55,11 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     highlightAll() {
-        this.cy.elements().forEach(cyElem => {
-            highlightElement(cyElem);
-        });
+        this.cy.elements().forEach(cyElem => highlightElement(cyElem));
     }
 
     unhighlightAll() {
-        this.cy.elements().forEach(cyElem => {
-            unhighlightElement(cyElem);
-        });
+        this.cy.elements().forEach(cyElem => unhighlightElement(cyElem));
     }
 
     ngOnInit() {
