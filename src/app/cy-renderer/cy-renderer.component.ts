@@ -6,7 +6,14 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../node.service';
 import { SampleNode } from '../SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
-import { resetElement, VisualStyle } from '../VisualStyle';
+import {
+    highlightElement,
+    hoverElement,
+    resetElement,
+    unhighlightElement,
+    unhoverElement,
+    VisualStyle
+} from '../VisualStyle';
 import { CY_LAYOUT_OPTIONS } from './CyLayout';
 import { SampleRun } from './SampleRun';
 
@@ -43,6 +50,18 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         });
     }
 
+    highlightAll() {
+        this.cy.elements().forEach(cyElem => {
+            highlightElement(cyElem);
+        });
+    }
+
+    unhighlightAll() {
+        this.cy.elements().forEach(cyElem => {
+            unhighlightElement(cyElem);
+        });
+    }
+
     ngOnInit() {
         this.cyContainer = document.getElementById(this.CYTOSCAPE_TAG);
         this.elementSub = this.elements.subscribe(newElements => {
@@ -72,7 +91,12 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     private setupEventListeners() {
-        this.cy.nodes().on('click', event => this.startSampleRunFrom(event.target));
+        const nodes = this.cy.nodes();
+
+        nodes.on('click', ({target}) => this.startSampleRunFrom(target));
+        nodes.on('mouseover', ({target}) => hoverElement(target));
+        nodes.on('mouseout', ({target}) => unhoverElement(target));
+
         window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
     }
 

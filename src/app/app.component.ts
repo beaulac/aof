@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
 
     toggleMute() {
         this.muted = !this.muted;
+        this.cyRenderer[this.muted ? 'highlightAll' : 'unhighlightAll']();
     }
 
     updateNodeCount($event) {
