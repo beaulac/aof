@@ -3,9 +3,6 @@ import * as cytoscape from 'cytoscape';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { NodeService } from '../builder/node.service';
-import { SampleNode } from '../builder/SampleNode';
-import { TICK_LENGTH_MS } from '../Timing';
 import {
     highlightElement,
     hoverElement,
@@ -14,6 +11,9 @@ import {
     unhoverElement,
     VisualStyle
 } from '../../VisualStyle';
+import { NodeService } from '../builder/node.service';
+import { SampleNode } from '../builder/SampleNode';
+import { TICK_LENGTH_MS } from '../Timing';
 import { CY_LAYOUT_OPTIONS } from './CyLayout';
 import { SampleRun } from './SampleRun';
 
@@ -84,7 +84,9 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                 boxSelectionEnabled: false,
                                 container: this.cyContainer,
                                 elements: cyElements,
-                                style: VisualStyle
+                                style: VisualStyle,
+                                minZoom: 0.04,
+                                maxZoom: 4
                             });
         this.initLayout();
         this.setupEventListeners();
