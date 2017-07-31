@@ -60,6 +60,11 @@ export class NodeService {
         for (let idx = 1; idx < this.sampleCount; idx++) {
             const newNode = this.buildRandomNode(allSamplesByType);
 
+            if (!newNode) {
+                console.warn('COULD NOT GET NODE');
+                continue;
+            }
+
             currentRoot.connectTo(newNode, randomMultipleOfFourWeight());
 
             elements.push(newNode);
@@ -80,27 +85,49 @@ export class NodeService {
         return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, countsPerType[type]));
     }
 
-    private randomSelection(samplesByType = this.samplesByType) {
+    private randomSelection(samplesByType) {
 
         const selectedType = this.selectRandomType();
 
-        const selectedNode = samplesByType[selectedType].pop();
+        const samplesOfType = samplesByType[selectedType];
 
-        for (const type in countsPerType) {
-            if (countsPerType.hasOwnProperty(type)) {
-                if (samplesByType[type].length > 0) {
-                    if (type === selectedType) {
-                        this.probabilities[type] = 0.1; // TODO alex: Don't hardcode this
-                    }
+        if (!samplesOfType) {
+            console.warn(`Found no samples for ${selectedType}!`);
+            return undefined;
+        }
 
-                    this.probabilities[type] += PROBABILITY_TICK;
-                } else {
-                    this.probabilities[type] = 0;
-                }
+        let selectedNode: AofSample = samplesOfType.pop();
+
+        if (!selectedNode) {
+            const [remainingSamples] = _(samplesByType)
+                .omitBy(samples => samples.length < 1)
+                .values()
+                .value();
+
+            if (remainingSamples) {
+                selectedNode = (remainingSamples as AofSample[]).pop();
+                console.warn(`Was going to get undefined for ${selectedType}, but recovered with ${selectedNode.type}`);
+            } else {
+                console.warn(`Was going to get undefined for ${selectedType}, and found no remaining types!`);
             }
         }
 
+        this.updateProbabilities(selectedType);
         return selectedNode;
+    }
+
+    private updateProbabilities(selectedType) {
+        for (const type of Object.keys(countsPerType)) {
+            if (this.samplesByType[type].length < 1) {
+                this.probabilities[type] = 0;
+            } else {
+                if (type === selectedType) {
+                    this.probabilities[type] = 0.1; // TODO alex: Don't hardcode this
+                } else {
+                    this.probabilities[type] += PROBABILITY_TICK;
+                }
+            }
+        }
     }
 
     private selectRandomType() {
@@ -108,7 +135,9 @@ export class NodeService {
         let type,
             randNumber = Math.random() * this.totalProbability;
 
-        for (type in countsPerType) {
+        const remainingTypes = _.pickBy(countsPerType, (_count, type) => this.samplesByType[type].length > 0);
+
+        for (type in remainingTypes) {
             if (countsPerType.hasOwnProperty(type)) {
                 if (randNumber <= this.probabilities[type]) {
                     return type;
@@ -120,7 +149,9 @@ export class NodeService {
     }
 
     private buildRandomNode(samples, sample = this.randomSelection(samples)) {
-        return new SampleNode(sample);
+        if (sample) {
+            return new SampleNode(sample);
+        }
     }
 }
 
