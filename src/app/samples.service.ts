@@ -4,8 +4,8 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { environment } from '../environments/environment';
-import { AofSample } from './AofSample';
-import { HowlerService } from './howler.service';
+import { AofSample } from './audio/AofSample';
+import { HowlerService } from './audio/howler.service';
 
 const DRIVE_API_ROOT = 'https://content.googleapis.com/drive/v3';
 const publicDownloadUrlFor = id => `${environment.corsProxy}/https://drive.google.com/uc?export=download&id=${id}`;

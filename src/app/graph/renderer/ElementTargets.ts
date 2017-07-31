@@ -13,11 +13,11 @@ export class ElementTargets {
                 public nodeTargets = []) {
     }
 
-    static extractTargetsFor(path, sourceId) {
-        return new ElementTargets([], []).extractTargetsFor(path.toArray(), sourceId);
+    static extractTargetsFor(path, sourceId): ElementTargets {
+        return new ElementTargets().extractTargetsFor(path.toArray(), sourceId);
     }
 
-    extractTargetsFor(path, sourceId) {
+    extractTargetsFor(path, sourceId): this {
         let idx = path.findIndex(e => e.id() === sourceId), // Start i from location of node in path
             previousWasOutgoingEdge = false; // Path is structured like E1, N1, E2, N2
 

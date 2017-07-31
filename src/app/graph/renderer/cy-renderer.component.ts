@@ -3,8 +3,8 @@ import * as cytoscape from 'cytoscape';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { NodeService } from '../node.service';
-import { SampleNode } from '../SampleNode';
+import { NodeService } from '../builder/node.service';
+import { SampleNode } from '../builder/SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
 import {
     highlightElement,
@@ -13,7 +13,7 @@ import {
     unhighlightElement,
     unhoverElement,
     VisualStyle
-} from '../VisualStyle';
+} from '../../VisualStyle';
 import { CY_LAYOUT_OPTIONS } from './CyLayout';
 import { SampleRun } from './SampleRun';
 
@@ -36,7 +36,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     private tickLength = TICK_LENGTH_MS;
 
     constructor(nodeService: NodeService) {
-        this.elements = nodeService.trackNodes();
+        this.elements = nodeService.nodes;
     }
 
     public STOP() {

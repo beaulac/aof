@@ -1,33 +1,28 @@
+import * as _ from 'lodash';
+import { AofSample } from '../../audio/AofSample';
 import { CyElementWrapper } from './CyElementWrapper';
-import { AofSample } from './AofSample';
 import { Edge } from './Edge';
-import { determineBeatsUntilStop } from './Timing';
+import { determineBeatsUntilStop } from '../Timing';
 
 const DEFAULT_MAX_LEVEL = 10;
 
 function randomColor() {
-    let colorString = '#';
-    for (let idx = 0; idx < 3; idx++) {
-        let byteString = randomByte().toString(16);
-        if (byteString.length < 2) {
-            byteString = `0${byteString}`;
-        }
-        colorString += `${colorString}${byteString}`;
-    }
-
-    return colorString;
+    return `#${_.times(3, randomByteStr).join('')}`;
 }
 
-function randomByte() {
-    return Math.round(Math.random() * 0xFF);
+function randomByteStr(): string {
+    const byte = Math.round(Math.random() * 0xFF);
+    const str = byte.toString(16);
+    return (byte < 0xF0) ? `0${str}` : str;
 }
 
 export class SampleNode extends CyElementWrapper {
-
     edges = {};
     currentLevel: number;
 
-    constructor(public sample: AofSample, public maxLevel = DEFAULT_MAX_LEVEL, public startLevel = maxLevel / 2) {
+    constructor(public sample: AofSample,
+                public maxLevel = DEFAULT_MAX_LEVEL,
+                public startLevel = maxLevel / 2) {
         super(sample.file || Math.random().toString().substr(2, 4));
 
         this.currentLevel = this.startLevel;
@@ -48,7 +43,6 @@ export class SampleNode extends CyElementWrapper {
             scratch: {
                 type: this.id,
                 nodeStop: nodeStopBeats,
-                color: randomColor(),
                 fm: 'hi',
                 nextNodeStart: nodeStopBeats / 4,
                 sample: this.sample
@@ -66,7 +60,7 @@ export class SampleNode extends CyElementWrapper {
         console.log(`${this.id} was stopped`);
     }
 
-    connectTo(otherNode, distance) {
+    connectTo(otherNode: SampleNode, distance: number) {
         if (!this.edges[otherNode.id]) {
             this.edges[otherNode.id] = new Edge(this.id, otherNode.id, distance);
         }

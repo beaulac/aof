@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CyRendererComponent } from './cy-renderer/cy-renderer.component';
-import { HowlerService } from './howler.service';
-import { NodeService } from './node.service';
+import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
+import { HowlerService } from './audio/howler.service';
+import { NodeService } from './graph/builder/node.service';
 
 @Component({
                selector: 'app-root',

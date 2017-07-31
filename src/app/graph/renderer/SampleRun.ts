@@ -1,5 +1,5 @@
-import { AofSample } from '../AofSample';
-import { highlightElement, unhighlightElement } from '../VisualStyle';
+import { AofSample } from '../../audio/AofSample';
+import { highlightElement, unhighlightElement } from '../../VisualStyle';
 import { extractTargetsFor } from './ElementTargets';
 
 const missingNode = {id: () => 'MISSING_NODE'};

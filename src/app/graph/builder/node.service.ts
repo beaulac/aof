@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AofSample } from './AofSample';
+import { AofSample } from '../../audio/AofSample';
 import { BRANCHING_PROBABILITY, countsPerType, Probabilities, PROBABILITY_TICK } from './node.probabilities';
 import { SampleNode } from './SampleNode';
-import { SamplesService } from './samples.service';
+import { SamplesService } from '../../samples.service';
 
 @Injectable()
 export class NodeService {
@@ -14,16 +14,23 @@ export class NodeService {
     private samplesByType: _.Dictionary<AofSample[]>;
     private probabilities: Probabilities;
     private totalProbability = 0;
-    public sampleCount = 0;
-
 
     private maxPerType = countsPerType;
     private typeRatioCount = _(countsPerType).values().sum();
 
+    /**
+     * Available samples from server.
+     * @type {number}
+     */
+    public sampleCount = 0;
     public totalNodeCount = 0;
     public branchingProbability = BRANCHING_PROBABILITY;
 
-    private nodes = new ReplaySubject<SampleNode[]>(1);
+    private nodes$ = new ReplaySubject<SampleNode[]>(1);
+
+    get nodes(): Observable<SampleNode[]> {
+        return this.nodes$;
+    }
 
     constructor(private samplesService: SamplesService) {
         this.samplesObs = this.samplesService.trackSamples();
@@ -37,10 +44,6 @@ export class NodeService {
 
             this.buildElements();
         });
-    }
-
-    public trackNodes(): Observable<SampleNode[]> {
-        return this.nodes;
     }
 
     private getTypeRatio(type: string) {
@@ -74,7 +77,7 @@ export class NodeService {
             }
         }
 
-        return this.nodes.next(elements);
+        return this.nodes$.next(elements);
     }
 
     private buildTypeProbabilities() {
@@ -156,5 +159,5 @@ export class NodeService {
 }
 
 function randomMultipleOfFourWeight() {
-    return 4 + (4 * Math.floor(Math.random() * 3));
+    return 4 + ((4 - 1) * Math.floor(Math.random() * 4));
 }

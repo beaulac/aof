@@ -3,10 +3,10 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NouisliderModule } from 'ng2-nouislider';
 import { AppComponent } from './app.component';
-import { CyRendererComponent } from './cy-renderer/cy-renderer.component';
-import { CytoscapeService } from './cytoscape.service';
-import { HowlerService } from './howler.service';
-import { NodeService } from './node.service';
+import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
+import { CytoscapeService } from './graph/cytoscape.service';
+import { HowlerService } from './audio/howler.service';
+import { NodeService } from './graph/builder/node.service';
 import { SamplesService } from './samples.service';
 
 @NgModule({
