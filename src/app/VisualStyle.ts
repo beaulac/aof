@@ -1,3 +1,5 @@
+import { AofSample } from './audio/AofSample';
+
 const HIGHLIGHT_CLASS = 'highlighted'
     , UNHIGHLIGHT_CLASS = 'unhighlighted';
 
@@ -181,7 +183,11 @@ export const VisualStyle = [
             'transition-duration': '0.25s',
             'border-color': 'black',
             'border-width': '1px',
-            'border-style': 'solid'
+            'border-style': 'solid',
+            'text-valign': 'center',
+            label: function (elem) {
+                return (elem.scratch('sample') as AofSample).file;
+            }
         }
     }, {
         selector: 'node.beat.unhighlighted.hovered',

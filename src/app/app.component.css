@@ -31,13 +31,15 @@
 
 .aof-ui-element {
     text-align: center;
+    align-content: center;
 }
 
 .aof-button-subtitle {
-    padding-top: 5px;
     text-align: center;
-    align-content: center;
+    margin-top: -0.5em;
+    padding-bottom: 0.5em;
     font-size: 0.8em;
+    text-indent: 0.5em;
     letter-spacing: 0.5em;
     line-height: 1em;
 }
