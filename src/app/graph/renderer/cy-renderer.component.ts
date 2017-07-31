@@ -110,8 +110,12 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                                directed: false
                                            });
 
-        this.sampleRun = new SampleRun(bfs, this.tickLength);
-        this.sampleRun.highlightNextElement(root);
+        if (!this.sampleRun) {
+            this.sampleRun = new SampleRun(bfs, this.tickLength);
+            this.sampleRun.highlightNextElement(root);
+        } else {
+            console.debug('NOT HANDLING DOUBLE RUNS YET');
+        }
     }
 
     private initLayout() {
