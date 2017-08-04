@@ -55,7 +55,7 @@ export class NodeService {
         this.probabilities = this.buildTypeProbabilities();
         this.totalProbability = _(this.probabilities).values().sum();
 
-        this.buildElements();        
+        this.buildElements();
     }
 
     public updateProbability(newProbability) {
@@ -123,10 +123,10 @@ export class NodeService {
         let selectedNode: AofSample = samplesOfType.pop();
 
         if (!selectedNode) {
-            const [remainingSamples] = _(samplesByType)
+            const remainingSamples = _(samplesByType)
                 .omitBy(samples => samples.length < 1)
                 .values()
-                .value();
+                .sample();
 
             if (remainingSamples) {
                 selectedNode = (remainingSamples as AofSample[]).pop();
