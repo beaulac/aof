@@ -18,6 +18,8 @@ export class NodeService {
     private maxPerType = countsPerType;
     private typeRatioCount = _(countsPerType).values().sum();
 
+    private samplesSnapShot : AofSample[];
+
     /**
      * Available samples from server.
      * @type {number}
@@ -25,6 +27,7 @@ export class NodeService {
     public sampleCount = 0;
     public totalNodeCount = 0;
     public branchingProbability = BRANCHING_PROBABILITY;
+    public numTypes = countsPerType.length;
 
     private nodes$ = new ReplaySubject<SampleNode[]>(1);
 
@@ -35,20 +38,24 @@ export class NodeService {
     constructor(private samplesService: SamplesService) {
         this.samplesObs = this.samplesService.trackSamples();
 
-        this.samplesObs.subscribe(samples => {
-            this.sampleCount = samples.length;
-            this.totalNodeCount = this.sampleCount * 0.5;
-            this.samplesByType = this.trimSamplesByType(_.groupBy(samples, 'type'));
-
-            this.probabilities = this.buildTypeProbabilities();
-            this.totalProbability = _(this.probabilities).values().sum();
-
-            this.buildElements();
-        });
+        this.samplesObs.subscribe(samples => this.initializeSamples(samples));
     }
 
-    private getTypeRatio(type: string) : number {
-        return this.maxPerType[type] / this.typeRatioCount;
+    public initializeSamples(samples: AofSample[]) {
+        this.samplesSnapShot = samples;
+        this.sampleCount = this.samplesSnapShot.length;
+        this.totalNodeCount = this.sampleCount * 0.5;
+
+        this.rebuildElements();
+    }
+
+    public rebuildElements() {
+        this.samplesByType = this.trimSamplesByType(_.groupBy(this.samplesSnapShot, 'type'));
+
+        this.probabilities = this.buildTypeProbabilities();
+        this.totalProbability = _(this.probabilities).values().sum();
+
+        this.buildElements();        
     }
 
     public updateProbability(newProbability) {
@@ -85,6 +92,10 @@ export class NodeService {
         return this.nodes$.next(elements);
     }
 
+    private getTypeRatio(type: string) : number {
+        return this.maxPerType[type] / this.typeRatioCount;
+    }
+
     private buildTypeProbabilities() {
         return _.mapValues(countsPerType, (maxOfType: number) => maxOfType / this.sampleCount);
     }
@@ -94,6 +105,7 @@ export class NodeService {
     }
 
     private getCountForType(type: string) : number {
+        console.log(type + ":" + this.getTypeRatio(type) * this.totalNodeCount)
         return this.getTypeRatio(type) * this.totalNodeCount;
     }
 
