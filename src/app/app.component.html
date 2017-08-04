@@ -46,12 +46,15 @@
 
         <!-- COUNT -->
         <div class="two columns">
-            <nouislider [connect]="true"
-                        [step]=0.05
+            <nouislider *ngIf="nodeService.sampleCount"
+                        [connect]="true"
+                        (update)="updateTotalNodeCount($event)"
+                        (change)="rebuildNodes()"
+                        [step]=1
                         [min]=0
-                        [max]=33
+                        [max]="nodeService.sampleCount"
                         [(ngModel)]="nodeService.totalNodeCount"></nouislider>
-            <div class="aof-button-subtitle">Data&nbsp;Points</div>
+            <div class="aof-button-subtitle">Data&nbsp;Points<br/>{{nodeService.totalNodeCount}}</div>
         </div>
 
         <!-- STOP BUTTON -->

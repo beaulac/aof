@@ -36,8 +36,9 @@ export class NodeService {
         this.samplesObs = this.samplesService.trackSamples();
 
         this.samplesObs.subscribe(samples => {
+            this.sampleCount = samples.length;
+            this.totalNodeCount = this.sampleCount * 0.5;
             this.samplesByType = this.trimSamplesByType(_.groupBy(samples, 'type'));
-            this.sampleCount = this.totalNodeCount = _(this.samplesByType).values().map('length').sum().valueOf();
 
             this.probabilities = this.buildTypeProbabilities();
             this.totalProbability = _(this.probabilities).values().sum();
@@ -46,12 +47,16 @@ export class NodeService {
         });
     }
 
-    private getTypeRatio(type: string) {
+    private getTypeRatio(type: string) : number {
         return this.maxPerType[type] / this.typeRatioCount;
     }
 
     public updateProbability(newProbability) {
         return this.branchingProbability = newProbability;
+    }
+
+    public updateTotalNodeCount(newNodeCount) {
+        return this.totalNodeCount = newNodeCount;
     }
 
     public buildElements() {
@@ -85,7 +90,11 @@ export class NodeService {
     }
 
     private trimSamplesByType(groupedSamples: _.Dictionary<AofSample[]>) {
-        return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, countsPerType[type]));
+        return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, this.getCountForType(type)));
+    }
+
+    private getCountForType(type: string) : number {
+        return this.getTypeRatio(type) * this.totalNodeCount;
     }
 
     private randomSelection(samplesByType) {

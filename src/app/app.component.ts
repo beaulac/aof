@@ -23,6 +23,10 @@ export class AppComponent implements OnInit {
         return this.nodeService.updateProbability($event);
     }
 
+    updateTotalNodeCount($event) {
+        return this.nodeService.updateTotalNodeCount($event);
+    }    
+
     toggleMute() {
         this.muted = !this.muted;
         this.howlerService.muted(this.muted);
