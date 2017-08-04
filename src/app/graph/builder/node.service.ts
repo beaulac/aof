@@ -157,16 +157,15 @@ export class NodeService {
     private selectRandomType() {
         // Make random selection based on existing probabilities
         let type,
-            randNumber = Math.random() * this.totalProbability;
+            randNumber = _.random(1, this.typeRatioCount);
 
         const remainingTypes = _.pickBy(countsPerType, (_count, type) => this.samplesByType[type].length > 0);
 
         for (type in remainingTypes) {
-            if (countsPerType.hasOwnProperty(type)) {
-                if (randNumber <= this.probabilities[type]) {
-                    return type;
-                }
-                randNumber -= this.probabilities[type];
+            randNumber -= countsPerType[type];
+            if (randNumber <= 0) {
+            console.log(type);
+                return type;
             }
         }
         return type;
