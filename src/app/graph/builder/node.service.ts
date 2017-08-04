@@ -27,7 +27,7 @@ export class NodeService {
     public sampleCount = 0;
     public totalNodeCount = 0;
     public branchingProbability = BRANCHING_PROBABILITY;
-    public numTypes = countsPerType.length;
+    public numTypes = Object.keys(countsPerType).length;
 
     private nodes$ = new ReplaySubject<SampleNode[]>(1);
 
