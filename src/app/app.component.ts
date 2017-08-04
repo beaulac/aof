@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
+import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 
 @Component({
                selector: 'app-root',
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
 
     updateTotalNodeCount($event) {
         return this.nodeService.updateTotalNodeCount($event);
-    }    
+    }
 
     toggleMute() {
         this.muted = !this.muted;

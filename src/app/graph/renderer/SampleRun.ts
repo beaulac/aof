@@ -1,8 +1,12 @@
 import { AofSample } from '../../audio/AofSample';
-import { highlightElement, unhighlightElement } from '../../VisualStyle';
 import { extractTargetsFor } from './ElementTargets';
+import { highlightElement, unhighlightElement } from './VisualStyle';
 
-const missingNode = {id: () => 'MISSING_NODE'};
+const missingNode = {
+    id: () => 'MISSING_NODE',
+    scratch: (_): any => {
+    }
+};
 
 export class SampleRun {
     private sampleEventQueue = [];
@@ -18,38 +22,26 @@ export class SampleRun {
 
     highlightNextElement(cyElem) {
         const currentID = cyElem.id();
-        const sample = cyElem.scratch('sample');
-
-        // Highlight & trigger:
-        highlightElement(cyElem);
-
-        this.initializeElementSample(cyElem);
 
         // Continue on the BFS path:
         const extractedTargets = extractTargetsFor(this.bfs.path, currentID)
             , numberOfTargets = extractedTargets.numberOfTargets();
 
-        if (extractedTargets.numberOfTargets() > 0) {
-            const {edgeTargets, nodeTargets} = extractedTargets;
+        const nextNodeStartMs = cyElem.scratch('nextNodeStart') * this.tickLength;
 
-            for (let idx = 0; idx < numberOfTargets; idx++) {
-                const edgeTarget = edgeTargets[idx]
-                    , nodeTarget = nodeTargets[idx];
+        const {edgeTargets, nodeTargets} = extractedTargets;
+        for (let idx = 0; idx < numberOfTargets; idx++) {
+            const edgeDelay = this.tickLength * edgeTargets[idx].data('length');
+            this.sampleEventQueue.push(
+                setTimeout(() => this.highlightNextElement(nodeTargets[idx]), edgeDelay + nextNodeStartMs)
+            );
+        }
 
-                const targetSample = nodeTarget.scratch('sample');
-                if (targetSample) {
-                    const edgeDelay = this.tickLength * edgeTarget.data('length')
-                        , nextNodeStart = cyElem.scratch('nextNodeStart') * this.tickLength;
-                    this.sampleEventQueue.push(
-                        setTimeout(() => this.highlightNextElement(nodeTargets[idx]), edgeDelay + nextNodeStart)
-                    );
-                } else {
-                    console.warn(`Missing sample for ${(nodeTarget || missingNode).id()}`);
-                }
-            }
-        } else if (extractedTargets.isLast) {
+        this.initializeElementSample(cyElem);
+
+        if (extractedTargets.isLast) {
             console.info('DONE');
-        } else {
+        } else if (extractedTargets.numberOfTargets() === 0) {
             console.debug('NO TARGETS');
         }
     };
@@ -59,28 +51,36 @@ export class SampleRun {
         const beatsToPeak = Math.floor(Math.random() * nodeStopBeats);
         const beatsToStop = nodeStopBeats - beatsToPeak;
 
-        const msDuration = nodeStopBeats * this.tickLength;
+        const msTotalDuration = nodeStopBeats * this.tickLength;
         const msToPeak = beatsToPeak * this.tickLength;
         const msToStopAfterPeak = beatsToStop * this.tickLength;
 
-        return {msToPeak, msToStopAfterPeak, msDuration};
+        return {msToPeak, msToStopAfterPeak, msTotalDuration};
     }
 
-    private initializeElementSample(cyElem) {
+    private initializeElementSample(cyElem = missingNode) {
         const sample: AofSample = cyElem.scratch('sample');
-        const {msToPeak, msToStopAfterPeak, msDuration} = this.msToPeakAndStop(cyElem);
+        if (!sample) {
+            console.warn(`Missing sample for ${(cyElem || missingNode).id()}`);
+            return;
+        }
 
-        sample.setVolume(this.initVolume);
-        sample.play();
-        sample.fadeTo(1, msToPeak);
+        const {msToPeak, msToStopAfterPeak, msTotalDuration} = this.msToPeakAndStop(cyElem);
+
+        sample.play(this.initVolume);
+        highlightElement(cyElem);
+
+        const startCrescendoToPeak = () => sample.fadeTo(1, msToPeak);
+        const fadeOutAfterPeak = () => sample.fadeTo(0, msToStopAfterPeak);
+        const stopAfterTotalDuration = () => {
+            sample.stop();
+            unhighlightElement(cyElem);
+        };
 
         this.sampleEventQueue.push(
-            setTimeout(() => sample.fadeTo(0, msToStopAfterPeak), msToPeak),
-            setTimeout(() => {
-                sample.fadeTo(0, 20); // To prevent 'click' on stop.
-                sample.stop();
-                unhighlightElement(cyElem);
-            }, msDuration)
+            setTimeout(startCrescendoToPeak, 0),
+            setTimeout(fadeOutAfterPeak, msToPeak),
+            setTimeout(stopAfterTotalDuration, msTotalDuration)
         );
 
         this.initVolume = Math.random() * this.initVolume;

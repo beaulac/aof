@@ -1,29 +1,38 @@
 export class AofSample {
-    public file: string;
+    public sampleName: string;
 
     constructor(public howlSound: Howl, file: string, public type) {
-        ([this.file] = file.split('.'));
+        ([this.sampleName] = file.split('.'));
     }
 
-    play() {
+    load() {
         this.howlSound.load();
+    }
+
+    play(initVolume) {
+        this.load();
+        this.howlSound.volume(initVolume);
         this.howlSound.play();
-        console.log(this.file + ' is now playing');
+        console.log(`${this.sampleName} is now playing`);
     }
 
     stop() {
-        this.howlSound.unload();
+        this.howlSound.fade(this.howlSound.volume(), 0, 20); // prevents 'click' on stop
         this.howlSound.stop();
-        console.log(this.file + ' has stopped playing.');
+        console.log(`${this.sampleName} has stopped playing.`);
+    }
+
+    unload() {
+        this.howlSound.unload();
     }
 
     setVolume(newVolume) {
-        console.log(this.file + ' had its volume set to ' + newVolume);
+        console.log(`${this.sampleName} had its volume set to ${newVolume}`);
         this.howlSound.volume(newVolume);
     }
 
     fadeTo(newVolume, lengthMs) {
-        console.log(this.file + ' is fading to ' + newVolume);
+        console.log(`${this.sampleName} is fading to ${newVolume}`);
         const sound = this.howlSound;
         sound.fade(sound.volume(), newVolume, lengthMs);
     }

@@ -3,6 +3,11 @@ import * as cytoscape from 'cytoscape';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeService } from '../builder/node.service';
+import { SampleNode } from '../builder/SampleNode';
+import { TICK_LENGTH_MS } from '../Timing';
+import { CY_LAYOUT_OPTIONS } from './CyLayout';
+import { SampleRun } from './SampleRun';
 import {
     highlightElement,
     hoverElement,
@@ -10,12 +15,7 @@ import {
     unhighlightElement,
     unhoverElement,
     VisualStyle
-} from '../../VisualStyle';
-import { NodeService } from '../builder/node.service';
-import { SampleNode } from '../builder/SampleNode';
-import { TICK_LENGTH_MS } from '../Timing';
-import { CY_LAYOUT_OPTIONS } from './CyLayout';
-import { SampleRun } from './SampleRun';
+} from './VisualStyle';
 
 
 @Component({
