@@ -47,15 +47,11 @@ export const VisualStyle = [
         style: {
             'height': 30,
             'width': 30,
-            'label': function (elem) {
-                return elem.data('type');
-            },
+            'label': elem => elem.data('type'),
             'font-family': 'Raleway, sans-serif',
             'text-valign': 'top',
             'text-halign': 'center',
-            'text-max-width': function (elem) {
-                return elem.width() - 10;
-            },
+            'text-max-width': elem => Math.max(elem.width() - 10, 0),
             'min-zoomed-font-size': 4,
             'transition-property': [
                 'background-blacken',
@@ -186,9 +182,7 @@ export const VisualStyle = [
             'border-width': '1px',
             'border-style': 'solid',
             'text-valign': 'center',
-            label: function (elem) {
-                return (elem.scratch('sample') as AofSample).sampleName;
-            }
+            label: elem => (elem.scratch('sample') as AofSample).sampleName
         }
     }, {
         selector: 'node.beat.unhighlighted.hovered',
