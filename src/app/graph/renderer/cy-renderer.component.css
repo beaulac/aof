@@ -1,9 +1,9 @@
 .bdtem-graph {
-    height: 80vh;
+    height: 100%;
     width: 100%;
 }
 
 #cy {
-    height: 100%;
+    height: 75vh;
     width: 100%;
 }
