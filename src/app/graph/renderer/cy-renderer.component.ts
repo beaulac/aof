@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeService } from '../builder/node.service';
 import { SampleNode } from '../builder/SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
-import { CY_LAYOUT_OPTIONS } from './CyLayout';
+import { buildColaLayout } from './CyLayout';
 import { SampleRun } from './SampleRun';
 import {
     highlightElement,
@@ -86,6 +86,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                 elements: cyElements,
                                 style: VisualStyle,
                                 minZoom: 0.04,
+                                zoom: 0.5,
                                 maxZoom: 4
                             });
         this.initLayout();
@@ -99,7 +100,13 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         nodes.on('mouseover', ({target}) => hoverElement(target));
         nodes.on('mouseout', ({target}) => unhoverElement(target));
 
-        window.addEventListener('resize', () => this.cy.resize() && this.cy.fit());
+        this.cy.on('tapend', () => this.fit());
+
+        window.addEventListener('resize', () => this.cy.resize() && this.fit());
+    }
+
+    private fit() {
+        return this.cy.fit();
     }
 
     private startSampleRunFrom(root) {
@@ -119,7 +126,36 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     private initLayout() {
-        this.currentLayout = this.cy.makeLayout(CY_LAYOUT_OPTIONS);
+        const options = buildColaLayout();
+
+        options.infinite = false;
+        options.fit = true;
+        options.ungrabifyWhileSimulating = true;
+
+        this.currentLayout = this.cy.makeLayout(options);
+        this.currentLayout.run();
+    }
+
+    // TODO OPTIMIZE INFINITE ANIMATION... USES TOO MUCH CPU
+    private runAnimatedLayout() {
+        const options = buildColaLayout();
+
+        this.currentLayout.stop();
+
+        options.infinite = true;
+        options.fit = false;
+        options.refresh = 2;
+
+        let randomAmount = Math.random();
+        const updateNoise = () => randomAmount = Math.random();
+
+        setInterval(updateNoise, 500);
+
+        options.edgeLength = edge => randomAmount * edge.data('length');
+
+        console.log('ANIMATED');
+
+        this.currentLayout = this.cy.makeLayout(options);
         this.currentLayout.run();
     }
 }

@@ -3,9 +3,9 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AofSample } from '../../audio/AofSample';
+import { SamplesService } from '../../samples.service';
 import { BRANCHING_PROBABILITY, countsPerType, Probabilities, PROBABILITY_TICK } from './node.probabilities';
 import { SampleNode } from './SampleNode';
-import { SamplesService } from '../../samples.service';
 
 @Injectable()
 export class NodeService {
@@ -18,7 +18,7 @@ export class NodeService {
     private maxPerType = countsPerType;
     private typeRatioCount = _(countsPerType).values().sum();
 
-    private samplesSnapShot : AofSample[];
+    private samplesSnapShot: AofSample[];
 
     /**
      * Available samples from server.
@@ -76,7 +76,7 @@ export class NodeService {
             const newNode = this.buildRandomNode(allSamplesByType);
 
             if (!newNode) {
-                console.warn('COULD NOT GET NODE');
+                // console.warn('COULD NOT GET NODE');
                 continue;
             }
 
@@ -92,7 +92,7 @@ export class NodeService {
         return this.nodes$.next(elements);
     }
 
-    private getTypeRatio(type: string) : number {
+    private getTypeRatio(type: string): number {
         return this.maxPerType[type] / this.typeRatioCount;
     }
 
@@ -104,8 +104,8 @@ export class NodeService {
         return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, this.getCountForType(type)));
     }
 
-    private getCountForType(type: string) : number {
-        console.log(type + ":" + this.getTypeRatio(type) * this.totalNodeCount)
+    private getCountForType(type: string): number {
+        console.debug(type + ':' + this.getTypeRatio(type) * this.totalNodeCount);
         return this.getTypeRatio(type) * this.totalNodeCount;
     }
 
@@ -164,7 +164,7 @@ export class NodeService {
         for (type in remainingTypes) {
             randNumber -= countsPerType[type];
             if (randNumber <= 0) {
-            console.log(type);
+                console.debug(type);
                 return type;
             }
         }
