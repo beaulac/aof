@@ -13,6 +13,8 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
+    showInfo = false;
+
     public muted = false;
 
     constructor(public nodeService: NodeService,
@@ -36,6 +38,10 @@ export class AppComponent implements OnInit {
         console.log($event);
     }
 
+    toggleInfo() {
+        this.showInfo = !this.showInfo;
+    }
+
     stopAll() {
         this.cyRenderer.STOP();
     }
@@ -45,6 +51,7 @@ export class AppComponent implements OnInit {
     }
 
     rebuildNodes() {
+        this.stopAll();
         this.nodeService.buildElements();
     }
 }

@@ -8,11 +8,13 @@ import { CytoscapeService } from './graph/cytoscape.service';
 import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
 import { SamplesService } from './samples.service';
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
               declarations: [
                   AppComponent,
-                  CyRendererComponent
+                  CyRendererComponent,
+                  InfoComponent
               ],
               imports: [
                   BrowserModule,

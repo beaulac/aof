@@ -11,6 +11,11 @@
     width: 100%;
 }
 
+.app-info {
+    z-index: 1000;
+    background-color: white;
+}
+
 .aof-title {
     padding-top: 0.1rem;
     margin: auto;
@@ -65,4 +70,10 @@
     background-color: #000;
     width: 2em;
     height: 2em;
+}
+
+.info-btn {
+    font-size: 3em;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
 }
