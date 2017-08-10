@@ -27,9 +27,24 @@
     height: 100%;
 }
 
-.info-text div {
-    text-decoration: underline;
+.info-line span {
     cursor: pointer;
+    text-decoration: underline;
     margin-bottom: 10vh;
+}
+
+.info-popover__content {
+    position: absolute;
+    top: -10vh;
+    margin-bottom: 1vh;
+    background-color: #FFFFFF;
+    width: 50%;
+    z-index: 10000;
+    border: 1px solid black;
+    font-size: 1.5rem;
+}
+
+.info-popover__content p::first-letter {
+    font-size: 2em;
 }
 
