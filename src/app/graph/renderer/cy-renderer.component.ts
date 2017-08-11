@@ -16,6 +16,7 @@ import {
     unhoverElement,
     VisualStyle
 } from './VisualStyle';
+import { AofSample } from '../../audio/AofSample';
 
 
 @Component({
@@ -46,7 +47,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         }
 
         this.cy.elements().forEach(cyElem => {
-            const sample = cyElem.scratch('sample');
+            const sample: AofSample = cyElem.scratch('sample');
             if (sample) {
                 resetElement(cyElem);
                 sample.stop();

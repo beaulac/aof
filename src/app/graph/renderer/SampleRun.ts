@@ -47,7 +47,7 @@ export class SampleRun {
     };
 
     private msToPeakAndStop(cyElem) {
-        const nodeStopBeats = cyElem.scratch('nodeStop');
+        const nodeStopBeats = ~~cyElem.scratch('nodeStop');
         const beatsToPeak = Math.floor(Math.random() * nodeStopBeats);
         const beatsToStop = nodeStopBeats - beatsToPeak;
 

@@ -7,21 +7,14 @@ import { environment } from '../environments/environment';
 import { AofSample } from './audio/AofSample';
 import { HowlerService } from './audio/howler.service';
 
-const DRIVE_API_ROOT = 'https://content.googleapis.com/drive/v3';
-const publicDownloadUrlFor = id => `${environment.corsProxy}/https://drive.google.com/uc?export=download&id=${id}`;
+const publicDownloadUrlFor = id => `${environment.corsProxyUrl}/https://drive.google.com/uc?export=download&id=${id}`;
 
 /**
  * @param filename
  * @returns sample type
  * @example returns 'texture' for M8_Texture.mp3
  */
-const filenameToType = filename => /_([^._\s]+)[\s.]+/.exec(filename)[1].toLowerCase();
-
-interface DriveFileResponse {
-    files: DriveFileEntry[];
-    incompleteSearch: boolean;
-    nextPageToken: string;
-}
+const filenameToType = filename => (/_([^._\s]+)[\s.]+/.exec(filename) || [, 'unknown'])[1].toLowerCase();
 
 /**
  * @example
@@ -41,11 +34,7 @@ interface DriveFileEntry {
 
 @Injectable()
 export class SamplesService {
-    private folderId = '0B721XY-cG39ueUNMVmZlWnpJeGc';
-    private apiKey = 'AIzaSyB34kcbBYm9f0lpjwdm1_RDubFRZPwi0pA';
-
-
-    private samplesURL = `${DRIVE_API_ROOT}/files?q=%27${this.folderId}%27+in+parents&key=${this.apiKey}`;
+    private samplesURL = `${environment.samplesServerUrl}/samples`;
 
     private samples = new ReplaySubject<AofSample[]>(1);
 
@@ -61,16 +50,20 @@ export class SamplesService {
         return this.http.get(this.samplesURL)
                    .map(
                        response => {
-                           const fileResponse = response.json() as DriveFileResponse
-                               , fileEntries = fileResponse.files;
+                           const fileEntries = response.json() as DriveFileEntry[];
+
+                           console.log(fileEntries);
                            return fileEntries.map(file => this.fileResultToSample(file));
                        }
                    );
     }
 
     fileResultToSample(fileResponse: DriveFileEntry): AofSample {
+        console.log(fileResponse);
+
         const {id, name} = fileResponse;
         const howlSound = this.howlerService.buildHowlSound(publicDownloadUrlFor(id));
+
         return new AofSample(howlSound, name, filenameToType(name));
     }
 }
