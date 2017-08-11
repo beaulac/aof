@@ -9,14 +9,11 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-}
-
-.app-info {
-    z-index: 1000;
-    background-color: white;
+    z-index: 5;
 }
 
 .aof-title {
+    position: absolute;
     padding-top: 0.1rem;
     margin: auto;
     text-align: center;
@@ -27,11 +24,18 @@
 }
 
 .aof-subtitle {
+    position: absolute;
+    top: 5rem;
+
     margin: auto;
     text-align: center;
     text-indent: 0.9em;
     letter-spacing: 0.9em;
     user-select: none;
+}
+
+.aof-top {
+    z-index: 2;
 }
 
 .aof-ui-element {
@@ -75,5 +79,11 @@
 .info-btn {
     font-size: 3em;
     cursor: pointer;
+    user-select: none;
     transform: translate(-50%, -50%);
+}
+
+app-cy-renderer {
+    position: relative;
+    top: 5rem;
 }

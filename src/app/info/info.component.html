@@ -1,56 +1,62 @@
-<div class="info-panel">
-    <div class="info-wrapper">
+<div class="info-wrapper">
 
-        <video loop muted autoplay poster="../../assets/poster.jpeg" class="fullscreen-bg__video">
-            <source src="../../assets/bw_v3.mp4" type="video/mp4">
-        </video>
+    <video loop muted autoplay poster="../../assets/poster.jpeg" class="fullscreen-bg__video">
+        <source src="../../assets/bw_v3.mp4" type="video/mp4">
+    </video>
 
-        <div class="info-text">
+    <div class="info-text">
 
-            <div class="info-line" style="font-size: 1.25em">
-                <div class="ten columns offset-by-three info-popover__content" [hidden]="popoverHidden[0]">
-                    <p>
-                        The thought of a thing is less like the thing itself than a web of small reminders of how it all
-                        seemed at the time.
-                        There are many connected factors that may influence Jumper’s bias toward a single truth that is
-                        not a whole truth.
-                    </p>
-                </div>
-                <span class="ten columns offset-by-three" (click)="showPopover(0)">The Analysis of Failure seminar was not so neatly clarified in Mark Jumper's mind.</span>
+        <div style="font-size: 1.25em">
+            <div class="eleven columns offset-by-one first-popover" [hidden]="popoverHidden[0]">
+                <p>
+                    The thought of a thing is less like the thing itself than a web of small reminders of how it all
+                    seemed at the time.
+                    There are many connected factors that may influence Jumper’s bias toward a single truth that is
+                    not a whole truth.
+                </p>
             </div>
-            <div class="info-line" style="font-size: 1em">
-                <div class="info-popover__content ten columns offset-by-three" [hidden]="popoverHidden[1]">
-                    <p>
-                        If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of
-                        his tedious, meticulated lineation, it would come forth from him more like this than his
-                        otherwise presented Reconstruction.
-                    </p>
-                </div>
-                <span class="eight columns offset-by-four" (click)="showPopover(1)">Here, we thoughtfully Reconduct his Analysis of Failure.</span>
+            <span class="info-line ten columns offset-by-two" (click)="showPopover(0)">
+                The Analysis of Failure seminar was not so neatly clarified in Mark Jumper's mind.
+            </span>
+        </div>
+
+        <div style="font-size: 1em">
+            <div class="eleven columns offset-by-one second-popover" [hidden]="popoverHidden[1]">
+                <p>
+                    If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of
+                    his tedious, meticulated lineation, it would come forth from him more like this than his
+                    otherwise presented Reconstruction.
+                </p>
             </div>
-            <div class="info-line" style="font-size: 0.75em">
-                <div class="info-popover__content ten columns offset-by-three" [hidden]="popoverHidden[2]">
-                    <p>
-                        It is impressions, not facts, that spread around the various lobes and folds, each one doing its
-                        part to retain something close to a whole.
-                    </p>
-                    <p>
-                        As a result, the mind does not bother to remember things rigidly, but rather in a malleable way,
-                        ripe for ceaseless reinterpretation, so that we might grow and not stagna
-                    </p>
-                </div>
-                <span class="six columns offset-by-five" (click)="showPopover(2)">And Mark Jumper’s Reconstructions become infinite.</span>
+            <span class="info-line eight columns offset-by-four" (click)="showPopover(1)">
+                Here, we thoughtfully Reconduct his Analysis of Failure.
+            </span>
+        </div>
+
+        <div style="font-size: 0.75em">
+            <div class="eleven columns offset-by-one third-popover" [hidden]="popoverHidden[2]">
+                <p>
+                    It is impressions, not facts, that spread around the various lobes and folds, each one doing its
+                    part to retain something close to a whole.
+                </p>
+                <p>
+                    As a result, the mind does not bother to remember things rigidly, but rather in a malleable way,
+                    ripe for ceaseless reinterpretation, so that we might grow and not stagna
+                </p>
             </div>
-            <div class="info-line" style="font-size: 0.5em">
-                <div class="info-popover__content ten columns offset-by-three" [hidden]="popoverHidden[3]">
-                    <p>
-                        So, it is because Mark Jumper fills the bareness of this Archive with his singular
-                        interpretations that we can know it to be only as true as it is incomplete.
-                    </p>
-                </div>
-                <span class="four columns offset-by-six" (click)="showPopover(3)">Because One can only be achieved by combining All.</span>
+            <span class="info-line six columns offset-by-five" (click)="showPopover(2)">
+                And Mark Jumper’s Reconstructions become infinite.
+            </span>
+        </div>
+
+        <div style="font-size: 0.5em">
+            <div class="eleven columns offset-by-one fourth-popover" [hidden]="popoverHidden[3]">
+                <p>
+                    So, it is because Mark Jumper fills the bareness of this Archive with his singular
+                    interpretations that we can know it to be only as true as it is incomplete.
+                </p>
             </div>
+            <span class="info-line four columns offset-by-six" (click)="showPopover(3)">Because One can only be achieved by combining All.</span>
         </div>
     </div>
-
 </div>
