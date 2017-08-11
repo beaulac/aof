@@ -10,6 +10,7 @@
     bottom: 0;
     width: 100%;
     z-index: 5;
+    user-select: none;
 }
 
 .aof-title {
@@ -41,46 +42,33 @@
 .aof-ui-element {
     text-align: center;
     align-content: center;
+    cursor: pointer;
+}
+
+.aof-ui-subtitle {
+    text-align: center;
+    padding-bottom: 0.5em;
+    font-size: 0.8rem;
+    text-indent: 0.5rem;
+    letter-spacing: 0.5rem;
+    line-height: 1rem;
 }
 
 .aof-button-subtitle {
-    text-align: center;
-    padding-bottom: 0.5em;
-    font-size: 0.8em;
-    text-indent: 0.5em;
-    letter-spacing: 0.5em;
-    line-height: 1em;
+    @extend .aof-ui-subtitle;
+    display: block;
 }
 
-.volume {
-    max-width: 100%;
-    max-height: 3em;
-    cursor: pointer;
-    margin-top: -5px;
-}
-
-.press, img, .press:focus, img:focus {
-    outline: 0 !important;
-    border: 0 none !important;
-    margin-bottom: 0.25em;
-}
-
-.stop-btn {
-    outline: 0;
-    border: 0 none;
-    margin-bottom: 0.5em;
-    padding: 0 0;
-    cursor: pointer;
-    background-color: #000;
-    width: 2em;
-    height: 2em;
+.aof-slider-subtitle {
+    @extend .aof-ui-subtitle;
+    display: block;
 }
 
 .info-btn {
-    font-size: 3em;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2em;
     cursor: pointer;
-    user-select: none;
-    transform: translate(-50%, -50%);
+    transform: translate(0, -25%);
 }
 
 app-cy-renderer {
