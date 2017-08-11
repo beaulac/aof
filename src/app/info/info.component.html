@@ -7,7 +7,9 @@
     <div class="info-text">
 
         <div style="font-size: 1.25em">
-            <div class="eleven columns offset-by-one first-popover" [hidden]="popoverHidden[0]">
+            <div class="eleven columns offset-by-one first-popover"
+                 [hidden]="popoverHidden[0]"
+                 (mouseleave)="showPopover(0)">
                 <p>
                     The thought of a thing is less like the thing itself than a web of small reminders of how it all
                     seemed at the time.
@@ -21,7 +23,9 @@
         </div>
 
         <div style="font-size: 1em">
-            <div class="eleven columns offset-by-one second-popover" [hidden]="popoverHidden[1]">
+            <div class="eleven columns offset-by-one second-popover"
+                 [hidden]="popoverHidden[1]"
+                 (mouseleave)="showPopover(1)">
                 <p>
                     If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of
                     his tedious, meticulated lineation, it would come forth from him more like this than his
@@ -34,7 +38,9 @@
         </div>
 
         <div style="font-size: 0.75em">
-            <div class="eleven columns offset-by-one third-popover" [hidden]="popoverHidden[2]">
+            <div class="eleven columns offset-by-one third-popover"
+                 [hidden]="popoverHidden[2]"
+                 (mouseleave)="showPopover(2)">
                 <p>
                     It is impressions, not facts, that spread around the various lobes and folds, each one doing its
                     part to retain something close to a whole.
@@ -50,13 +56,17 @@
         </div>
 
         <div style="font-size: 0.5em">
-            <div class="eleven columns offset-by-one fourth-popover" [hidden]="popoverHidden[3]">
+            <div class="eleven columns offset-by-one fourth-popover"
+                 [hidden]="popoverHidden[3]"
+                 (mouseleave)="showPopover(3)">
                 <p>
                     So, it is because Mark Jumper fills the bareness of this Archive with his singular
                     interpretations that we can know it to be only as true as it is incomplete.
                 </p>
             </div>
-            <span class="info-line four columns offset-by-six" (click)="showPopover(3)">Because One can only be achieved by combining All.</span>
+            <span class="info-line four columns offset-by-six" (click)="showPopover(3)">
+                Because One can only be achieved by combining All.
+            </span>
         </div>
     </div>
 </div>

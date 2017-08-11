@@ -13,8 +13,7 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
-    //TEST
-    showInfo = true;
+    public showInfo = false;
 
     public muted = false;
 
