@@ -29,11 +29,11 @@ export function resetElement(element) {
     element.classes(sample.type);
 }
 
-const BEAT_COLOR = '#F2671F'
-    , ELEMENT_COLOR = '#C91B26'
-    , BASS_COLOR = '#9C0F5F'
-    , SPEECH_COLOR = '#60047A'
-    , TEXTURE_COLOR = '#160A47';
+const BEAT_COLOR = '#6E2435'
+    , ELEMENT_COLOR = '#6E2435'
+    , BASS_COLOR = '#947C7C'
+    , SPEECH_COLOR = '#BE4058'
+    , TEXTURE_COLOR = '#2D0311';
 
 const BEAT_SIZE = 100;
 const ELEMENT_SIZE = 60;
