@@ -22,10 +22,26 @@ export class HowlerService {
         Howler.Howler.volume(volume);
     }
 
+    backgroundNoise: Howl;
+
     constructor() {
+        this.backgroundNoise = new Howler.Howl({
+                                                   src: ['assets/audio/recall_long2.ogg'],
+                                                   html5: true,
+                                                   preload: true,
+                                                   loop: true,
+                                                   volume: 0
+                                               });
+        this.backgroundNoise.once(
+            'load',
+            () => {
+                this.backgroundNoise.play();
+                this.backgroundNoise.fade(0, 1, 1000);
+            }
+        );
     }
 
-    muted(muted: boolean) {
+    mute(muted: boolean) {
         return Howler.Howler.mute(muted);
     }
 

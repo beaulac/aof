@@ -31,7 +31,7 @@ export class AppComponent implements OnInit {
 
     toggleMute() {
         this.muted = !this.muted;
-        this.howlerService.muted(this.muted);
+        this.howlerService.mute(this.muted);
     }
 
     updateNodeCount($event) {
