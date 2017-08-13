@@ -154,8 +154,6 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
         options.edgeLength = edge => randomAmount * edge.data('length');
 
-        console.log('ANIMATED');
-
         this.currentLayout = this.cy.makeLayout(options);
         this.currentLayout.run();
     }

@@ -48,19 +48,13 @@ export class SamplesService {
 
     loadSamples(): Observable<AofSample[]> {
         return this.http.get(this.samplesURL)
-                   .map(
-                       response => {
-                           const fileEntries = response.json() as DriveFileEntry[];
-
-                           console.log(fileEntries);
-                           return fileEntries.map(file => this.fileResultToSample(file));
-                       }
-                   );
+                   .map(response => {
+                       const fileEntries = response.json() as DriveFileEntry[];
+                       return fileEntries.map(file => this.fileResultToSample(file));
+                   });
     }
 
     fileResultToSample(fileResponse: DriveFileEntry): AofSample {
-        console.log(fileResponse);
-
         const {id, name} = fileResponse;
         const howlSound = this.howlerService.buildHowlSound(publicDownloadUrlFor(id));
 

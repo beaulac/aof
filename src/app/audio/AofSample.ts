@@ -18,8 +18,11 @@ export class AofSample {
 
     stop() {
         this.howlSound.fade(this.howlSound.volume(), 0, 20); // prevents 'click' on stop
-        this.howlSound.stop();
-        console.log(`${this.sampleName} has stopped playing.`);
+
+        if (this.howlSound.playing()) {
+            this.howlSound.stop();
+            console.log(`${this.sampleName} has stopped playing.`);
+        }
     }
 
     unload() {
