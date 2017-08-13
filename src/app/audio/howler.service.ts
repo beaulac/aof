@@ -19,7 +19,7 @@ const audioRootPath = 'assets/audio'
 export class HowlerService {
     options = DEFAULT_HOWL_OPTIONS;
 
-    backgroundVolume = 1;
+    backgroundVolume = 0.8;
 
     get volume() {
         return Howler.Howler.volume();
