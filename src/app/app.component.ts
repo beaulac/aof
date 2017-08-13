@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
 
     stopAll() {
         this.cyRenderer.STOP();
+        this.nodeService.stopAllSamples();
     }
 
     ngOnInit() {

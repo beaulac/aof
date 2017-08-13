@@ -41,6 +41,12 @@ export class NodeService {
         this.samplesObs.subscribe(samples => this.initializeSamples(samples));
     }
 
+    public stopAllSamples() {
+        if (this.samplesSnapShot) {
+            this.samplesSnapShot.forEach((sample: AofSample) => sample.stop());
+        }
+    }
+
     public initializeSamples(samples: AofSample[]) {
         this.samplesSnapShot = samples;
         this.sampleCount = this.samplesSnapShot.length;
@@ -101,7 +107,9 @@ export class NodeService {
     }
 
     private trimSamplesByType(groupedSamples: _.Dictionary<AofSample[]>) {
-        return _.mapValues(groupedSamples, (samples, type) => _.shuffle(_.sampleSize(samples, this.getCountForType(type))));
+        return _.mapValues(groupedSamples,
+                           (samples, type) => _.shuffle(_.sampleSize(samples, this.getCountForType(type)))
+        );
     }
 
     private getCountForType(type: string): number {
