@@ -101,7 +101,7 @@ export class NodeService {
     }
 
     private trimSamplesByType(groupedSamples: _.Dictionary<AofSample[]>) {
-        return _.mapValues(groupedSamples, (samples, type) => _.sampleSize(samples, this.getCountForType(type)));
+        return _.mapValues(groupedSamples, (samples, type) => _.shuffle(_.sampleSize(samples, this.getCountForType(type))));
     }
 
     private getCountForType(type: string): number {
