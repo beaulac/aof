@@ -1,9 +1,10 @@
 a {
     text-decoration: none;
     color: #000;
+    transition:text-shadow 0.25s ease;
 
     &:hover {
-        text-shadow: 0 0 10px #000
+        text-shadow: 0 0 10px #000;
     }
 }
 

@@ -37,15 +37,15 @@
 
 .info-popover__content {
     position: absolute;
-    left: 3rem;
+    left: 3em;
     background-color: #FFFFFF;
-    width: 100rem;
+    width: 80em;
     border: 1px solid black;
     font-size: 1.2rem;
     z-index: 4;
     transition: visibility 0s linear 0.5s, opacity 0.5s linear;
     top: -14rem;
-    text-align: justify
+    text-align: justify;
 }
 
 .info-popover__content p {
