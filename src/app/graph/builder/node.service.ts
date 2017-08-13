@@ -7,6 +7,8 @@ import { SamplesService } from '../../samples.service';
 import { BRANCHING_PROBABILITY, countsPerType, Probabilities, PROBABILITY_TICK } from './node.probabilities';
 import { SampleNode } from './SampleNode';
 
+const initialNodeCount = 50;
+
 @Injectable()
 export class NodeService {
     private samplesObs: Observable<AofSample[]>;
@@ -50,7 +52,7 @@ export class NodeService {
     public initializeSamples(samples: AofSample[]) {
         this.samplesSnapShot = samples;
         this.sampleCount = this.samplesSnapShot.length;
-        this.totalNodeCount = this.sampleCount * 0.5;
+        this.totalNodeCount = Math.min(initialNodeCount, this.sampleCount);
 
         this.rebuildElements();
     }
