@@ -152,19 +152,20 @@ export class NodeService {
                 }
             }
         }
+
+        this.totalProbability = _(this.probabilities).values().sum();
     }
 
     private selectRandomType() {
         // Make random selection based on existing probabilities
         let type,
-            randNumber = _.random(1, this.typeRatioCount);
+            randNumber = _.random(1, this.totalProbability);
 
         const remainingTypes = _.pickBy(countsPerType, (_count, type) => this.samplesByType[type].length > 0);
 
         for (type in remainingTypes) {
             randNumber -= countsPerType[type];
             if (randNumber <= 0) {
-                console.debug(type);
                 return type;
             }
         }
