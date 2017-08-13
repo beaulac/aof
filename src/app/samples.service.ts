@@ -48,10 +48,14 @@ export class SamplesService {
 
     loadSamples(): Observable<AofSample[]> {
         return this.http.get(this.samplesURL)
-                   .map(response => {
-                       const fileEntries = response.json() as DriveFileEntry[];
-                       return fileEntries.map(file => this.fileResultToSample(file));
-                   });
+                   .map(
+                       response => {
+                           const fileEntries = response.json() as DriveFileEntry[];
+
+
+                           return fileEntries.map(file => this.fileResultToSample(file));
+                       }
+                   );
     }
 
     fileResultToSample(fileResponse: DriveFileEntry): AofSample {

@@ -1,6 +1,10 @@
 export class AofSample {
     public sampleName: string;
 
+    get volume() {
+        return this.howlSound.volume();
+    }
+
     constructor(public howlSound: Howl, file: string, public type) {
         ([this.sampleName] = file.split('.'));
     }
@@ -17,9 +21,8 @@ export class AofSample {
     }
 
     stop() {
-        this.howlSound.fade(this.howlSound.volume(), 0, 20); // prevents 'click' on stop
-
         if (this.howlSound.playing()) {
+            this.howlSound.fade(this.volume, 0, 20); // prevents 'click' on stop
             this.howlSound.stop();
             console.log(`${this.sampleName} has stopped playing.`);
         }
@@ -36,7 +39,6 @@ export class AofSample {
 
     fadeTo(newVolume, lengthMs) {
         console.log(`${this.sampleName} is fading to ${newVolume}`);
-        const sound = this.howlSound;
-        sound.fade(sound.volume(), newVolume, lengthMs);
+        this.howlSound.fade(this.volume, newVolume, lengthMs);
     }
 }

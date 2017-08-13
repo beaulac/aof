@@ -13,6 +13,14 @@ export class AppComponent implements OnInit {
     @ViewChild(CyRendererComponent)
     public cyRenderer: CyRendererComponent;
 
+    minBpm = 120;
+    maxBpm = 420;
+
+
+    get bpm() {
+        return (60 * 1000) / (this.cyRenderer.tickLength);
+    }
+
     public showInfo = false;
 
     public muted = false;
@@ -27,6 +35,13 @@ export class AppComponent implements OnInit {
 
     updateTotalNodeCount($event) {
         return this.nodeService.updateTotalNodeCount($event);
+    }
+
+    updateTickLengthFromBPM($event) {
+        console.log($event);
+        if (!isNaN($event)) {
+            return this.cyRenderer.tickLength = (1 / $event) * 60 * 1000;
+        }
     }
 
     toggleMute() {

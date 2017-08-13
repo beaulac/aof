@@ -32,38 +32,63 @@
             </div>
         </div>
 
-        <!-- BRANCHING -->
-        <div class="two columns">
-            <nouislider class="slider"
-                        [connect]="true"
-                        (update)="updateBranchingProbability($event)"
-                        (change)="rebuildNodes()"
-                        [step]=0.05
-                        [min]=0
-                        [max]=1
-                        [(ngModel)]="nodeService.branchingProbability"></nouislider>
-            <div class="aof-slider-subtitle">Recall&nbsp;Efficiency<br />{{nodeService.branchingProbability.toPrecision(2)}}
-            </div>
-        </div>
+        <div class="four columns">
+            <div class="one row">
+                <!-- BRANCHING -->
+                <div class="four columns">
+                    <nouislider class="slider"
+                                [connect]="true"
+                                (update)="updateBranchingProbability($event)"
+                                (change)="rebuildNodes()"
+                                [step]=0.05
+                                [min]=0
+                                [max]=1
+                                [(ngModel)]="nodeService.branchingProbability"></nouislider>
+                    <div class="aof-slider-subtitle">
+                        Recall Efficiency
+                        <br />
+                        {{nodeService.branchingProbability.toPrecision(2)}}
+                    </div>
+                </div>
 
-        <!-- COUNT -->
-        <div class="two columns">
-            <nouislider *ngIf="nodeService.sampleCount"
-                        [connect]="true"
-                        (update)="updateTotalNodeCount($event)"
-                        (change)="rebuildNodes()"
-                        [step]=1
-                        [min]="nodeService.numTypes"
-                        [max]="nodeService.sampleCount"
-                        [(ngModel)]="nodeService.totalNodeCount"></nouislider>
-            <div class="aof-slider-subtitle">Data&nbsp;Points<br />{{nodeService.totalNodeCount}}</div>
+                <!-- SPEED -->
+                <div class="four columns">
+                    <nouislider class="slider"
+                                [connect]="true"
+                                (update)="updateTickLengthFromBPM($event)"
+                                [step]=2
+                                [min]=minBpm
+                                [max]=maxBpm
+                                [ngModel]="bpm"></nouislider>
+                    <div class="aof-slider-subtitle">
+                        Connective Alacrity
+                        <br />
+                        {{bpm.toPrecision(3)}}
+                    </div>
+                </div>
+
+                <!-- COUNT -->
+                <div class="four columns">
+                    <nouislider *ngIf="nodeService.sampleCount"
+                                [connect]="true"
+                                (update)="updateTotalNodeCount($event)"
+                                (change)="rebuildNodes()"
+                                [step]=1
+                                [min]="nodeService.numTypes"
+                                [max]="nodeService.sampleCount"
+                                [(ngModel)]="nodeService.totalNodeCount"></nouislider>
+                    <div class="aof-slider-subtitle">Data&nbsp;Points<br />{{nodeService.totalNodeCount}}</div>
+                </div>
+            </div>
         </div>
 
         <!-- STOP BUTTON -->
         <div class="two columns">
             <div class="aof-ui-element" (click)="stopAll()">
                 <i class="fa fa-lg fa-stop"></i>
-                <div class="aof-button-subtitle">Interrupt Process</div>
+                <div class="aof-button-subtitle">
+                    Interrupt Process
+                </div>
             </div>
         </div>
         <!-- INFO BUTTON -->

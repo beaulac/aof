@@ -26,24 +26,24 @@ import {
            })
 export class CyRendererComponent implements OnInit, OnDestroy {
     private cy: any;
-    private CYTOSCAPE_TAG = 'cy';
     private cyContainer;
     private currentLayout: any;
 
     private elements: Observable<SampleNode[]>;
     private elementSub: Subscription;
-    private sampleRun: SampleRun;
+    private currentSampleRun: SampleRun;
 
-    private tickLength = TICK_LENGTH_MS;
+    public cytoscapeTag = 'cy';
+    public tickLength = TICK_LENGTH_MS;
 
     constructor(nodeService: NodeService) {
         this.elements = nodeService.nodes;
     }
 
     public STOP() {
-        if (this.sampleRun) {
-            this.sampleRun.STOP();
-            this.sampleRun = null;
+        if (this.currentSampleRun) {
+            this.currentSampleRun.STOP();
+            this.currentSampleRun = null;
         }
 
         this.cy.elements().forEach(cyElem => {
@@ -64,7 +64,8 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.cyContainer = document.getElementById(this.CYTOSCAPE_TAG);
+        this.tickLength = TICK_LENGTH_MS;
+        this.cyContainer = document.getElementById(this.cytoscapeTag);
         this.elementSub = this.elements.subscribe(newElements => {
             this.updateCyjs(newElements);
         });
@@ -72,7 +73,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.elementSub && this.elementSub.unsubscribe();
-        this.sampleRun && this.sampleRun.STOP();
+        this.currentSampleRun && this.currentSampleRun.STOP();
     }
 
     private updateCyjs(elements) {
@@ -118,9 +119,9 @@ export class CyRendererComponent implements OnInit, OnDestroy {
                                                directed: false
                                            });
 
-        if (!this.sampleRun) {
-            this.sampleRun = new SampleRun(bfs, this.tickLength);
-            this.sampleRun.highlightNextElement(root);
+        if (!this.currentSampleRun) {
+            this.currentSampleRun = new SampleRun(bfs, this.tickLength);
+            this.currentSampleRun.highlightNextElement(root);
         } else {
             console.debug('NOT HANDLING DOUBLE RUNS YET');
         }

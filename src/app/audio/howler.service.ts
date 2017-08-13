@@ -21,11 +21,11 @@ export class HowlerService {
 
     backgroundVolume = 1;
 
-    get volume() {
+    get globalVolume() {
         return Howler.Howler.volume();
     }
 
-    set volume(volume: number) {
+    set globalVolume(volume: number) {
         Howler.Howler.volume(volume);
     }
 
