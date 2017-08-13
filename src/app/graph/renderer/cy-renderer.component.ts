@@ -3,6 +3,7 @@ import * as cytoscape from 'cytoscape';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { AofSample } from '../../audio/AofSample';
 import { NodeService } from '../builder/node.service';
 import { SampleNode } from '../builder/SampleNode';
 import { TICK_LENGTH_MS } from '../Timing';
@@ -16,7 +17,6 @@ import {
     unhoverElement,
     VisualStyle
 } from './VisualStyle';
-import { AofSample } from '../../audio/AofSample';
 
 
 @Component({

@@ -51,7 +51,7 @@
             <nouislider *ngIf="nodeService.sampleCount"
                         [connect]="true"
                         (update)="updateTotalNodeCount($event)"
-                        (change)="nodeService.rebuildElements()"
+                        (change)="rebuildNodes()"
                         [step]=1
                         [min]="nodeService.numTypes"
                         [max]="nodeService.sampleCount"

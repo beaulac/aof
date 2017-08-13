@@ -34,10 +34,6 @@ export class AppComponent implements OnInit {
         this.howlerService.mute(this.muted);
     }
 
-    updateNodeCount($event) {
-        console.log($event);
-    }
-
     toggleInfo() {
         this.showInfo = !this.showInfo;
     }
@@ -52,6 +48,6 @@ export class AppComponent implements OnInit {
 
     rebuildNodes() {
         this.stopAll();
-        this.nodeService.buildElements();
+        this.nodeService.rebuildElements();
     }
 }
