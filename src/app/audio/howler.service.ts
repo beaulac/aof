@@ -10,9 +10,16 @@ const DEFAULT_HOWL_OPTIONS = {
     format: 'mp3'
 };
 
+const audioRootPath = 'assets/audio'
+    , shortLoopSrc = `${audioRootPath}/recall_short2.ogg`
+    , longLoopSrc = `${audioRootPath}/recall_long2.ogg`;
+
+
 @Injectable()
 export class HowlerService {
     options = DEFAULT_HOWL_OPTIONS;
+
+    backgroundVolume = 1;
 
     get volume() {
         return Howler.Howler.volume();
@@ -22,24 +29,33 @@ export class HowlerService {
         Howler.Howler.volume(volume);
     }
 
-    backgroundNoise: Howl;
+    shortBackgroundNoise: Howl;
+    longBackgroundNoise: Howl;
 
     constructor() {
-        this.backgroundNoise = new Howler.Howl({
-                                                   src: ['assets/audio/recall_long2.ogg'],
-                                                   html5: true,
-                                                   preload: true,
-                                                   loop: true,
-                                                   volume: 0
-                                               });
-        this.backgroundNoise.once(
+        this.shortBackgroundNoise = this.buildBackgroundNoise(shortLoopSrc);
+        this.longBackgroundNoise = this.buildBackgroundNoise(longLoopSrc);
+    }
+
+    private buildBackgroundNoise(srcPath) {
+        const backgroundNoise = new Howler.Howl({
+                                                    src: [srcPath],
+                                                    html5: true,
+                                                    preload: true,
+                                                    loop: true,
+                                                    volume: 0
+                                                });
+        backgroundNoise.once(
             'load',
             () => {
-                this.backgroundNoise.play();
-                this.backgroundNoise.fade(0, 1, 1000);
+                backgroundNoise.play();
+                backgroundNoise.fade(0, this.backgroundVolume, 1000);
             }
         );
+
+        return backgroundNoise;
     }
+
 
     mute(muted: boolean) {
         return Howler.Howler.mute(muted);
