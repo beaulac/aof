@@ -89,7 +89,7 @@ export class NodeService {
             weight => Math.max(1, Math.round(weight * this.nodeCount))
         );
 
-        // Ugly way of reconciliating weighted counts with requested node count:
+        // Ugly way of reconciling weighted counts with requested node count:
         // Would be nice to make this fair, i.e. type with most/least gets reduced/increased, respectively.
         let weightedCount = _(this.weightedCountsByType).values().sum();
         while (weightedCount < this.nodeCount) {
@@ -105,17 +105,47 @@ export class NodeService {
     private assembleNodesFromSamples() {
         const currentNodes = this.currentSamples.map(sample => new SampleNode(sample));
 
-        let [currentRoot] = currentNodes;
+        let [currentRoot] = currentNodes,
+            {sample: {type: currentType}} = currentRoot;
+
+        const setRoot = newRoot => {
+            currentRoot = newRoot;
+            currentType = currentRoot.sample.type;
+        };
+
+        const tempNodeStack: SampleNode[] = [];
 
         for (let idx = 1; idx < currentNodes.length; idx++) {
             const newNode = currentNodes[idx];
 
-            currentRoot.connectTo(newNode, randomMultipleOfFourWeight());
+            if (tempNodeStack.length > 0) {
+                let nodeStackHead = tempNodeStack.pop();
 
-            if (Math.random() < this.branchingProbability) {
-                currentRoot = newNode;
+                if (nodeStackHead && nodeStackHead.sample.type !== currentType) {
+                    currentRoot.connectTo(nodeStackHead, randomMultipleOfFourWeight());
+                    setRoot(nodeStackHead);
+                } else {
+                    tempNodeStack.push(nodeStackHead);
+                }
+            }
+
+            if (newNode.sample.type === currentType) {
+                tempNodeStack.push(newNode);
+            } else {
+                currentRoot.connectTo(newNode, randomMultipleOfFourWeight());
+                if (Math.random() < this.branchingProbability) {
+                    setRoot(newNode);
+                }
             }
         }
+
+        // Empty out the remaining nodes... this might be an invalid coloring.
+        tempNodeStack.forEach(remaining => {
+            currentRoot.connectTo(remaining, randomMultipleOfFourWeight());
+            if (Math.random() < this.branchingProbability) {
+                setRoot(remaining);
+            }
+        });
 
         return this.nodes$.next(currentNodes);
     }
