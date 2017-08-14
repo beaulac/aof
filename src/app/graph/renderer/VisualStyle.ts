@@ -11,6 +11,7 @@ export function highlightElement(element) {
 }
 
 export function hoverElement(element) {
+    element.scratch('sample').load();
     element.addClass(HOVER_CLASS);
 }
 

@@ -6,7 +6,9 @@ export class AofSample {
     }
 
     load() {
-        this.howlSound.load();
+        if (this.howlSound.state() === 'unloaded') {
+            this.howlSound.load();
+        }
     }
 
     play(initVolume) {
