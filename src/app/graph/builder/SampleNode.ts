@@ -26,7 +26,6 @@ export class SampleNode extends CyElementWrapper {
             scratch: {
                 type: this.id,
                 nodeStop: nodeStopBeats,
-                fm: 'hi',
                 nextNodeStart: nodeStopBeats / 4,
                 sample: this.sample
             }

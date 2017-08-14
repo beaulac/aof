@@ -4,66 +4,51 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AofSample } from '../../audio/AofSample';
 import { SamplesService } from '../../samples.service';
-import { BRANCHING_PROBABILITY, countsPerType, Probabilities, PROBABILITY_TICK } from './node.probabilities';
+import {
+    initialBranchingProbability,
+    initialNodeCount,
+    numberOfTypes,
+    Probabilities,
+    randomType,
+    weightsPerType
+} from './node.probabilities';
 import { SampleNode } from './SampleNode';
-
-const initialNodeCount = 50;
 
 @Injectable()
 export class NodeService {
-    private samplesObs: Observable<AofSample[]>;
-
-    private samplesByType: _.Dictionary<AofSample[]>;
-    private probabilities: Probabilities;
-    private totalProbability = 0;
-
-    private maxPerType = countsPerType;
-    private typeRatioCount = _(countsPerType).values().sum();
-
-    private samplesSnapShot: AofSample[];
-
-    /**
-     * Available samples from server.
-     * @type {number}
-     */
-    public sampleCount = 0;
-    public totalNodeCount = 0;
-    public branchingProbability = BRANCHING_PROBABILITY;
-    public numTypes = Object.keys(countsPerType).length;
-
     private nodes$ = new ReplaySubject<SampleNode[]>(1);
 
     get nodes(): Observable<SampleNode[]> {
         return this.nodes$;
     }
 
+    /**
+     * Available samples from server.
+     * @type {number}
+     */
+    public sampleCount = 0;
+    private samplesSnapshot: AofSample[] = [];
+    private weightedCountsByType: Probabilities;
+
+    private get samplesByType(): _.Dictionary<AofSample[]> {
+        return _.groupBy(this.samplesSnapshot, 'type');
+    }
+
+    /**
+     * Currently in-use nodes:
+     * @type {number}
+     */
+    public nodeCount = 0;
+    /**
+     *
+     */
+    private currentSamples: AofSample[];
+    public branchingProbability = initialBranchingProbability;
+
+    public numTypes = numberOfTypes;
+
     constructor(private samplesService: SamplesService) {
-        this.samplesObs = this.samplesService.trackSamples();
-
-        this.samplesObs.subscribe(samples => this.initializeSamples(samples));
-    }
-
-    public stopAllSamples() {
-        if (this.samplesSnapShot) {
-            this.samplesSnapShot.forEach((sample: AofSample) => sample.stop());
-        }
-    }
-
-    public initializeSamples(samples: AofSample[]) {
-        this.samplesSnapShot = samples;
-        this.sampleCount = this.samplesSnapShot.length;
-        this.totalNodeCount = Math.min(initialNodeCount, this.sampleCount);
-
-        this.rebuildElements();
-    }
-
-    public rebuildElements() {
-        this.samplesByType = this.trimSamplesByType(_.groupBy(this.samplesSnapShot, 'type'));
-
-        this.probabilities = this.buildTypeProbabilities();
-        this.totalProbability = _(this.probabilities).values().sum();
-
-        this.buildElements();
+        this.samplesService.trackSamples().subscribe(samples => this.initializeSamples(samples));
     }
 
     public updateProbability(newProbability) {
@@ -71,121 +56,77 @@ export class NodeService {
     }
 
     public updateTotalNodeCount(newNodeCount) {
-        return this.totalNodeCount = newNodeCount;
+        return this.nodeCount = newNodeCount;
     }
 
-    public buildElements() {
-        const allSamplesByType = _.cloneDeep(this.samplesByType);
+    public stopAllSamples() {
+        for (let i = this.sampleCount - 1; i >= 0; i--) {
+            this.samplesSnapshot[i].stop();
+        }
+    }
 
-        let currentRoot = this.buildRandomNode(allSamplesByType);
-        const elements = [currentRoot];
+    public selectSamples() {
+        this.buildWeightedCounts();
 
-        for (let idx = 1; idx < this.sampleCount; idx++) {
-            const newNode = this.buildRandomNode(allSamplesByType);
+        this.currentSamples = _(this.samplesByType)
+            .transform(
+                (acc: AofSample[], samples: AofSample[], type: string) => {
+                    const sampleNodes = _.sampleSize(samples, this.weightedCountsByType[type] || 0);
+                    acc.push(...sampleNodes);
 
-            if (!newNode) {
-                // console.warn('COULD NOT GET NODE');
-                continue;
-            }
+                    return acc;
+                }, [])
+            .flatten()
+            .shuffle()
+            .value() as AofSample[];
+
+        this.assembleNodesFromSamples();
+    }
+
+    private buildWeightedCounts() {
+        this.weightedCountsByType = _.mapValues(
+            weightsPerType, // Minimum 1 per type:
+            weight => Math.max(1, Math.round(weight * this.nodeCount))
+        );
+
+        // Ugly way of reconciliating weighted counts with requested node count:
+        // Would be nice to make this fair, i.e. type with most/least gets reduced/increased, respectively.
+        let weightedCount = _(this.weightedCountsByType).values().sum();
+        while (weightedCount < this.nodeCount) {
+            ++this.weightedCountsByType[randomType()];
+            ++weightedCount;
+        }
+        while (weightedCount > this.nodeCount) {
+            --this.weightedCountsByType[randomType()];
+            --weightedCount;
+        }
+    }
+
+    private assembleNodesFromSamples() {
+        const currentNodes = this.currentSamples.map(sample => new SampleNode(sample));
+
+        let [currentRoot] = currentNodes;
+
+        for (let idx = 1; idx < currentNodes.length; idx++) {
+            const newNode = currentNodes[idx];
 
             currentRoot.connectTo(newNode, randomMultipleOfFourWeight());
-
-            elements.push(newNode);
 
             if (Math.random() < this.branchingProbability) {
                 currentRoot = newNode;
             }
         }
 
-        return this.nodes$.next(elements);
+        return this.nodes$.next(currentNodes);
     }
 
-    private getTypeRatio(type: string): number {
-        return this.maxPerType[type] / this.typeRatioCount;
-    }
+    private initializeSamples(samples: AofSample[]) {
+        this.samplesSnapshot = samples;
+        this.sampleCount = this.samplesSnapshot.length;
 
-    private buildTypeProbabilities() {
-        return _.mapValues(countsPerType, (maxOfType: number) => maxOfType / this.sampleCount);
-    }
+        this.nodeCount = Math.min(initialNodeCount, this.sampleCount);
 
-    private trimSamplesByType(groupedSamples: _.Dictionary<AofSample[]>) {
-        return _.mapValues(groupedSamples,
-                           (samples, type) => _.shuffle(_.sampleSize(samples, this.getCountForType(type)))
-        );
-    }
-
-    private getCountForType(type: string): number {
-        console.debug(type + ':' + this.getTypeRatio(type) * this.totalNodeCount);
-        return this.getTypeRatio(type) * this.totalNodeCount;
-    }
-
-    private randomSelection(samplesByType) {
-
-        const selectedType = this.selectRandomType();
-
-        const samplesOfType = samplesByType[selectedType];
-
-        if (!samplesOfType) {
-            console.warn(`Found no samples for ${selectedType}!`);
-            return undefined;
-        }
-
-        let selectedNode: AofSample = samplesOfType.pop();
-
-        if (!selectedNode) {
-            const remainingSamples = _(samplesByType)
-                .omitBy(samples => samples.length < 1)
-                .values()
-                .sample();
-
-            if (remainingSamples) {
-                selectedNode = (remainingSamples as AofSample[]).pop();
-                console.warn(`Was going to get undefined for ${selectedType}, but recovered with ${selectedNode.type}`);
-            } else {
-                console.warn(`Was going to get undefined for ${selectedType}, and found no remaining types!`);
-            }
-        }
-
-        this.updateProbabilities(selectedType);
-        return selectedNode;
-    }
-
-    private updateProbabilities(selectedType) {
-        for (const type of Object.keys(countsPerType)) {
-            if (this.samplesByType[type].length < 1) {
-                this.probabilities[type] = 0;
-            } else {
-                if (type === selectedType) {
-                    this.probabilities[type] = 0.1; // TODO alex: Don't hardcode this
-                } else {
-                    this.probabilities[type] += PROBABILITY_TICK;
-                }
-            }
-        }
-
-        this.totalProbability = _(this.probabilities).values().sum();
-    }
-
-    private selectRandomType() {
-        // Make random selection based on existing probabilities
-        let type,
-            randNumber = _.random(1, this.totalProbability);
-
-        const remainingTypes = _.pickBy(countsPerType, (_count, type) => this.samplesByType[type].length > 0);
-
-        for (type in remainingTypes) {
-            randNumber -= countsPerType[type];
-            if (randNumber <= 0) {
-                return type;
-            }
-        }
-        return type;
-    }
-
-    private buildRandomNode(samples, sample = this.randomSelection(samples)) {
-        if (sample) {
-            return new SampleNode(sample);
-        }
+        this.selectSamples();
     }
 }
 

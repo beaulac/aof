@@ -49,6 +49,6 @@ export class AppComponent implements OnInit {
 
     rebuildNodes() {
         this.stopAll();
-        this.nodeService.rebuildElements();
+        this.nodeService.selectSamples();
     }
 }
