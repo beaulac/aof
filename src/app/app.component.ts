@@ -36,6 +36,11 @@ export class AppComponent implements OnInit {
 
     toggleInfo() {
         this.showInfo = !this.showInfo;
+        if (!this.showInfo) {
+            // Graph does not re-appear if it was modified while info page was open
+            // Unless it is manually resized... after next digest (haack)
+            setTimeout(() => this.cyRenderer.resizeAndFit(), 0);
+        }
     }
 
     stopAll() {
