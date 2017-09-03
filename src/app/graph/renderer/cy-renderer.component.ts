@@ -122,6 +122,8 @@ export class CyRendererComponent implements OnInit, OnDestroy {
 
         if (!this.sampleRun) {
             this.sampleRun = new SampleRun(bfs, this.tickLength);
+
+            root.addClass('initialTrigger');
             this.sampleRun.highlightNextElement(root);
         } else {
             console.debug('NOT HANDLING DOUBLE RUNS YET');

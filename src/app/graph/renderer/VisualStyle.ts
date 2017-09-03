@@ -20,8 +20,8 @@ export function unhoverElement(element) {
 }
 
 export function unhighlightElement(element) {
-    element.removeClass(HIGHLIGHT_CLASS);
     element.addClass(UNHIGHLIGHT_CLASS);
+    element.removeClass(HIGHLIGHT_CLASS);
 }
 
 export function resetElement(element) {
@@ -30,11 +30,8 @@ export function resetElement(element) {
     element.classes(sample.type);
 }
 
-const BEAT_COLOR = '#6E2435'
-    , ELEMENT_COLOR = '#6E2435'
-    , BASS_COLOR = '#947C7C'
-    , SPEECH_COLOR = '#BE4058'
-    , TEXTURE_COLOR = '#2D0311';
+const TRIGGER_COLOR = '#eb4b64';
+const ACTIVE_COLOR = '#5164ed';
 
 const BEAT_SIZE = 100;
 const ELEMENT_SIZE = 60;
@@ -47,13 +44,13 @@ export const VisualStyle = [
         selector: 'node',
         style: {
             'font-family': 'Raleway, sans-serif',
+            'background-color': '#000',
             'text-valign': 'top',
             'text-halign': 'center',
             'min-zoomed-font-size': 4,
             'transition-property': [
                 'background-blacken',
                 'background-color',
-                'background-opacity',
                 'line-color',
                 'width',
                 'height'
@@ -65,7 +62,6 @@ export const VisualStyle = [
         style: {
             'height': BEAT_SIZE,
             'width': BEAT_SIZE,
-            'background-color': BEAT_COLOR,
             'label': 'Beat'
         }
     }, {
@@ -73,7 +69,6 @@ export const VisualStyle = [
         style: {
             'height': ELEMENT_SIZE,
             'width': ELEMENT_SIZE,
-            'background-color': ELEMENT_COLOR,
             'label': 'Element'
         }
     }, {
@@ -81,7 +76,6 @@ export const VisualStyle = [
         style: {
             'height': BASS_SIZE,
             'width': BASS_SIZE,
-            'background-color': BASS_COLOR,
             'label': 'Bass'
         }
     }, {
@@ -89,7 +83,6 @@ export const VisualStyle = [
         style: {
             'height': SPEECH_SIZE,
             'width': SPEECH_SIZE,
-            'background-color': SPEECH_COLOR,
             'label': 'Speech'
         }
     }, {
@@ -97,7 +90,6 @@ export const VisualStyle = [
         style: {
             'height': TEXTURE_SIZE,
             'width': TEXTURE_SIZE,
-            'background-color': TEXTURE_COLOR,
             'label': 'Texture'
         }
     }, {
@@ -105,19 +97,21 @@ export const VisualStyle = [
         style: {
             'border-width': '2px',
             'border-style': 'solid',
-            'border-color': '#888',
-            'line-color': '#FFF',
-            'background-opacity': 0,
+            'border-color': '#000',
+            'background-color': '#E4E4E4',
             'label': ''
         }
     },
     {
         selector: 'node.highlighted',
         style: {
-            'height': 1,
-            'width': 1,
-            'label': '',
-            'background-opacity': 0
+            'background-color': ACTIVE_COLOR
+        }
+    },
+    {
+        selector: 'node.initialTrigger',
+        style: {
+            'background-color': TRIGGER_COLOR
         }
     },
     {
@@ -131,7 +125,6 @@ export const VisualStyle = [
     }, {
         selector: 'node.hovered',
         style: {
-            'background-opacity': 1,
             'background-blacken': -0.7,
             'transition-duration': '0.25s',
             'border-color': 'black',
@@ -145,35 +138,30 @@ export const VisualStyle = [
         style: {
             'height': BEAT_SIZE,
             'width': BEAT_SIZE,
-            'background-color': BEAT_COLOR
         }
     }, {
         selector: 'node.element.unhighlighted.hovered',
         style: {
             'height': ELEMENT_SIZE,
             'width': ELEMENT_SIZE,
-            'background-color': ELEMENT_COLOR
         }
     }, {
         selector: 'node.bass.unhighlighted.hovered',
         style: {
             'height': BASS_SIZE,
             'width': BASS_SIZE,
-            'background-color': BASS_COLOR
         }
     }, {
         selector: 'node.speech.unhighlighted.hovered',
         style: {
             'height': SPEECH_SIZE,
             'width': SPEECH_SIZE,
-            'background-color': SPEECH_COLOR
         }
     }, {
         selector: 'node.texture.unhighlighted.hovered',
         style: {
             'height': TEXTURE_SIZE,
             'width': TEXTURE_SIZE,
-            'background-color': TEXTURE_COLOR
         }
     }
 ];
