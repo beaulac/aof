@@ -5,6 +5,6 @@
 
 export const environment = {
     corsProxyUrl: 'http://localhost:8080',
-    samplesServerUrl: 'http://localhost:8888',
+    samplesServerUrl: 'http://localhost:8888/samples',
     production: false
 };
