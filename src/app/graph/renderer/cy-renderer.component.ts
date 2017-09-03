@@ -101,8 +101,6 @@ export class CyRendererComponent implements OnInit, OnDestroy {
         nodes.on('mouseover', ({target}) => hoverElement(target));
         nodes.on('mouseout', ({target}) => unhoverElement(target));
 
-        this.cy.on('tapend', () => this.fitGraph());
-
         window.addEventListener('resize', () => this.resizeAndFit());
     }
 
