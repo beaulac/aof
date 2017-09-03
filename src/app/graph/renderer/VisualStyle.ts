@@ -1,17 +1,50 @@
 import { AofSample } from '../../audio/AofSample';
 
 const HIGHLIGHT_CLASS = 'highlighted'
-    , UNHIGHLIGHT_CLASS = 'unhighlighted';
+    , UNHIGHLIGHT_CLASS = 'unhighlighted'
+    , LOADING_CLASS = 'sampleLoading';
 
 const HOVER_CLASS = 'hovered';
 
 export function highlightElement(element) {
     element.removeClass(UNHIGHLIGHT_CLASS);
+    element.removeClass(LOADING_CLASS);
     element.addClass(HIGHLIGHT_CLASS);
 }
 
+export function markLoadingElement(element) {
+    const sample = element.scratch('sample')
+        , isLoaded = () => sample.isLoaded;
+
+    const startDimension = element.height()
+        , pulseDimension = startDimension + 10;
+
+    const animateLoad = () => {
+        if (isLoaded()) {
+            return;
+        }
+
+        element.animate({
+                            style: {'height': pulseDimension, 'width': pulseDimension},
+                            duration: 200,
+                            queue: true,
+                            complete: unanimateLoad
+                        });
+    };
+    const unanimateLoad = () => {
+        element.animate({
+                            style: {'height': startDimension, 'width': startDimension},
+                            duration: 200,
+                            queue: true,
+                            complete: animateLoad
+                        });
+    };
+
+    animateLoad();
+}
+
 export function hoverElement(element) {
-    element.scratch('sample').load();
+    (element.scratch('sample') as AofSample).load();
     element.addClass(HOVER_CLASS);
 }
 
@@ -137,31 +170,31 @@ export const VisualStyle = [
         selector: 'node.beat.unhighlighted.hovered',
         style: {
             'height': BEAT_SIZE,
-            'width': BEAT_SIZE,
+            'width': BEAT_SIZE
         }
     }, {
         selector: 'node.element.unhighlighted.hovered',
         style: {
             'height': ELEMENT_SIZE,
-            'width': ELEMENT_SIZE,
+            'width': ELEMENT_SIZE
         }
     }, {
         selector: 'node.bass.unhighlighted.hovered',
         style: {
             'height': BASS_SIZE,
-            'width': BASS_SIZE,
+            'width': BASS_SIZE
         }
     }, {
         selector: 'node.speech.unhighlighted.hovered',
         style: {
             'height': SPEECH_SIZE,
-            'width': SPEECH_SIZE,
+            'width': SPEECH_SIZE
         }
     }, {
         selector: 'node.texture.unhighlighted.hovered',
         style: {
             'height': TEXTURE_SIZE,
-            'width': TEXTURE_SIZE,
+            'width': TEXTURE_SIZE
         }
     }
 ];

@@ -1,6 +1,6 @@
 import { AofSample } from '../../audio/AofSample';
 import { extractTargetsFor } from './ElementTargets';
-import { highlightElement, unhighlightElement } from './VisualStyle';
+import { highlightElement, markLoadingElement, unhighlightElement } from './VisualStyle';
 
 const missingNode = {
     id: () => 'MISSING_NODE',
@@ -32,8 +32,12 @@ export class SampleRun {
         const {edgeTargets, nodeTargets} = extractedTargets;
         for (let idx = 0; idx < numberOfTargets; idx++) {
             const edgeDelay = this.tickLength * edgeTargets[idx].data('length');
+            const nodeTarget = nodeTargets[idx];
+
+            (nodeTarget.scratch('sample') as AofSample).load();
+
             this.sampleEventQueue.push(
-                setTimeout(() => this.highlightNextElement(nodeTargets[idx]), edgeDelay + nextNodeStartMs)
+                setTimeout(() => this.highlightNextElement(nodeTarget), edgeDelay + nextNodeStartMs)
             );
         }
 
@@ -67,8 +71,10 @@ export class SampleRun {
 
         const {msToPeak, msToStopAfterPeak, msTotalDuration} = this.msToPeakAndStop(cyElem);
 
-        sample.play(this.initVolume);
-        highlightElement(cyElem);
+        if (!sample.isLoaded) {
+            markLoadingElement(cyElem);
+        }
+        sample.play(this.initVolume, () => highlightElement(cyElem));
 
         const startCrescendoToPeak = () => sample.fadeTo(1, msToPeak);
         const fadeOutAfterPeak = () => sample.fadeTo(0, msToStopAfterPeak);
