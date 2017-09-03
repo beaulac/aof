@@ -47,10 +47,13 @@ export class SamplesService {
     }
 
     loadSamples(): Observable<AofSample[]> {
+        const validExtensions = /.+\.(mp3|ogg)$/;
+
         return this.http.get(this.samplesURL)
                    .map(response => {
                        const fileEntries = response.json() as DriveFileEntry[];
-                       return fileEntries.map(file => this.fileResultToSample(file));
+                       return fileEntries.filter(file => validExtensions.test(file.name))
+                                         .map(file => this.fileResultToSample(file));
                    });
     }
 
