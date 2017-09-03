@@ -34,7 +34,7 @@ interface DriveFileEntry {
 
 @Injectable()
 export class SamplesService {
-    private samplesURL = `${environment.samplesServerUrl}/samples`;
+    private samplesURL = environment.samplesServerUrl;
 
     private samples = new ReplaySubject<AofSample[]>(1);
 

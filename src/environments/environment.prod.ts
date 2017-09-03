@@ -1,5 +1,5 @@
 export const environment = {
-    corsProxyUrl: 'https://aof.herokuapp.com',
-    samplesServerUrl: 'https://aof-samples.herokuapp.com',
+    corsProxyUrl: 'http://bdtem.co.in/cors',
+    samplesServerUrl: 'http://bdtem.co.in/samples',
     production: true
 };
