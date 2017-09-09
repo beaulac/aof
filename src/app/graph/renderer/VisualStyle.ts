@@ -63,8 +63,9 @@ export function resetElement(element) {
     element.classes(sample.type);
 }
 
-const TRIGGER_COLOR = '#eb4b64';
-const ACTIVE_COLOR = '#5164ed';
+const MAIN_COLOR = '#797979';
+const TRIGGER_COLOR = '#e54490';
+const ACTIVE_COLOR = '#28c6a3';
 
 const BEAT_SIZE = 100;
 const ELEMENT_SIZE = 60;
@@ -77,7 +78,7 @@ export const VisualStyle = [
         selector: 'node',
         style: {
             'font-family': 'Raleway, sans-serif',
-            'background-color': '#000',
+            'background-color': MAIN_COLOR,
             'text-valign': 'top',
             'text-halign': 'center',
             'min-zoomed-font-size': 4,
