@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
@@ -5,6 +6,20 @@ import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 
 @Component({
                selector: 'app-root',
+               animations: [
+                   trigger(
+                       'enterAnimation', [
+                           transition(':enter', [
+                               style({opacity: 0}),
+                               animate('250ms', style({opacity: 1}))
+                           ]),
+                           transition(':leave', [
+                               style({opacity: 1}),
+                               animate('250ms', style({opacity: 0}))
+                           ])
+                       ]
+                   )
+               ],
                templateUrl: './app.component.html',
                styleUrls: ['./app.component.scss']
            })

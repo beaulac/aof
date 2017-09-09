@@ -11,7 +11,7 @@
     <div class="eight rows offset-by-two">
         <div class="twelve columns">
             <app-cy-renderer [hidden]="showInfo"></app-cy-renderer>
-            <app-info *ngIf="showInfo"></app-info>
+            <app-info *ngIf="showInfo" [@enterAnimation]></app-info>
         </div>
     </div>
 

@@ -13,7 +13,7 @@ export function highlightElement(element) {
 }
 
 export function markLoadingElement(element) {
-    const sample = element.scratch('sample')
+    const sample: AofSample = element.scratch('sample')
         , isLoaded = () => sample.isLoaded;
 
     const startDimension = element.height()
@@ -66,6 +66,7 @@ export function resetElement(element) {
 const MAIN_COLOR = '#797979';
 const TRIGGER_COLOR = '#e54490';
 const ACTIVE_COLOR = '#28c6a3';
+const INACTIVE_COLOR = '#E4E4E4';
 
 const BEAT_SIZE = 100;
 const ELEMENT_SIZE = 60;
@@ -131,8 +132,8 @@ export const VisualStyle = [
         style: {
             'border-width': '2px',
             'border-style': 'solid',
-            'border-color': '#000',
-            'background-color': '#E4E4E4',
+            'border-color': MAIN_COLOR,
+            'background-color': INACTIVE_COLOR,
             'label': ''
         }
     },

@@ -1,23 +1,27 @@
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NouisliderModule } from 'ng2-nouislider';
 import { AppComponent } from './app.component';
-import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
-import { CytoscapeService } from './graph/cytoscape.service';
 import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
-import { SamplesService } from './samples.service';
+import { CytoscapeService } from './graph/cytoscape.service';
+import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
+import { InfoSectionComponent } from './info/info-section/info-section.component';
 import { InfoComponent } from './info/info.component';
+import { SamplesService } from './samples.service';
 
 @NgModule({
               declarations: [
                   AppComponent,
                   CyRendererComponent,
-                  InfoComponent
+                  InfoComponent,
+                  InfoSectionComponent
               ],
               imports: [
                   BrowserModule,
+                  BrowserAnimationsModule,
                   HttpModule,
                   NouisliderModule
               ],
