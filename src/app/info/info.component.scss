@@ -2,7 +2,6 @@
     top: 0;
     position: absolute;
     height: 85vh;
-    width: 100%;
     z-index: auto;
 }
 
@@ -16,19 +15,18 @@
 }
 
 .info-text {
-    position: absolute;
+    font-family: 'Libre Baskerville', serif;
+    position: relative;
+    height: auto;
     top: 15rem;
     left: 0;
-    font-family: 'Libre Baskerville', serif;
     width: 100%;
-    height: 100%;
     z-index: 3;
 }
 
 .info-line {
     cursor: pointer;
     margin-bottom: 10vh;
-    width: 100%;
 }
 
 .info-line:hover {
@@ -37,15 +35,31 @@
 
 .info-popover__content {
     position: absolute;
-    left: 3em;
+    left: 0;
     background-color: #FFFFFF;
-    width: 80em;
+    width: 70vw;
     border: 1px solid black;
     font-size: 1.2rem;
     z-index: 4;
     transition: visibility 0s linear 0.5s, opacity 0.5s linear;
-    top: -14rem;
+    top: -12em;
     text-align: justify;
+}
+
+sup {
+    cursor: pointer;
+}
+
+.info-popover__popover__bottom_right {
+    position: absolute;
+    right: .5em;
+    bottom: .5em;
+    width: 25vw;
+    border: 1px solid black;
+    font-size: 1rem;
+    padding: .5em;
+    z-index: 5;
+    text-align: left;
 }
 
 .info-popover__content p {

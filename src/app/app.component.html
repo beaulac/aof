@@ -1,21 +1,21 @@
 <div class="container">
-    <div class="aof-top">
+    <div class="row">
         <span class="twelve columns aof-title aof-top">
             A <a href="../">o</a> F
         </span>
     </div>
-    <div class="aof-top">
+    <div class="row">
         <span class="twelve columns aof-subtitle aof-top">DATA RECOLLECTION</span>
     </div>
 
-    <div class="eight rows offset-by-two">
+    <div class="row">
         <div class="twelve columns">
             <app-cy-renderer [hidden]="showInfo"></app-cy-renderer>
-            <app-info *ngIf="showInfo" [@enterAnimation]></app-info>
+            <app-info *ngIf="showInfo" (rollOut)="toggleInfo(false)" [@enterAnimation]></app-info>
         </div>
     </div>
 
-    <div class="controls one row">
+    <div class="controls row">
         <!-- VOLUME -->
         <div class="one column offset-by-one">
             <div class="aof-ui-element" (click)="toggleMute()">

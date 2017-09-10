@@ -8,7 +8,6 @@ import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
 import { CytoscapeService } from './graph/cytoscape.service';
 import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
-import { InfoSectionComponent } from './info/info-section/info-section.component';
 import { InfoComponent } from './info/info.component';
 import { SamplesService } from './samples.service';
 
@@ -16,8 +15,7 @@ import { SamplesService } from './samples.service';
               declarations: [
                   AppComponent,
                   CyRendererComponent,
-                  InfoComponent,
-                  InfoSectionComponent
+                  InfoComponent
               ],
               imports: [
                   BrowserModule,

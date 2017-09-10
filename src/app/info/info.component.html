@@ -1,4 +1,4 @@
-    <div class="info-wrapper">
+<div class="info-wrapper ten columns offset-by-one" (mouseleave)="onMouseOut();">
 
     <video loop muted autoplay poster="assets/poster.jpeg" class="fullscreen-bg__video">
         <source src="assets/bw_v3.mp4" type="video/mp4">
@@ -8,42 +8,53 @@
 
         <div style="font-size: 1.25em">
             <div class="eleven columns offset-by-one first-popover"
-                 [hidden]="popoverHidden[0]"
-                 (mouseleave)="showPopover(0)">
+                 *ngIf="popoverShown[0]"
+                 [@enterAnimation]
+                 (mouseleave)="togglePopover(0)">
                 <p>
                     The thought of a thing is less like the thing itself than a web of small reminders of how
-                    <br>
-                    it all seemed at the time. There are many connected factors that may influence
-                    <br>
-                    Jumper’s bias toward a single truth that is not a whole truth.
+                    <br />
+                    it all seemed at the time. In the web presented here, Jumper’s perception is separated
+                    <br />into the many connected reminders<sup (mouseover)="showMetaPopover(0)"
+                                                                (mouseout)="hideMetaPopover(0)">1</sup>
+                    that form his memory of the AoF seminar.
                 </p>
+
+                <span class="info-popover__popover__bottom_right"
+                      *ngIf="metaPopoverShown[0]"
+                      [@enterAnimation]>
+                    1. The circular nodes contain audio representations of Jumper’s reminders.
+                </span>
             </div>
-            <span class="info-line ten columns offset-by-two" (click)="showPopover(0)">
-                The Analysis of Failure seminar was not so neatly clarified in Mark Jumper's mind.
+
+            <span class="info-line ten columns offset-by-two" (click)="togglePopover(0)">
+                The Analysis of Failure seminar was not so neatly clarified in Mark Jumper’s mind.
             </span>
         </div>
 
         <div style="font-size: 1em">
             <div class="eleven columns offset-by-one second-popover"
-                 [hidden]="popoverHidden[1]"
-                 (mouseleave)="showPopover(1)">
+                 *ngIf="popoverShown[1]"
+                 [@enterAnimation]
+                 (mouseleave)="togglePopover(1)">
                 <p>
-                   If Jumper were asked to recount his experience conducting the AoF seminar
-                   <br>
-                   without the benefit of his tedious, meticulated lineation, it would come forth
-                   <br>
-                   from him more like this display of fragile pliability than his otherwise presented Reconstruction.
+                    If Jumper were asked to recount his experience conducting the AoF seminar
+                    <br>
+                    without the benefit of his tedious, meticulated lineation, it would come forth
+                    <br>
+                    from him more like this display of fragile pliability than his otherwise presented Reconstruction.
                 </p>
             </div>
-            <span class="info-line eight columns offset-by-four" (click)="showPopover(1)">
+            <span class="info-line eight columns offset-by-four" (click)="togglePopover(1)">
                 Here, we thoughtfully Reconduct his Analysis of Failure.
             </span>
         </div>
 
         <div style="font-size: 0.75em">
             <div class="eleven columns offset-by-one third-popover"
-                 [hidden]="popoverHidden[2]"
-                 (mouseleave)="showPopover(2)">
+                 *ngIf="popoverShown[2]"
+                 [@enterAnimation]
+                 (mouseleave)="togglePopover(2)">
                 <p>
                     It is impressions, not facts, that spread around the various lobes and folds, each one
                     <br>
@@ -55,22 +66,23 @@
                     malleable way, ripe for ceaseless reinterpretation, so that we might grow and not stagnate.
                 </p>
             </div>
-            <span class="info-line six columns offset-by-five" (click)="showPopover(2)">
+            <span class="info-line six columns offset-by-five" (click)="togglePopover(2)">
                 And Mark Jumper’s Reconstructions become infinite.
             </span>
         </div>
 
         <div style="font-size: 0.5em">
             <div class="eleven columns offset-by-one fourth-popover"
-                 [hidden]="popoverHidden[3]"
-                 (mouseleave)="showPopover(3)">
+                 *ngIf="popoverShown[3]"
+                 [@enterAnimation]
+                 (mouseleave)="togglePopover(3)">
                 <p>
-                   And so it is because Mark Jumper fills the bareness of this Archive with his singular
-                   <br>
-                   interpretations that we can know it to be only as true as it is incomplete.
+                    And so it is because Mark Jumper fills the bareness of this Archive with his singular
+                    <br>
+                    interpretations that we can know it to be only as true as it is incomplete.
                 </p>
             </div>
-            <span class="info-line four columns offset-by-six" (click)="showPopover(3)">
+            <span class="info-line four columns offset-by-six" (click)="togglePopover(3)">
                 Because One can only be achieved by combining All.
             </span>
         </div>

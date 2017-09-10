@@ -1,25 +1,12 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HowlerService } from './audio/howler.service';
+import { fadeAnimation } from './fade.animation';
 import { NodeService } from './graph/builder/node.service';
 import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 
 @Component({
                selector: 'app-root',
-               animations: [
-                   trigger(
-                       'enterAnimation', [
-                           transition(':enter', [
-                               style({opacity: 0}),
-                               animate('250ms', style({opacity: 1}))
-                           ]),
-                           transition(':leave', [
-                               style({opacity: 1}),
-                               animate('250ms', style({opacity: 0}))
-                           ])
-                       ]
-                   )
-               ],
+               animations: [fadeAnimation],
                templateUrl: './app.component.html',
                styleUrls: ['./app.component.scss']
            })
@@ -49,8 +36,8 @@ export class AppComponent implements OnInit {
         this.howlerService.mute(this.muted);
     }
 
-    toggleInfo() {
-        this.showInfo = !this.showInfo;
+    toggleInfo(newInfo = !this.showInfo) {
+        this.showInfo = newInfo;
         if (!this.showInfo) {
             // Graph does not re-appear if it was modified while info page was open
             // Unless it is manually resized... after next digest (haack)
