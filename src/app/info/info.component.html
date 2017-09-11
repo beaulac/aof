@@ -1,90 +1,69 @@
-<div class="info-wrapper ten columns offset-by-one" (mouseleave)="onMouseOut();">
+<div class="info-wrapper">
 
     <video loop muted autoplay poster="assets/poster.jpeg" class="fullscreen-bg__video">
         <source src="assets/bw_v3.mp4" type="video/mp4">
     </video>
 
     <div class="info-text">
-
-        <div style="font-size: 1.25em">
-            <div class="eleven columns offset-by-one first-popover"
-                 *ngIf="popoverShown[0]"
-                 [@enterAnimation]
-                 (mouseleave)="togglePopover(0)">
-                <p>
-                    The thought of a thing is less like the thing itself than a web of small reminders of how
-                    <br />
-                    it all seemed at the time. In the web presented here, Jumper’s perception is separated
-                    <br />into the many connected reminders<sup (mouseover)="showMetaPopover(0)"
-                                                                (mouseout)="hideMetaPopover(0)">1</sup>
-                    that form his memory of the AoF seminar.
-                </p>
-
-                <span class="info-popover__popover__bottom_right"
-                      *ngIf="metaPopoverShown[0]"
-                      [@enterAnimation]>
-                    1. The circular nodes contain audio representations of Jumper’s reminders.
-                </span>
-            </div>
-
-            <span class="info-line ten columns offset-by-two" (click)="togglePopover(0)">
-                The Analysis of Failure seminar was not so neatly clarified in Mark Jumper’s mind.
-            </span>
+        <div class="eleven columns offset-by-one first-popover" [hidden]="popoverHidden[0]">
+            <p>
+                The thought of a thing is less like the thing itself than a web of
+                <br> small reminders of how it all seemed at the time. In the web presented here,
+                <br> Jumper’s perception is separated into the many connected reminders<sup class="annotation" (mouseenter)="showFootnote(0)" (mouseleave)="showFootnote(0)">[1]</sup> that form his memory of the AoF seminar.
+            </p>
+            <p class="footNote" style="margin-left: 45em;" [hidden]="footNoteHidden[0]">The circular nodes contain audio representations of Jumper’s reminders.</p>
         </div>
 
-        <div style="font-size: 1em">
-            <div class="eleven columns offset-by-one second-popover"
-                 *ngIf="popoverShown[1]"
-                 [@enterAnimation]
-                 (mouseleave)="togglePopover(1)">
+        <p style="font-size: 1.2em" class="first-line info-line ten columns offset-by-two" (click)="showPopover(0)">
+            The Analysis of Failure seminar was not so neatly clarified in Mark Jumper's mind.
+        </p>
+
+        <div style="font-size: 1.06667em">
+            <div class="eleven columns offset-by-one second-popover" [hidden]="popoverHidden[1]">
                 <p>
-                    If Jumper were asked to recount his experience conducting the AoF seminar
-                    <br>
-                    without the benefit of his tedious, meticulated lineation, it would come forth
-                    <br>
-                    from him more like this display of fragile pliability than his otherwise presented Reconstruction.
+                    If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of his tedious,
+                    <br> meticulated lineation<sup class="annotation" (mouseenter)="showFootnote(1)" (mouseleave)="showFootnote(1)">[2]</sup>, he would have to choose a starting point from amongst these reminders. But, once stimulated,
+                    <br> there is no telling where he will be reminded to go and he is forced to sit back and allow his memories to reveal themselves.<sup class="annotation" (mouseenter)="showFootnote(2)" (mouseleave)="showFootnote(2)">[3]</sup>
+                </p>
+                <p class="footNote" style="margin-left: 55em;" [hidden]="footNoteHidden[1]">See ‘Analysis of Failure: Reconstructed’</p>
+                <p class="footNote" style="margin-left: 25em;" [hidden]="footNoteHidden[2]">You only need to manually stimulate a single node to hear how the memory unfolds.
+                    <br>The interconnected web of reminders stimulate each other, crawling across the brain until the memory is finished.
                 </p>
             </div>
-            <span class="info-line eight columns offset-by-four" (click)="togglePopover(1)">
+            <p class="info-line eight columns offset-by-four" (click)="showPopover(1)">
                 Here, we thoughtfully Reconduct his Analysis of Failure.
-            </span>
+            </p>
         </div>
 
-        <div style="font-size: 0.75em">
-            <div class="eleven columns offset-by-one third-popover"
-                 *ngIf="popoverShown[2]"
-                 [@enterAnimation]
-                 (mouseleave)="togglePopover(2)">
+        <div style="font-size: 0.93333em">
+            <div class="eleven columns offset-by-one third-popover" [hidden]="popoverHidden[2]">
                 <p>
-                    It is impressions, not facts, that spread around the various lobes and folds, each one
-                    <br>
-                    doing its part to retain something close to a whole.
+                    For it is impressions, not facts, that spread around the various lobes and folds, each one
+                    <br> doing its part to retain something close to a whole.
                 </p>
+
                 <p>
                     As a result, the mind does not bother to remember things rigidly, but rather in a
-                    <br>
-                    malleable way, ripe for ceaseless reinterpretation, so that we might grow and not stagnate.
+                    <br> malleable way, ripe for ceaseless reinterpretation<sup class="annotation" (mouseenter)="showFootnote(3)" (mouseleave)="showFootnote(3)">[4]</sup>, so that we might grow and not stagnate.
                 </p>
+                <p class="footNote" style="margin-left: 35em;" [hidden]="footNoteHidden[3]">Adjust the parameters below to create new circumstances under <br>which Jumper might attempt to remember how it all happened.</p>
             </div>
-            <span class="info-line six columns offset-by-five" (click)="togglePopover(2)">
+            <p class="info-line six columns offset-by-five" (click)="showPopover(2)">
                 And Mark Jumper’s Reconstructions become infinite.
-            </span>
+            </p>
         </div>
 
-        <div style="font-size: 0.5em">
-            <div class="eleven columns offset-by-one fourth-popover"
-                 *ngIf="popoverShown[3]"
-                 [@enterAnimation]
-                 (mouseleave)="togglePopover(3)">
+        <div style="font-size: 0.8em">
+            <div class="eleven columns offset-by-one fourth-popover" [hidden]="popoverHidden[3]">
                 <p>
                     And so it is because Mark Jumper fills the bareness of this Archive with his singular
-                    <br>
-                    interpretations that we can know it to be only as true as it is incomplete.
+                    <br> interpretations that we can know it to be only as true as it is incomplete.<sup class="annotation" (mouseenter)="showFootnote(4)" (mouseleave)="showFootnote(4)">[5]</sup>
                 </p>
+                <p class="footNote" style="margin-left: 35em;" [hidden]="footNoteHidden[4]">Because nothing that can been perceived can be perceived the same way twice.</p>
             </div>
-            <span class="info-line four columns offset-by-six" (click)="togglePopover(3)">
-                Because One can only be achieved by combining All.
-            </span>
+            <p class="info-line four columns offset-by-six" (click)="showPopover(3)">
+                Because one can only be achieved by combining all.
+            </p>
         </div>
     </div>
 </div>
