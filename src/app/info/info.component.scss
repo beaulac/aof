@@ -2,6 +2,7 @@
     top: 0;
     position: absolute;
     height: 85vh;
+    width: 100%;
     z-index: auto;
 }
 
@@ -15,18 +16,24 @@
 }
 
 .info-text {
-    font-family: 'Libre Baskerville', serif;
-    position: relative;
-    height: auto;
+    position: absolute;
     top: 15rem;
     left: 0;
+    font-family: raleway, sans-serif;
     width: 100%;
+    height: 100%;
     z-index: 3;
 }
 
 .info-line {
     cursor: pointer;
     margin-bottom: 10vh;
+    width: 100%;
+}
+
+.annotation {
+    cursor: pointer;
+    font-weight: 600;
 }
 
 .info-line:hover {
@@ -35,36 +42,23 @@
 
 .info-popover__content {
     position: absolute;
-    left: 0;
+    left: 6em;
     background-color: #FFFFFF;
-    width: 70vw;
+    width: 80em;
     border: 1px solid black;
     font-size: 1.2rem;
     z-index: 4;
     transition: visibility 0s linear 0.5s, opacity 0.5s linear;
-    top: -12em;
-    text-align: justify;
-}
-
-sup {
-    cursor: pointer;
-}
-
-.info-popover__popover__bottom_right {
-    position: absolute;
-    right: .5em;
-    bottom: .5em;
-    width: 25vw;
-    border: 1px solid black;
-    font-size: 1rem;
-    padding: .5em;
-    z-index: 5;
-    text-align: left;
+    top: -14rem;
 }
 
 .info-popover__content p {
     margin-left: 5rem;
     width: 90%;
+}
+
+.footNote:first-child {
+    transform: none;
 }
 
 .info-popover__content p::first-letter {
@@ -74,7 +68,7 @@ sup {
 
 .first-popover {
     @extend .info-popover__content;
-    height: 12rem;
+    height: 14rem;
 }
 
 .first-popover p {
