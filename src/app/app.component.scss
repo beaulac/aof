@@ -47,6 +47,11 @@ a {
 
 .aof-top {
     z-index: 2;
+    pointer-events: none;
+
+    .active-portal {
+        pointer-events: auto;
+    }
 }
 
 .aof-ui-element {

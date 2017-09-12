@@ -1,13 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { fadeAnimation } from '../fade.animation';
+
+const toggleFn = toggleIdx => (shown, idx) => (toggleIdx === idx) ? !shown : false;
 
 @Component({
                selector: 'app-info',
+               animations: [fadeAnimation],
                templateUrl: './info.component.html',
                styleUrls: ['./info.component.scss']
            })
 export class InfoComponent implements OnInit {
-    popoverHidden = [true, true, true, true];
-    footNoteHidden = [true, true, true, true,true];
+    @Output()
+    public rollOut = new EventEmitter<void>();
+
+    popoverShown = [false, false, false, false];
+    footNoteShown = [false, false, false, false, false];
+
 
     constructor() {
     }
@@ -15,11 +23,11 @@ export class InfoComponent implements OnInit {
     ngOnInit() {
     }
 
-    showPopover(toggleIdx) {
-        this.popoverHidden = this.popoverHidden.map((hidden, idx) => !hidden || (idx !== toggleIdx));
+    togglePopover(toggleIdx) {
+        this.popoverShown = this.popoverShown.map(toggleFn(toggleIdx));
     }
 
-    showFootnote (toggleIdx) {
-        this.footNoteHidden = this.footNoteHidden.map((hidden, idx) => !hidden || (idx !== toggleIdx));
+    toggleFootnote(toggleIdx) {
+        this.footNoteShown = this.footNoteShown.map(toggleFn(toggleIdx));
     }
 }
