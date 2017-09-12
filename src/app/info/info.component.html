@@ -5,38 +5,38 @@
     </video>
 
     <div class="info-text">
-        <div class="eleven columns offset-by-one first-popover" [hidden]="popoverHidden[0]">
+        <div class="eleven columns offset-by-one first-popover" [@enterAnimation] *ngIf="popoverShown[0]">
             <p class="styleParagragh">
                 The thought of a thing is less like the thing itself than a web of
                 <br> small reminders of how it all seemed at the time. In the web presented here,
-                <br> Jumper’s perception is separated into the many connected reminders<info-annotation [number]="1" (mouseToggle)="showFootnote(0)"></info-annotation> that form his memory of the AoF seminar.
+                <br> Jumper’s perception is separated into the many connected reminders<info-annotation [number]="1" (mouseToggle)="toggleFootnote(0)"></info-annotation> that form his memory of the AoF seminar.
             </p>
-            <p class="footNote" style="width:500px;margin-left: 35em;"><sup>[1]</sup>The circular nodes contain audio representations of Jumper’s reminders.</p>
+            <p class="footNote" style="width:500px;margin-left: 35em;" [@enterAnimation] *ngIf="footNoteShown[0]"><sup>[1]</sup>The circular nodes contain audio representations of Jumper’s reminders.</p>
         </div>
 
-        <p style="font-size: 1.2em" class="first-line info-line ten columns" (click)="showPopover(0)">
+        <p style="font-size: 1.2em" class="first-line info-line ten columns" (click)="togglePopover(0)">
             The Analysis of Failure seminar was not so neatly clarified in Mark Jumper's mind.
         </p>
 
         <div style="font-size: 1.06667em">
-            <div class="eleven columns offset-by-one second-popover" [hidden]="popoverHidden[1]">
+            <div class="eleven columns offset-by-one second-popover" [@enterAnimation] *ngIf="popoverShown[1]">
                 <p class="styleParagragh">
                     If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of his tedious,
-                    <br> meticulated lineation<info-annotation [number]="2" (mouseToggle)="showFootnote(1)"></info-annotation>, he would have to choose a starting point from amongst these reminders. But, once stimulated,
-                    <br> there is no telling where he will be reminded to go and he is forced to sit back and allow his memories to reveal themselves.<info-annotation [number]="3" (mouseToggle)="showFootnote(2)"></info-annotation>
+                    <br> meticulated lineation<info-annotation [number]="2" (mouseToggle)="toggleFootnote(1)"></info-annotation>, he would have to choose a starting point from amongst these reminders. But, once stimulated,
+                    <br> there is no telling where he will be reminded to go and he is forced to sit back and allow his memories to reveal themselves.<info-annotation [number]="3" (mouseToggle)="toggleFootnote(2)"></info-annotation>
                 </p>
-                <p class="footNote" style="width:300px;margin-left: 45em;" [hidden]="footNoteHidden[1]"><sup>[2]</sup>See ‘Analysis of Failure: Reconstructed’</p>
-                <p class="footNote" style="width:800px;margin-left: 10em;" [hidden]="footNoteHidden[2]"><sup>[3]</sup>You only need to manually stimulate a single node to hear how the memory unfolds.
+                <p class="footNote" style="width:300px;margin-left: 45em;" [@enterAnimation] *ngIf="footNoteShown[1]"><sup>[2]</sup>See ‘Analysis of Failure: Reconstructed’</p>
+                <p class="footNote" style="width:800px;margin-left: 10em;" [@enterAnimation] *ngIf="footNoteShown[2]"><sup>[3]</sup>You only need to manually stimulate a single node to hear how the memory unfolds.
                     <br>The interconnected web of reminders stimulate each other, crawling across the brain until the memory is finished.
                 </p>
             </div>
-            <p class="info-line eight columns second-line" (click)="showPopover(1)">
+            <p class="info-line eight columns second-line" (click)="togglePopover(1)">
                 Here, we thoughtfully Reconduct his Analysis of Failure.
             </p>
         </div>
 
         <div style="font-size: 0.93333em">
-            <div class="eleven columns offset-by-one third-popover" [hidden]="popoverHidden[2]">
+            <div class="eleven columns offset-by-one third-popover" [@enterAnimation] *ngIf="popoverShown[2]">
                 <p class="styleParagragh">
                     For it is impressions, not facts, that spread around the various lobes and folds, each one
                     <br> doing its part to retain something close to a whole.
@@ -44,24 +44,24 @@
 
                 <p class="styleParagragh">
                     As a result, the mind does not bother to remember things rigidly, but rather in a
-                    <br> malleable way, ripe for ceaseless reinterpretation<info-annotation [number]="4" (mouseToggle)="showFootnote(3)"></info-annotation>, so that we might grow and not stagnate.
+                    <br> malleable way, ripe for ceaseless reinterpretation<info-annotation [number]="4" (mouseToggle)="toggleFootnote(3)"></info-annotation>, so that we might grow and not stagnate.
                 </p>
-                <p class="footNote" style="width:500px; margin-left: 35em;" [hidden]="footNoteHidden[3]"><sup>[4]</sup>Adjust the parameters below to create new circumstances under <br>which Jumper might attempt to remember how it all happened.</p>
+                <p class="footNote" style="width:500px; margin-left: 35em;" [@enterAnimation] *ngIf="footNoteShown[3]"><sup>[4]</sup>Adjust the parameters below to create new circumstances under <br>which Jumper might attempt to remember how it all happened.</p>
             </div>
-            <p class="info-line six columns third-line" (click)="showPopover(2)">
+            <p class="info-line six columns third-line" (click)="togglePopover(2)">
                 And Mark Jumper’s Reconstructions become infinite.
             </p>
         </div>
 
         <div style="font-size: 0.8em">
-            <div class="eleven columns offset-by-one fourth-popover" [hidden]="popoverHidden[3]">
+            <div class="eleven columns offset-by-one fourth-popover" [@enterAnimation] *ngIf="popoverShown[3]">
                 <p class="styleParagragh">
                     And so it is because Mark Jumper fills the bareness of this Archive with his singular
-                    <br> interpretations that we can know it to be only as true as it is incomplete.<info-annotation [number]="5" (mouseToggle)="showFootnote(4)"></info-annotation>
+                    <br> interpretations that we can know it to be only as true as it is incomplete.<info-annotation [number]="5" (mouseToggle)="toggleFootnote(4)"></info-annotation>
                 </p>
-                <p class="footNote" style="width:500px; margin-left: 35em;" [hidden]="footNoteHidden[4]"><sup>[5]</sup>Because nothing that can been perceived can be perceived the same way twice.</p>
+                <p class="footNote" style="width:500px; margin-left: 35em;" [@enterAnimation] *ngIf="footNoteShown[4]"><sup>[5]</sup>Because nothing that can been perceived can be perceived the same way twice.</p>
             </div>
-            <p class="info-line four columns four-line" (click)="showPopover(3)">
+            <p class="info-line four columns four-line" (click)="togglePopover(3)">
                 Because one can only be achieved by combining all.
             </p>
         </div>
