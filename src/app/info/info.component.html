@@ -1,4 +1,4 @@
-<div class="info-wrapper">
+<div class="info-wrapper" (mouseleave)="rollOut.next()">
 
     <video loop muted autoplay poster="assets/poster.jpeg" class="fullscreen-bg__video">
         <source src="assets/bw_v3.mp4" type="video/mp4">
@@ -9,7 +9,7 @@
             <p class="styleParagragh">
                 The thought of a thing is less like the thing itself than a web of
                 <br> small reminders of how it all seemed at the time. In the web presented here,
-                <br> Jumper’s perception is separated into the many connected reminders<sup class="annotation" (mouseenter)="showFootnote(0)" (mouseleave)="showFootnote(0)">[1]</sup> that form his memory of the AoF seminar.
+                <br> Jumper’s perception is separated into the many connected reminders<info-annotation [number]="1" (mouseToggle)="showFootnote(0)"></info-annotation> that form his memory of the AoF seminar.
             </p>
             <p class="footNote" style="width:500px;margin-left: 35em;"><sup>[1]</sup>The circular nodes contain audio representations of Jumper’s reminders.</p>
         </div>
@@ -22,8 +22,8 @@
             <div class="eleven columns offset-by-one second-popover" [hidden]="popoverHidden[1]">
                 <p class="styleParagragh">
                     If Jumper were asked to recount his experience conducting the AoF seminar without the benefit of his tedious,
-                    <br> meticulated lineation<sup class="annotation" (mouseenter)="showFootnote(1)" (mouseleave)="showFootnote(1)">[2]</sup>, he would have to choose a starting point from amongst these reminders. But, once stimulated,
-                    <br> there is no telling where he will be reminded to go and he is forced to sit back and allow his memories to reveal themselves.<sup class="annotation" (mouseenter)="showFootnote(2)" (mouseleave)="showFootnote(2)">[3]</sup>
+                    <br> meticulated lineation<info-annotation [number]="2" (mouseToggle)="showFootnote(1)"></info-annotation>, he would have to choose a starting point from amongst these reminders. But, once stimulated,
+                    <br> there is no telling where he will be reminded to go and he is forced to sit back and allow his memories to reveal themselves.<info-annotation [number]="3" (mouseToggle)="showFootnote(2)"></info-annotation>
                 </p>
                 <p class="footNote" style="width:300px;margin-left: 45em;" [hidden]="footNoteHidden[1]"><sup>[2]</sup>See ‘Analysis of Failure: Reconstructed’</p>
                 <p class="footNote" style="width:800px;margin-left: 10em;" [hidden]="footNoteHidden[2]"><sup>[3]</sup>You only need to manually stimulate a single node to hear how the memory unfolds.
@@ -44,7 +44,7 @@
 
                 <p class="styleParagragh">
                     As a result, the mind does not bother to remember things rigidly, but rather in a
-                    <br> malleable way, ripe for ceaseless reinterpretation<sup class="annotation" (mouseenter)="showFootnote(3)" (mouseleave)="showFootnote(3)">[4]</sup>, so that we might grow and not stagnate.
+                    <br> malleable way, ripe for ceaseless reinterpretation<info-annotation [number]="4" (mouseToggle)="showFootnote(3)"></info-annotation>, so that we might grow and not stagnate.
                 </p>
                 <p class="footNote" style="width:500px; margin-left: 35em;" [hidden]="footNoteHidden[3]"><sup>[4]</sup>Adjust the parameters below to create new circumstances under <br>which Jumper might attempt to remember how it all happened.</p>
             </div>
@@ -57,7 +57,7 @@
             <div class="eleven columns offset-by-one fourth-popover" [hidden]="popoverHidden[3]">
                 <p class="styleParagragh">
                     And so it is because Mark Jumper fills the bareness of this Archive with his singular
-                    <br> interpretations that we can know it to be only as true as it is incomplete.<sup class="annotation" (mouseenter)="showFootnote(4)" (mouseleave)="showFootnote(4)">[5]</sup>
+                    <br> interpretations that we can know it to be only as true as it is incomplete.<info-annotation [number]="5" (mouseToggle)="showFootnote(4)"></info-annotation>
                 </p>
                 <p class="footNote" style="width:500px; margin-left: 35em;" [hidden]="footNoteHidden[4]"><sup>[5]</sup>Because nothing that can been perceived can be perceived the same way twice.</p>
             </div>

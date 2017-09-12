@@ -9,7 +9,7 @@ import { fadeAnimation } from '../fade.animation';
            })
 export class InfoComponent implements OnInit {
     @Output()
-    public rollOut = new EventEmitter();
+    public rollOut = new EventEmitter<void>();
 
     popoverHidden = [true, true, true, true];
     footNoteHidden = [true, true, true, true, true];
@@ -24,11 +24,7 @@ export class InfoComponent implements OnInit {
         this.popoverHidden = this.popoverHidden.map((hidden, idx) => !hidden || (idx !== toggleIdx));
     }
 
-    showFootnote (toggleIdx) {
+    showFootnote(toggleIdx) {
         this.footNoteHidden = this.footNoteHidden.map((hidden, idx) => !hidden || (idx !== toggleIdx));
-    }
-
-    onMouseOut() {
-        this.rollOut.next();
     }
 }

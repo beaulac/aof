@@ -10,12 +10,14 @@ import { CytoscapeService } from './graph/cytoscape.service';
 import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 import { InfoComponent } from './info/info.component';
 import { SamplesService } from './samples.service';
+import { InfoAnnotationComponent } from './info/info-annotation/info-annotation.component';
 
 @NgModule({
               declarations: [
                   AppComponent,
                   CyRendererComponent,
-                  InfoComponent
+                  InfoComponent,
+                  InfoAnnotationComponent
               ],
               imports: [
                   BrowserModule,
