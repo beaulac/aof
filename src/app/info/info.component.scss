@@ -26,9 +26,26 @@
 }
 
 .info-line {
+    font-family: 'Libre Baskerville', serif;
     cursor: pointer;
     margin-bottom: 10vh;
     width: 100%;
+}
+
+.first-line {
+    margin-left: 220px;
+}
+
+.second-line {
+    margin-left: 240px;
+}
+
+.third-line {
+    margin-left: 260px;
+}
+
+.four-line {
+    margin-left: 280px;
 }
 
 .annotation {
@@ -42,7 +59,7 @@
 
 .info-popover__content {
     position: absolute;
-    left: 6em;
+    left: 7em;
     background-color: #FFFFFF;
     width: 80em;
     border: 1px solid black;
@@ -57,11 +74,11 @@
     width: 90%;
 }
 
-.footNote:first-child {
-    transform: none;
+.footNote {
+    border: 1px solid #000000;
 }
 
-.info-popover__content p::first-letter {
+.styleParagragh::first-letter {
     font-size: 2.5rem;
     line-height: 1rem;
 }
