@@ -17,9 +17,9 @@
 
 .info-text {
     position: absolute;
-    top: 15rem;
+    top: 20rem;
     left: 0;
-    font-family: Raleway, sans-serif;
+    font-family: 'Libre Baskerville', serif;
     width: 100%;
     height: 100%;
     z-index: 3;
@@ -27,29 +27,29 @@
 
 .info-line {
     display: inline-block;
-    font-family: 'Libre Baskerville', serif;
     cursor: pointer;
     margin-bottom: 10vh;
 }
 
 .first-line {
     @extend .info-line;
-    margin-left: 220px;
+    // margin-top: 20px;
+    margin-left: 320px;
 }
 
 .second-line {
     @extend .info-line;
-    margin-left: 240px;
+    margin-left: 340px;
 }
 
 .third-line {
     @extend .info-line;
-    margin-left: 260px;
+    margin-left: 360px;
 }
 
 .fourth-line {
     @extend .info-line;
-    margin-left: 280px;
+    margin-left: 380px;
 }
 
 .annotation {
@@ -63,13 +63,13 @@
 
 .info-popover__content {
     position: absolute;
-    left: 7em;
     background-color: #FFF;
-    width: 80em;
+    left: 150px;
+    width: 60%;
     border: 1px solid black;
     font-size: 1.2rem;
     z-index: 4;
-    top: -14rem;
+    top: -16rem;
 }
 
 .info-popover__content p {
@@ -79,6 +79,7 @@
 
 .footNote {
     border: 1px solid #000;
+    padding: 10px 10px;
 }
 
 .styleParagragh::first-letter {
@@ -88,7 +89,8 @@
 
 .first-popover {
     @extend .info-popover__content;
-    height: 14rem;
+    height: 16rem;
+    top: -16rem;
 }
 
 .first-popover p {
@@ -97,7 +99,8 @@
 
 .second-popover {
     @extend .info-popover__content;
-    height: 22rem;
+    top: -17rem;
+    height: 26rem;
 }
 
 .second-popover p {
@@ -106,6 +109,7 @@
 
 .third-popover {
     @extend .info-popover__content;
+    top: -11rem;
     height: 30rem;
 }
 
@@ -115,6 +119,7 @@
 
 .fourth-popover {
     @extend .info-popover__content;
+    top: -10rem;
     height: 38rem;
 }
 
