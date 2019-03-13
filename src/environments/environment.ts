@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-    corsProxyUrl: 'http://localhost:8080',
+    corsProxyUrl: 'https://crossorigin.me',
     samplesServerUrl: 'http://localhost:8888/samples',
     production: false
 };

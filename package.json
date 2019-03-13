@@ -9,7 +9,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "prod": "ng build -aot -prod --env=prod --deploy-url=/aof/ --base-href=/aof/"
+        "prod": "ng build -aot -prod --env=prod"
     },
     "private": true,
     "dependencies": {
