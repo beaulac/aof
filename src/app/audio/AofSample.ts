@@ -1,4 +1,4 @@
-const NO_OP = () => undefined;
+import { _trace } from '../trace';
 
 export class AofSample {
     public sampleName: string;
@@ -20,11 +20,11 @@ export class AofSample {
         if (this.isLoadingOrLoaded) {
             return;
         }
-        console.log('Preloading!');
+        _trace('Preloading!');
         this.howlSound.load();
     }
 
-    play(initVolume, onLoadCb = NO_OP) {
+    play(initVolume, onLoadCb = Function.prototype) {
         if (this.isLoaded) {
             onLoadCb();
             this.doPlay(initVolume);
@@ -43,7 +43,7 @@ export class AofSample {
     private doPlay(initVolume) {
         this.howlSound.volume(initVolume);
         this.howlSound.play();
-        console.log(`${this.sampleName} is now playing`);
+        _trace(`${this.sampleName} is now playing`);
     }
 
     stop() {
@@ -51,7 +51,7 @@ export class AofSample {
 
         if (this.howlSound.playing()) {
             this.howlSound.stop();
-            console.log(`${this.sampleName} has stopped playing.`);
+            _trace(`${this.sampleName} has stopped playing.`);
         }
     }
 
@@ -60,12 +60,12 @@ export class AofSample {
     }
 
     setVolume(newVolume) {
-        console.log(`${this.sampleName} had its volume set to ${newVolume}`);
+        _trace(`${this.sampleName} had its volume set to ${newVolume}`);
         this.howlSound.volume(newVolume);
     }
 
     fadeTo(newVolume, lengthMs) {
-        console.log(`${this.sampleName} is fading to ${newVolume}`);
+        _trace(`${this.sampleName} is fading to ${newVolume}`);
         const sound = this.howlSound;
         sound.fade(sound.volume(), newVolume, lengthMs);
     }

@@ -1,11 +1,12 @@
 import { AofSample } from '../../audio/AofSample';
 import { extractTargetsFor } from './ElementTargets';
 import { highlightElement, markLoadingElement, unhighlightElement } from './VisualStyle';
+import { _trace } from '../../trace';
 
 const missingNode = {
     id: () => 'MISSING_NODE',
     scratch: (_): any => {
-    }
+    },
 };
 
 export class SampleRun {
@@ -29,7 +30,7 @@ export class SampleRun {
 
         const nextNodeStartMs = cyElem.scratch('nextNodeStart') * this.tickLength;
 
-        const {edgeTargets, nodeTargets} = extractedTargets;
+        const { edgeTargets, nodeTargets } = extractedTargets;
         for (let idx = 0; idx < numberOfTargets; idx++) {
             const edgeDelay = this.tickLength * edgeTargets[idx].data('length');
             const nodeTarget = nodeTargets[idx];
@@ -37,18 +38,18 @@ export class SampleRun {
             (nodeTarget.scratch('sample') as AofSample).load();
 
             this.sampleEventQueue.push(
-                setTimeout(() => this.highlightNextElement(nodeTarget), edgeDelay + nextNodeStartMs)
+                setTimeout(() => this.highlightNextElement(nodeTarget), edgeDelay + nextNodeStartMs),
             );
         }
 
         this.initializeElementSample(cyElem);
 
         if (extractedTargets.isLast) {
-            console.info('DONE');
+            _trace('DONE');
         } else if (extractedTargets.numberOfTargets() === 0) {
-            console.debug('NO TARGETS');
+            _trace('NO TARGETS');
         }
-    };
+    }
 
     private msToPeakAndStop(cyElem) {
         const nodeStopBeats = ~~cyElem.scratch('nodeStop');
@@ -59,7 +60,7 @@ export class SampleRun {
         const msToPeak = beatsToPeak * this.tickLength;
         const msToStopAfterPeak = beatsToStop * this.tickLength;
 
-        return {msToPeak, msToStopAfterPeak, msTotalDuration};
+        return { msToPeak, msToStopAfterPeak, msTotalDuration };
     }
 
     private initializeElementSample(cyElem = missingNode) {
@@ -69,7 +70,7 @@ export class SampleRun {
             return;
         }
 
-        const {msToPeak, msToStopAfterPeak, msTotalDuration} = this.msToPeakAndStop(cyElem);
+        const { msToPeak, msToStopAfterPeak, msTotalDuration } = this.msToPeakAndStop(cyElem);
 
         if (!sample.isLoaded) {
             markLoadingElement(cyElem);
@@ -86,7 +87,7 @@ export class SampleRun {
         this.sampleEventQueue.push(
             setTimeout(startCrescendoToPeak, 0),
             setTimeout(fadeOutAfterPeak, msToPeak),
-            setTimeout(stopAfterTotalDuration, msTotalDuration)
+            setTimeout(stopAfterTotalDuration, msTotalDuration),
         );
 
         this.initVolume = Math.random() * this.initVolume;

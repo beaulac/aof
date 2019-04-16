@@ -6,7 +6,6 @@ import { NouisliderModule } from 'ng2-nouislider';
 import { AppComponent } from './app.component';
 import { HowlerService } from './audio/howler.service';
 import { NodeService } from './graph/builder/node.service';
-import { CytoscapeService } from './graph/cytoscape.service';
 import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
 import { InfoComponent } from './info/info.component';
 import { SamplesService } from './samples.service';
@@ -17,16 +16,16 @@ import { InfoAnnotationComponent } from './info/info-annotation/info-annotation.
                   AppComponent,
                   CyRendererComponent,
                   InfoComponent,
-                  InfoAnnotationComponent
+                  InfoAnnotationComponent,
               ],
               imports: [
                   BrowserModule,
                   BrowserAnimationsModule,
                   HttpModule,
-                  NouisliderModule
+                  NouisliderModule,
               ],
-              providers: [SamplesService, HowlerService, NodeService, CytoscapeService],
-              bootstrap: [AppComponent]
+              providers: [SamplesService, HowlerService, NodeService],
+              bootstrap: [AppComponent],
           })
 export class AppModule {
 }

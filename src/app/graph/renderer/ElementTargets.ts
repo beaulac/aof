@@ -1,3 +1,5 @@
+import { _trace } from '../../trace';
+
 function isEdgeLinkedTo(edge, sourceId) {
     return edge.isEdge() && edge.source().id() === sourceId || edge.target().id() === sourceId;
 }
@@ -40,7 +42,7 @@ export class ElementTargets {
         const {length: numNodes} = this.nodeTargets
             , {length: numEdges} = this.edgeTargets;
 
-        console.debug(`Nodes: ${this.nodeTargets.length}`, `Edges: ${this.edgeTargets.length}`);
+        _trace(`Nodes: ${this.nodeTargets.length}`, `Edges: ${this.edgeTargets.length}`);
 
         if (numEdges !== numNodes) {
             console.warn('Unequal number of edges and nodes?');

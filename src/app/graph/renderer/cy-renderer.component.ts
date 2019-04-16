@@ -17,6 +17,7 @@ import {
     unhoverElement,
     VisualStyle
 } from './VisualStyle';
+import { _trace } from '../../trace';
 
 
 @Component({
@@ -76,10 +77,10 @@ export class CyRendererComponent implements OnInit, OnDestroy {
     }
 
     private updateCyjs(elements) {
-        console.log('* Cytoscape.js is rendering new network...');
+        _trace('* Cytoscape.js is rendering new network...');
 
         const cyElements = _(elements).map(e => e.toCyElementJSON()).flatten().value();
-        console.debug('Elements: ', cyElements);
+        _trace('Elements: ', cyElements);
 
         this.cy = cytoscape({
                                 boxSelectionEnabled: false,
@@ -126,7 +127,7 @@ export class CyRendererComponent implements OnInit, OnDestroy {
             root.addClass('initialTrigger');
             this.sampleRun.highlightNextElement(root);
         } else {
-            console.debug('NOT HANDLING DOUBLE RUNS YET');
+            _trace('NOT HANDLING DOUBLE RUNS YET');
         }
     }
 

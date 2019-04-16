@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
+    homeUrl: 'https://aof.bdtem.co.in/',
     samplesServerUrl: 'https://aof-repo.bdtem.co.in',
     samplesIndexUrl: 'https://aof-repo.bdtem.co.in/samples.txt',
     production: false

@@ -3,12 +3,14 @@ import { HowlerService } from './audio/howler.service';
 import { fadeAnimation } from './fade.animation';
 import { NodeService } from './graph/builder/node.service';
 import { CyRendererComponent } from './graph/renderer/cy-renderer.component';
+import { environment } from '../environments/environment';
+import { _trace } from './trace';
 
 @Component({
                selector: 'app-root',
                animations: [fadeAnimation],
                templateUrl: './app.component.html',
-               styleUrls: ['./app.component.scss']
+               styleUrls: ['./app.component.scss'],
            })
 export class AppComponent implements OnInit {
 
@@ -18,6 +20,8 @@ export class AppComponent implements OnInit {
     public showInfo = false;
 
     public muted = false;
+
+    public homeUrl = environment.homeUrl;
 
     constructor(public nodeService: NodeService,
                 public howlerService: HowlerService) {
@@ -51,7 +55,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.debug('Renderer: ', this.cyRenderer);
+        _trace('Renderer: ', this.cyRenderer);
     }
 
     rebuildNodes() {
