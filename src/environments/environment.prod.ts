@@ -1,5 +1,5 @@
 export const environment = {
-    corsProxyUrl: 'https://crossorigin.me',
-    samplesServerUrl: 'https://aof-rec.now.sh/',
+    samplesServerUrl: '/samples',
+    samplesIndexUrl: '/samples',
     production: true,
 };
